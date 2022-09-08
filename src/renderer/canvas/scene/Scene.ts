@@ -1,4 +1,5 @@
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { Entity } from '@/wrapper/Entity';
 
 export abstract class Scene {
   
@@ -12,6 +13,10 @@ export abstract class Scene {
     this.canvas.width = width;
     this.canvas.height = height;
     this.context = this.canvas.getContext('2d')!;
+  }
+
+  public drawEntity(entity: Entity, speed: number, scale: number = 1): void {
+    this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), speed, scale);
   }
 
   public drawSprite(sprite: SpriteResource, x: number, y: number, speed: number, scale: number = 1): void {
