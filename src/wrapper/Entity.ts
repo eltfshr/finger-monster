@@ -12,15 +12,15 @@ export interface Entity {
 
   setY(y: number): void;
 
-  getHealth(): number;
-
-  setHealth(health: number): void;
-
   getCurrentState(): EntityState;
 
   setCurrentState(state: EntityState): void;
 
   getCurrentSprite(): SpriteResource;
+
+  getHealth(): number;
+
+  setHealth(health: number): void;
 
   attack(target: Entity): void
 

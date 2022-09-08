@@ -1,10 +1,10 @@
-import { PlayerSprites } from "@/renderer/canvas/sprite/entities/PlayerSprites";
-import { SpriteResource } from "@/renderer/canvas/sprite/SpriteResource";
+import { BlueSlimeSprites } from '@/renderer/canvas/sprite/entities/BlueSlimeSprites';
+import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { Entity, EntityState } from "@/wrapper/Entity";
 
-export class Player implements Entity {
+export class BlueSlime implements Entity {
 
-  private sprites: PlayerSprites = new PlayerSprites();
+  private sprites: BlueSlimeSprites = new BlueSlimeSprites();
   private x: number;
   private y: number;
   private health: number = 100;
@@ -55,11 +55,10 @@ export class Player implements Entity {
   public getCurrentSprite(): SpriteResource {
     return this.sprites.getCurrentSprite();
   }
-
+  
   public attack(target: Entity): void {
     // TODO
     throw new Error('Method not implemented.');
   }
-
+  
 }
-
