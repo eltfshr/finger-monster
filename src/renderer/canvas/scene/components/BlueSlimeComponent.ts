@@ -4,7 +4,7 @@ import { HurtBlueSlimeSprite } from "../../sprite/blueslime/HurtBlueSlimeSprite"
 import { SpriteResource } from "../../sprite/SpriteResource";
 import { SceneComponent } from "./SceneComponent";
 
-export class BlueSlimeComponents extends SceneComponent<SpriteResource> {
+export class BlueSlimeComponent extends SceneComponent<SpriteResource> {
 
   public constructor() {
     super([
