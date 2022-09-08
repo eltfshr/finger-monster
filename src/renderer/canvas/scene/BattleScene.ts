@@ -20,10 +20,7 @@ export class BattleScene extends Scene {
 
   public action(): void {
     this.drawEntity(this.player, 10)
-
-    if (this.sceneFrame === 500) {
-      this.player.setCurrentState(EntityState.DIE);
-    }
+    this.player.setCurrentState(EntityState.IDLE);
   }
   
 }

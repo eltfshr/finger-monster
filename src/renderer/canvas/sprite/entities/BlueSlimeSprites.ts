@@ -13,15 +13,10 @@ export class BlueSlimeSprites implements EntitySprite {
   private currentSprite: SpriteResource = this.spriteResourceByState.get(EntityState.IDLE)!;
 
   public async load(): Promise<void> {
-    try {
-      const loader = Array
-        .from(this.spriteResourceByState.values())
-        .map((resource) => resource.load());
-      await Promise.all(loader);
-    } catch (error: unknown) {
-      if (!(error instanceof Error)) return;
-      console.log('Something went wrong on loading blue slime sprite resources', error.message);
-    }
+    const loader = Array
+      .from(this.spriteResourceByState.values())
+      .map((resource) => resource.load());
+    await Promise.all(loader);
   }
 
   public getCurrentSprite(): SpriteResource {
@@ -30,7 +25,7 @@ export class BlueSlimeSprites implements EntitySprite {
 
   public setCurrentSprite(state: EntityState): void {
     const sprite = this.spriteResourceByState.get(state);
-    if (!sprite) return;
+    if (!sprite) throw new Error(`Could not load Blue slime resource with state ${sprite}`);
     this.currentSprite = sprite;
   }
 
