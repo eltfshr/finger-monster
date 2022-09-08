@@ -14,7 +14,7 @@ export abstract class Scene {
     this.context = this.canvas.getContext('2d')!;
   }
 
-  public drawSprite(sprite: SpriteResource, x: number, y: number, speed: number): void {
+  public drawSprite(sprite: SpriteResource, x: number, y: number, speed: number, scale: number = 1): void {
     const spriteWidth = sprite.getSpriteWidth();
     const spriteHeight = sprite.getSpriteHeight();
 
@@ -26,11 +26,11 @@ export abstract class Scene {
       spriteHeight,
       x,
       y,
-      spriteWidth,
-      spriteHeight,
+      spriteWidth * scale,
+      spriteHeight * scale,
     );
 
-    this.context.strokeRect(x, y, spriteWidth, spriteHeight); // Debug
+    this.context.strokeRect(x, y, spriteWidth * scale, spriteHeight * scale); // Debug
 
     if (this.sceneFrame % speed == 0) {
       sprite.nextFrame();
