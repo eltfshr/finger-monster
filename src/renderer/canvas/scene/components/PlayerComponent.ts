@@ -14,4 +14,16 @@ export class PlayerComponent extends SceneComponent<SpriteResource> {
     ], 0, 0);
   }
 
+  public getIdleSprite(): SpriteResource {
+    return this.getResources()[0];
+  }
+
+  public getAttackSprite(): SpriteResource {
+    return this.getResources()[1];
+  }
+
+  public getHitSprite(): SpriteResource {
+    return this.getResources()[2];
+  }
+
 }

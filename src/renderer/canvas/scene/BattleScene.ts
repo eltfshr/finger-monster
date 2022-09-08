@@ -15,13 +15,13 @@ export class BattleScene extends Scene {
     this.backgroundAudio.setVolume(0.1);
     this.backgroundAudio.play();
 
-    const playerSprite = this.playerComponent.getResources()[0];
+    const playerSprite = this.playerComponent.getIdleSprite();
     this.playerComponent.setX(0);
     this.playerComponent.setY(this.getHeight() / 2 - playerSprite.getSpriteHeight() / 2);
   }
 
   public action(): void {
-    const playerSprite = this.playerComponent.getResources()[0];
+    const playerSprite = this.playerComponent.getIdleSprite();
     this.drawSprite(playerSprite, this.playerComponent.getX(), this.playerComponent.getY(), 10);
   }
   
