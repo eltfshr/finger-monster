@@ -12,7 +12,7 @@ export class PlayerSprites implements EntitySprites {
 
   private currentSprite: SpriteResource = this.spriteResourceByState.get(EntityState.IDLE)!;
 
-  public async load(): Promise<void> {
+  public async loadAllSprites(): Promise<void> {
     const loader = Array
       .from(this.spriteResourceByState.values())
       .map((resource) => resource.load());

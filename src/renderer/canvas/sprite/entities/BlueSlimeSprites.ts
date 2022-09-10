@@ -12,7 +12,7 @@ export class BlueSlimeSprites implements EntitySprites {
 
   private currentSprite: SpriteResource = this.spriteResourceByState.get(EntityState.ATTACK)!;
 
-  public async load(): Promise<void> {
+  public async loadAllSprites(): Promise<void> {
     const loader = Array
       .from(this.spriteResourceByState.values())
       .map((resource) => resource.load());

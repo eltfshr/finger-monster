@@ -1,8 +1,9 @@
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
-import { GameResource } from '@/renderer/GameResource';
 import { EntityState } from '@/wrapper/Entity';
 
-export interface EntitySprites extends GameResource {
+export interface EntitySprites {
+
+  loadAllSprites(): Promise<void>;
 
   getCurrentSprite(): SpriteResource;
 

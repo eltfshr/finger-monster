@@ -16,7 +16,7 @@ export class BlueSlime implements Entity {
   }
 
   public async load(): Promise<void> {
-    await this.sprites.load();
+    await this.sprites.loadAllSprites();
   }
 
   public getX(): number {
