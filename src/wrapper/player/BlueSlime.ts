@@ -58,7 +58,7 @@ export class BlueSlime implements Entity {
   
   public attack(target: Entity): void {
     // TODO
-    throw new Error('Method not implemented.');
+    console.log('attack', target);
   }
   
 }
