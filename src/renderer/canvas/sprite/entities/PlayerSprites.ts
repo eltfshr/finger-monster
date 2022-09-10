@@ -1,8 +1,8 @@
+import { EntitySprites } from '@/renderer/canvas/sprite/entities/EntitySprites';
+import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { EntityState } from "@/wrapper/Entity";
-import { EntitySprite } from "./EntitySprites";
-import { SpriteResource } from "../SpriteResource";
 
-export class PlayerSprites implements EntitySprite {
+export class PlayerSprites implements EntitySprites {
 
   private readonly spriteResourceByState: Map<EntityState, SpriteResource> = new Map([
     [EntityState.IDLE,    new SpriteResource('character/player/idle.png',   5)],

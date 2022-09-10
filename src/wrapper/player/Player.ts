@@ -1,6 +1,6 @@
-import { PlayerSprites } from "@/renderer/canvas/sprite/entities/PlayerSprites";
-import { SpriteResource } from "@/renderer/canvas/sprite/SpriteResource";
-import { Entity, EntityState } from "@/wrapper/Entity";
+import { PlayerSprites } from '@/renderer/canvas/sprite/entities/PlayerSprites';
+import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { Entity, EntityState } from '@/wrapper/Entity';
 
 export class Player implements Entity {
 

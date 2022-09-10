@@ -1,6 +1,6 @@
 import { BlueSlimeSprites } from '@/renderer/canvas/sprite/entities/BlueSlimeSprites';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
-import { Entity, EntityState } from "@/wrapper/Entity";
+import { Entity, EntityState } from '@/wrapper/Entity';
 
 export class BlueSlime implements Entity {
 

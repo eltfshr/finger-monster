@@ -1,8 +1,8 @@
-import { GameResource } from "@/renderer/GameResource";
-import { EntityState } from "@/wrapper/Entity";
-import { SpriteResource } from "../SpriteResource";
+import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { GameResource } from '@/renderer/GameResource';
+import { EntityState } from '@/wrapper/Entity';
 
-export interface EntitySprite extends GameResource {
+export interface EntitySprites extends GameResource {
 
   getCurrentSprite(): SpriteResource;
 

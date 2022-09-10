@@ -1,8 +1,8 @@
-import { EntityState } from "@/wrapper/Entity";
-import { SpriteResource } from "../SpriteResource";
-import { EntitySprite } from "./EntitySprites";
+import { EntitySprites } from '@/renderer/canvas/sprite/entities/EntitySprites';
+import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { EntityState } from '@/wrapper/Entity';
 
-export class BlueSlimeSprites implements EntitySprite {
+export class BlueSlimeSprites implements EntitySprites {
 
   private readonly spriteResourceByState: Map<EntityState, SpriteResource> = new Map([
     [EntityState.ATTACK,  new SpriteResource('character/blueslime/attack.png',  5)],

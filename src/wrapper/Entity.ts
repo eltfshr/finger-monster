@@ -1,4 +1,4 @@
-import { SpriteResource } from "@/renderer/canvas/sprite/SpriteResource";
+import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 
 export interface Entity {
 
@@ -22,7 +22,7 @@ export interface Entity {
 
   setHealth(health: number): void;
 
-  attack(target: Entity): void
+  attack(target: Entity): void;
 
 }
 
