@@ -5,7 +5,7 @@ export abstract class Scene {
   
   private readonly canvas: HTMLCanvasElement;
   private readonly context: CanvasRenderingContext2D;
-  
+
   protected sceneFrame: number = 0;
 
   public constructor(width: number, height: number) {
@@ -15,13 +15,13 @@ export abstract class Scene {
     this.context = this.canvas.getContext('2d')!;
   }
 
-  public drawEntity(entity: Entity, speed: number, scale: number = 1): void {
-    this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), speed, scale);
+  public drawEntity(entity: Entity, scale: number = 1): void {
+    this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), scale);
   }
 
-  public drawSprite(sprite: SpriteResource, x: number, y: number, speed: number, scale: number = 1): void {
-    const spriteWidth = sprite.getSpriteWidth();
-    const spriteHeight = sprite.getSpriteHeight();
+  public drawSprite(sprite: SpriteResource, x: number, y: number, scale: number = 1): void {
+    const spriteWidth = sprite.getWidth();
+    const spriteHeight = sprite.getHeight();
 
     this.context.drawImage(
       sprite.getImage(),
@@ -35,9 +35,9 @@ export abstract class Scene {
       spriteHeight * scale,
     );
 
-    this.context.strokeRect(x, y, spriteWidth * scale, spriteHeight * scale); // Debug
+    this.context.strokeRect(x, y, spriteWidth * scale, spriteHeight * scale); // Debug sprite bouding box
 
-    if (this.sceneFrame % speed == 0) {
+    if (this.sceneFrame % sprite.getFrameHold() === 0) {
       sprite.nextFrame();
     }
   }

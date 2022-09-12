@@ -5,9 +5,9 @@ import { EntityState } from "@/wrapper/Entity";
 export class PlayerSprites implements EntitySprites {
 
   private readonly spriteResourceByState: Map<EntityState, SpriteResource> = new Map([
-    [EntityState.IDLE,    new SpriteResource('character/player/idle.png',   5)],
-    [EntityState.ATTACK,  new SpriteResource('character/player/attack.png', 7)],
-    [EntityState.HURT,    new SpriteResource('character/player/hurt.png',   3)],
+    [EntityState.IDLE,    new SpriteResource('character/player/idle.png',   5, 20)],
+    [EntityState.ATTACK,  new SpriteResource('character/player/attack.png', 7, 20)],
+    [EntityState.HURT,    new SpriteResource('character/player/hurt.png',   3, 20)],
   ]);
 
   private currentSprite: SpriteResource = this.spriteResourceByState.get(EntityState.IDLE)!;
@@ -26,6 +26,8 @@ export class PlayerSprites implements EntitySprites {
   public setCurrentSprite(state: EntityState): void {
     const sprite = this.spriteResourceByState.get(state);
     if (!sprite) throw new Error(`Could not load Player resource with state ${sprite}`);
+
+    this.currentSprite.resetFrame();
     this.currentSprite = sprite;
   }
 
