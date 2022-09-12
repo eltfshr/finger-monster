@@ -1,6 +1,6 @@
 import { GameResource } from '@/renderer/GameResource';
 
-export abstract class SpriteResource implements GameResource {
+export class SpriteResource implements GameResource {
 
   private readonly image: HTMLImageElement;
   private readonly maxFrame: number;

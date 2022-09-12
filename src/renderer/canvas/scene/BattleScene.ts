@@ -1,28 +1,42 @@
 import { BattleBackgroundAudio } from '@/renderer/audio/BattleBackgroundAudio';
-import { PlayerComponent } from '@/renderer/canvas/scene/components/PlayerComponent';
 import { Scene } from '@/renderer/canvas/scene/Scene';
-import { GameResourceLoader } from '@/utils/GameResourceLoader';
+import { BlueSlime } from '@/wrapper/player/BlueSlime';
+import { Player } from '@/wrapper/player/Player';
 
 export class BattleScene extends Scene {
 
   private backgroundAudio: BattleBackgroundAudio = new BattleBackgroundAudio();
-  private playerComponent: PlayerComponent = new PlayerComponent();
+  private player: Player = new Player(0, 0);
+  private blueSlimes: BlueSlime[] = [];
 
   public async load(): Promise<void> {
-    await GameResourceLoader.load(this.playerComponent);
-
     this.backgroundAudio.load();
     this.backgroundAudio.setVolume(0.1);
     this.backgroundAudio.play();
 
-    const playerSprite = this.playerComponent.getResources()[0];
-    this.playerComponent.setX(0);
-    this.playerComponent.setY(this.getHeight() / 2 - playerSprite.getSpriteHeight() / 2);
+    await this.player.load();
+    this.player.setX(0);
+    this.player.setY(this.getHeight() / 2 - this.player.getCurrentSprite().getSpriteHeight() / 2);
+
+    for (let i = 0; i < 5; i++) {
+      const blueSlime = new BlueSlime(0, 0);
+      await blueSlime.load();
+
+      const randomXOffset = Math.floor(Math.random() * 400) + 50;
+      const randomYOffset = Math.floor(Math.random() * 500) - 300;
+      blueSlime.setX(this.getWidth() - (blueSlime.getCurrentSprite().getSpriteWidth() * 2) - randomXOffset);
+      blueSlime.setY((this.getHeight() / 2) - (blueSlime.getCurrentSprite().getSpriteHeight() / 2) + randomYOffset);
+
+      this.blueSlimes.push(blueSlime);
+    }
   }
 
   public action(): void {
-    const playerSprite = this.playerComponent.getResources()[0];
-    this.drawSprite(playerSprite, this.playerComponent.getX(), this.playerComponent.getY(), 10);
+    this.drawEntity(this.player, 10)
+
+    this.blueSlimes.forEach((blueSlime) => {
+      this.drawEntity(blueSlime, 20, 2);
+    });
   }
   
 }
