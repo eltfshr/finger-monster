@@ -4,7 +4,7 @@ import { Game } from '@/Game';
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
 app.innerHTML = `
-  <canvas id="scene" />
+  <canvas id="scene"></canvas>
 `;
 
 const game = new Game();
