@@ -8,12 +8,24 @@ export class Player extends Creature {
     super(new PlayerSprites(), x, y);
   }
 
+  public idle(): void {
+    this.setCurrentState(EntityState.IDLE);
+  }
+
   public attack(): void {
     this.setCurrentState(EntityState.ATTACK);
   }
 
   public damage(): void {
     this.setCurrentState(EntityState.HURT);
+  }
+
+  public hurt(): void {
+    this.setCurrentState(EntityState.HURT);
+  }
+
+  public die(): void {
+    this.setCurrentState(EntityState.DIE);
   }
 
 }

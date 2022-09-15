@@ -24,18 +24,6 @@ export interface Entity {
 
 }
 
-export interface LivingEntity extends Entity {
-
-  getHealth(): number;
-
-  setHealth(health: number): void;
-
-  attack(): void
-
-  damage(): void;
-
-}
-
 export enum EntityState {
   IDLE,
   ATTACK,

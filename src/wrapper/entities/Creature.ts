@@ -1,6 +1,7 @@
 import { EntitySprites } from '@/renderer/canvas/sprite/entities/EntitySprites';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
-import { EntityState, LivingEntity } from '@/wrapper/entities/Entity';
+import { EntityState } from '@/wrapper/entities/Entity';
+import { LivingEntity } from '@/wrapper/entities/LivingEntity';
 
 export abstract class Creature implements LivingEntity {
 
@@ -47,7 +48,7 @@ export abstract class Creature implements LivingEntity {
   }
 
   public getCurrentState(): EntityState {
-    throw new Error('Method not implemented.');
+    return this.state;
   }
 
   public setCurrentState(state: EntityState): void {
@@ -60,15 +61,21 @@ export abstract class Creature implements LivingEntity {
   }
 
   public getHealth(): number {
-    throw new Error('Method not implemented.');
+    return this.health;
   }
 
   public setHealth(health: number): void {
     this.health = health;
   }
 
+  public abstract idle(): void;
+
   public abstract attack(): void;
 
   public abstract damage(): void;
+
+  public abstract hurt(): void;
+
+  public abstract die(): void;
 
 }
