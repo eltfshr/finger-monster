@@ -1,13 +1,13 @@
 import { EntitySprites } from '@/renderer/canvas/sprite/entities/EntitySprites';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
-import { EntityState } from "@/wrapper/Entity";
+import { EntityState } from "@/wrapper/entities/Entity";
 
 export class PlayerSprites implements EntitySprites {
 
   private readonly spriteResourceByState: Map<EntityState, SpriteResource> = new Map([
-    [EntityState.IDLE,    new SpriteResource('character/player/idle.png',   5, 20)],
-    [EntityState.ATTACK,  new SpriteResource('character/player/attack.png', 7, 20)],
-    [EntityState.HURT,    new SpriteResource('character/player/hurt.png',   3, 20)],
+    [EntityState.IDLE,    new SpriteResource('character/player/idle.png',   5, 10)],
+    [EntityState.ATTACK,  new SpriteResource('character/player/attack.png', 7, 10)],
+    [EntityState.HURT,    new SpriteResource('character/player/hurt.png',   3, 10)],
   ]);
 
   private currentSprite: SpriteResource = this.spriteResourceByState.get(EntityState.IDLE)!;

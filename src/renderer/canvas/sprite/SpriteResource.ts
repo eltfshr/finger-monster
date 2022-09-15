@@ -4,11 +4,11 @@ export class SpriteResource implements GameResource {
 
   private readonly image: HTMLImageElement;
   private readonly maxFrame: number;
-  private readonly frameHold: number;
 
   private width: number = 0;
   private height: number = 0;
   private frame: number = 0;
+  private frameHold: number;
 
   public constructor(imagePath: string, maxFrame: number, frameHold: number) {
     this.image = new Image();
@@ -70,6 +70,10 @@ export class SpriteResource implements GameResource {
 
   public getFrameHold(): number {
     return this.frameHold;
+  }
+
+  public setFrameHold(frameHold: number): void {
+    this.frameHold = frameHold;
   }
 
 }
