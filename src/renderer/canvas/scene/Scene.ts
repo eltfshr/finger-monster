@@ -1,12 +1,17 @@
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
-import { Entity } from '@/wrapper/Entity';
+import { Entity } from '@/wrapper/entities/Entity';
 
 export abstract class Scene {
   
+  private static readonly DEBUG_MODE: boolean = true;
+
   private readonly canvas: HTMLCanvasElement;
   private readonly context: CanvasRenderingContext2D;
 
   protected sceneFrame: number = 0;
+
+  private lastUpdateTimestamp: number = Date.now();
+  private elapsedTime: number = 0;
 
   public constructor(width: number, height: number) {
     this.canvas = document.querySelector<HTMLCanvasElement>('#scene')!;
@@ -35,7 +40,8 @@ export abstract class Scene {
       spriteHeight * scale,
     );
 
-    this.context.strokeRect(x, y, spriteWidth * scale, spriteHeight * scale); // Debug sprite bouding box
+    // Debug sprite bouding box
+    Scene.DEBUG_MODE && this.context.strokeRect(x, y, spriteWidth * scale, spriteHeight * scale);
 
     if (this.sceneFrame % sprite.getFrameHold() === 0) {
       sprite.nextFrame();
@@ -46,9 +52,23 @@ export abstract class Scene {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  public startScene(): void {
+  public startScene(timestamp: number = Date.now()): void {
     this.clearScene();
-    this.action();
+    this.update();
+
+    // Debug FPS
+    if (Scene.DEBUG_MODE) {
+      this.elapsedTime = (timestamp - this.lastUpdateTimestamp) / 1000;
+      this.lastUpdateTimestamp = timestamp;
+      const fps = Math.round(1 / this.elapsedTime);
+
+      this.context.fillStyle = 'white';
+      this.context.fillRect(10, 10, 60, 30);
+      this.context.font = '16px Tahoma';
+      this.context.fillStyle = 'black';
+      this.context.fillText(`FPS ${fps}`, 15, 31);
+    }
+
     this.sceneFrame++;
     requestAnimationFrame(this.startScene.bind(this));
   };
@@ -61,8 +81,12 @@ export abstract class Scene {
     return this.canvas.height;
   }
 
+  public getCanvasContext(): CanvasRenderingContext2D {
+    return this.context;
+  }
+
   public abstract load(): Promise<void>;
 
-  public abstract action(): void;
+  public abstract update(): void;
 
 }
