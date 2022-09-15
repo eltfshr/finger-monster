@@ -1,7 +1,7 @@
 import { GameResource } from '@/renderer/GameResource';
 import { Howl } from 'howler';
 
-export abstract class AudioResource implements GameResource {
+export  class AudioResource implements GameResource {
 
   private readonly audio: Howl;
 
@@ -30,6 +30,10 @@ export abstract class AudioResource implements GameResource {
 
   public play(): void {
     this.audio.play();
+  }
+
+  public stop(): void {
+    this.audio.stop();
   }
   
 }

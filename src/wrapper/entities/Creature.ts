@@ -1,3 +1,5 @@
+import { AudioResource } from '@/renderer/audio/AudioResource';
+import { EntityAudio } from '@/renderer/audio/entities/EntityAudio';
 import { EntitySprites } from '@/renderer/canvas/sprite/entities/EntitySprites';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { EntityState } from '@/wrapper/entities/Entity';
@@ -6,6 +8,7 @@ import { LivingEntity } from '@/wrapper/entities/LivingEntity';
 export abstract class Creature implements LivingEntity {
 
   protected readonly sprites: EntitySprites;
+  protected readonly audios: EntityAudio;
 
   protected x: number;
   protected y: number;
@@ -13,14 +16,16 @@ export abstract class Creature implements LivingEntity {
   protected health: number = 100;
   protected state: EntityState = EntityState.IDLE;
 
-  public constructor(sprites: EntitySprites, x: number, y: number) {
+  public constructor(sprites: EntitySprites, x: number, y: number , audios: EntityAudio) {
     this.sprites = sprites;
     this.x = x;
     this.y = y;
+    this.audios = audios;
   }
 
   public async load(): Promise<void> {
     await this.sprites.loadAllSprites();
+    await this.audios.loadAllAudios();
   }
 
   public getX(): number {
@@ -54,10 +59,15 @@ export abstract class Creature implements LivingEntity {
   public setCurrentState(state: EntityState): void {
     this.state = state;
     this.sprites.setCurrentSprite(state);
+    this.audios.setCurrentAudio(state);
   }
 
   public getCurrentSprite(): SpriteResource {
     return this.sprites.getCurrentSprite();
+  }
+
+  public getCurrentAudio(): AudioResource {
+    return this.audios.getCurrentAudio();
   }
 
   public getHealth(): number {
