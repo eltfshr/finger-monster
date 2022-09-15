@@ -7,10 +7,14 @@ export interface Entity {
   getX(): number;
 
   setX(x: number): void;
-
+  
   getY(): number;
 
   setY(y: number): void;
+
+  getVelocity(): number;
+
+  setVelocity(velocity: number): void;
 
   getCurrentState(): EntityState;
 
@@ -18,11 +22,17 @@ export interface Entity {
 
   getCurrentSprite(): SpriteResource;
 
+}
+
+export interface LivingEntity extends Entity {
+
   getHealth(): number;
 
   setHealth(health: number): void;
 
-  attack(target: Entity): void;
+  attack(): void
+
+  damage(): void;
 
 }
 
