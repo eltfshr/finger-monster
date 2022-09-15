@@ -24,7 +24,7 @@ export abstract class Scene {
     this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), scale);
   }
 
-  public drawSprite(sprite: SpriteResource, x: number, y: number, scale: number = 1): void {
+  public drawSprite(sprite: SpriteResource, x: number, y: number, scale: number = 1.0): void {
     const spriteWidth = sprite.getWidth();
     const spriteHeight = sprite.getHeight();
 
