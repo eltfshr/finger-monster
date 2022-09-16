@@ -5,14 +5,16 @@ export class SpriteResource implements GameResource {
   private readonly image: HTMLImageElement;
   private readonly maxFrame: number;
 
-  private spriteWidth: number = 0;
-  private spriteHeight: number = 0;
+  private width: number = 0;
+  private height: number = 0;
   private frame: number = 0;
+  private frameHold: number;
 
-  public constructor(imagePath: string, maxFrame: number) {
+  public constructor(imagePath: string, maxFrame: number, frameHold: number) {
     this.image = new Image();
     this.image.src = imagePath;
     this.maxFrame = maxFrame;
+    this.frameHold = frameHold;
   }
 
   public async load(): Promise<void> {
@@ -30,20 +32,20 @@ export class SpriteResource implements GameResource {
   }
 
   private loadSpriteDimension(): void {
-    this.spriteWidth = this.image.width / (this.maxFrame + 1);
-    this.spriteHeight = this.image.height;
+    this.width = this.image.width / (this.maxFrame + 1);
+    this.height = this.image.height;
   }
 
   public getImage(): HTMLImageElement {
     return this.image;
   }
 
-  public getSpriteWidth(): number {
-    return this.spriteWidth;
+  public getWidth(): number {
+    return this.width;
   }
 
-  public getSpriteHeight(): number {
-    return this.spriteHeight;
+  public getHeight(): number {
+    return this.height;
   }
 
   public nextFrame(): void {
@@ -64,6 +66,14 @@ export class SpriteResource implements GameResource {
 
   public getMaxFrame(): number {
     return this.maxFrame;
+  }
+
+  public getFrameHold(): number {
+    return this.frameHold;
+  }
+
+  public setFrameHold(frameHold: number): void {
+    this.frameHold = frameHold;
   }
 
 }

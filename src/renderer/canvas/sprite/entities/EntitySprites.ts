@@ -1,5 +1,5 @@
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
-import { EntityState } from '@/wrapper/Entity';
+import { EntityState } from '@/wrapper/entities/Entity';
 
 export interface EntitySprites {
 

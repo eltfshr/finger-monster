@@ -1,4 +1,4 @@
-import { BattleScene } from '@/renderer/canvas/scene/BattleScene';
+import { BattleScene } from '@/scene/BattleScene';
 
 export class Game {
  
