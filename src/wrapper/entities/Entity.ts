@@ -26,6 +26,7 @@ export interface Entity {
 
 export enum EntityState {
   IDLE,
+  MOVE,
   ATTACK,
   HURT,
   DIE,
