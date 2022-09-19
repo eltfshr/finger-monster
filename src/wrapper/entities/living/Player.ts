@@ -21,11 +21,12 @@ export class Player extends Creature {
   }
 
   public hurt(): void {
-    this.setCurrentState(EntityState.HURT);
+    this.setCurrentTemporaryState(EntityState.HURT, EntityState.IDLE);
   }
 
   public die(): void {
     this.setCurrentState(EntityState.DIE);
+    this.sprites.getCurrentSprite().setStopLastFrame(true);
   }
 
 }

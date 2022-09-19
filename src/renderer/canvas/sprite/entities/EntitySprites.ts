@@ -7,6 +7,6 @@ export interface EntitySprites {
 
   getCurrentSprite(): SpriteResource;
 
-  setCurrentSprite(state: EntityState): void;
+  setCurrentSprite(state: EntityState, callback?: Function): void;
 
 }

@@ -20,6 +20,8 @@ export interface Entity {
 
   setCurrentState(state: EntityState): void;
 
+  setCurrentTemporaryState(state: EntityState, afterState: EntityState): void;
+
   getCurrentSprite(): SpriteResource;
 
 }
