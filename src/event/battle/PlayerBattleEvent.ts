@@ -2,6 +2,7 @@ import { BattleUIManager } from '@/renderer/ui/battleui/BattleUIManager';
 import { Player } from '@/wrapper/entities/living/Player';
 
 export class PlayerBattleEvent {
+
   private uiManager: BattleUIManager;
 
   public constructor(uiManager: BattleUIManager) {

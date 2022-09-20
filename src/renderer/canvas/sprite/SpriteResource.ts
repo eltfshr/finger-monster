@@ -8,7 +8,9 @@ export class SpriteResource implements GameResource {
   private width: number = 0;
   private height: number = 0;
   private frame: number = 0;
-  private frameHold: number;
+  private frameHold: number = 0;
+  private needStopLastFrame: boolean = false;
+  private endLoopCallback: Function = () => {};
 
   public constructor(imagePath: string, maxFrame: number, frameHold: number) {
     this.image = new Image();
@@ -49,10 +51,16 @@ export class SpriteResource implements GameResource {
   }
 
   public nextFrame(): void {
-    if (this.getCurrentFrame() < this.getMaxFrame()) {
-      this.frame += 1;
+    const isCompleteLoop = this.getCurrentFrame() === this.getMaxFrame();
+
+    if (isCompleteLoop && this.needStopLastFrame) return;
+
+    if (isCompleteLoop) {
+      this.resetFrame();
+      this.endLoopCallback();
+      this.endLoopCallback = () => {};
     } else {
-      this.frame = 0;
+      this.frame += 1;
     }
   }
 
@@ -74,6 +82,14 @@ export class SpriteResource implements GameResource {
 
   public setFrameHold(frameHold: number): void {
     this.frameHold = frameHold;
+  }
+
+  public setStopLastFrame(needStop: boolean): void {
+    this.needStopLastFrame = needStop;
+  }
+
+  public setEndLoopCallback(callback: Function): void {
+    this.endLoopCallback = callback;
   }
 
 }

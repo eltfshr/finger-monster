@@ -56,6 +56,13 @@ export abstract class Creature implements LivingEntity {
     this.sprites.setCurrentSprite(state);
   }
 
+  public setCurrentTemporaryState(state: EntityState, afterState: EntityState): void {
+    this.state = state;
+    this.sprites.setCurrentSprite(state, () => {
+      this.setCurrentState(afterState);
+    });
+  }
+
   public getCurrentSprite(): SpriteResource {
     return this.sprites.getCurrentSprite();
   }
