@@ -1,5 +1,6 @@
 import { Tileset } from '@/renderer/canvas/object/Tileset';
 import { GameResource } from '@/renderer/GameResource';
+import { Scene } from '@/scene/Scene';
 
 export class Ground implements GameResource {
 
@@ -22,10 +23,10 @@ export class Ground implements GameResource {
     this.tileMap = this.generate(2);
   }
 
-  public apply(width: number, height: number, sceneHeight: number, scale: number = 1): void {
-    this.width = width;
+  public apply(scene: Scene, height: number, scale: number = 1): void {
+    this.width = scene.getWidth();
+    this.sceneHeight = scene.getHeight();
     this.height = height;
-    this.sceneHeight = sceneHeight;
     this.scale = scale;
   }
 
@@ -79,14 +80,14 @@ export class Ground implements GameResource {
     const tileSize = this.tileset.getSize() * this.scale;
     const tileXCount = Math.ceil(this.width / tileSize) * 2;
     const tileYCount = Math.ceil(this.height / tileSize);
-    const yOffset = this.sceneHeight - (tileYCount * tileSize);
+    const offsetY = this.sceneHeight - (tileYCount * tileSize);
 
     for (let i = 0; i < tileYCount; i++) {
       for (let j = 0; j < tileXCount; j++) {
         this.tileset.draw(
           context,
           (16 * 0) + this.x + (j * tileSize),
-          yOffset + (i * tileSize),
+          offsetY + (i * tileSize),
           this.tileMap[i][j] as [number, number] || [0, 0],
           this.scale,
         );

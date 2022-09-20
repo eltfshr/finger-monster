@@ -1,4 +1,5 @@
 import { GameResource } from '@/renderer/GameResource';
+import { Scene } from '@/scene/Scene';
 
 export class Background implements GameResource {
 
@@ -24,7 +25,10 @@ export class Background implements GameResource {
     });
   }
 
-  public apply(sceneWidth: number, sceneHeight: number): void {
+  public apply(scene: Scene): void {
+    const sceneWidth = scene.getWidth();
+    const sceneHeight = scene.getHeight();
+
     if (this.image.height >= sceneHeight) return;
 
     const bgRatio = this.image.width / this.image.height;
