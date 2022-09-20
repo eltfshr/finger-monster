@@ -1,4 +1,5 @@
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { GameScreen } from '@/renderer/GameScreen';
 import { Entity } from '@/wrapper/entities/Entity';
 
 export abstract class Scene {
@@ -13,10 +14,10 @@ export abstract class Scene {
   private lastUpdateTimestamp: number = Date.now();
   private elapsedTime: number = 0;
 
-  public constructor(width: number, height: number) {
+  public constructor(gameScreen: GameScreen) {
     this.canvas = document.querySelector<HTMLCanvasElement>('#scene')!;
-    this.canvas.width = width;
-    this.canvas.height = height;
+    this.canvas.width = gameScreen.getWidth();
+    this.canvas.height = gameScreen.getHeight();
     this.context = this.canvas.getContext('2d')!;
   }
 

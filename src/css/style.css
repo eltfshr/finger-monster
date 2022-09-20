@@ -31,6 +31,10 @@ html, body {
   background-color: rgb(34, 34, 34);
 }
 
+#game {
+  position: relative;
+}
+
 #scene {
   background-color: rgb(190, 190, 190);
 }
@@ -42,7 +46,7 @@ html, body {
 }
 
 #health-bar {
-  position: fixed;
+  position: absolute;
   bottom: 5%;
   left: 2%;
   background-color: orangered;
