@@ -77,6 +77,8 @@ export abstract class Creature implements LivingEntity {
 
   public abstract idle(): void;
 
+  public abstract move(): void;
+
   public abstract attack(): void;
 
   public abstract damage(): void;

@@ -12,6 +12,10 @@ export class Player extends Creature {
     this.setCurrentState(EntityState.IDLE);
   }
 
+  public move(): void {
+    this.setCurrentState(EntityState.MOVE);
+  }
+
   public attack(): void {
     this.setCurrentState(EntityState.ATTACK);
   }

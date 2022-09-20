@@ -8,6 +8,8 @@ export interface LivingEntity extends Entity {
 
   idle(): void;
 
+  move(): void;
+
   attack(): void
 
   hurt(): void;
