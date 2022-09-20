@@ -1,16 +1,16 @@
-import { BattleUIManager } from '@/renderer/ui/battleui/BattleUIManager';
+import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
 import { Player } from '@/wrapper/entities/living/Player';
 
 export class PlayerBattleEvent {
 
-  private uiManager: BattleUIManager;
+  private uiRoot: BattleUserInterfaceRoot;
 
-  public constructor(uiManager: BattleUIManager) {
-    this.uiManager = uiManager;
+  public constructor(uiRoot: BattleUserInterfaceRoot) {
+    this.uiRoot = uiRoot;
   }
   
   public onHurt(health: number): void {
-    this.uiManager.updateHealth(health);
+    this.uiRoot.updateHealth(health);
   }
 
   public onDie(player: Player): void {

@@ -1,15 +1,16 @@
 import { PlayerBattleEvent } from '@/event/battle/PlayerBattleEvent';
-import { BattleUIManager } from '@/renderer/ui/battleui/BattleUIManager';
+import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
 import { Player } from '@/wrapper/entities/living/Player';
 
 export class BattleEventManager {
 
-  protected uiManager: BattleUIManager;
+  protected uiRoot: BattleUserInterfaceRoot;
+
   private playerEvent: PlayerBattleEvent;
 
-  public constructor(uiManager: BattleUIManager) {
-    this.uiManager = uiManager;
-    this.playerEvent = new PlayerBattleEvent(this.uiManager);
+  public constructor(uiRoot: BattleUserInterfaceRoot) {
+    this.uiRoot = uiRoot;
+    this.playerEvent = new PlayerBattleEvent(this.uiRoot);
   }
 
   public onPlayerDie(player: Player): void {

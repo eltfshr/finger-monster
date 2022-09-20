@@ -21,6 +21,7 @@ time, mark, audio, video {
 
 html, body {
   height: 100%;
+  overflow: hidden;
 }
 
 #app {
@@ -47,7 +48,42 @@ html, body {
 
 #health-bar {
   position: absolute;
-  bottom: 5%;
+  top: 4.7%;
+  left: calc(2% + 100px - 5px);
+  width: 180px;
+  height: 23px;
+  background-image: url('/graphic/health-bar.png');
+  background-size: cover;
+}
+
+#mana-bar {
+  position: absolute;
+  top: calc(4.7% + 23px - 3px);
+  left: calc(2% + 100px - 5px);
+  width: 158px;
+  height: 23px;
+  background-image: url('/graphic/mana-bar.png');
+  background-size: cover;
+}
+
+#player-frame {
+  z-index: 1;
+  position: absolute;
+  top: 4.7%;
+  left: 3%;
+  width: 75px;
+  height: 78px;
+  background-image: url('/graphic/player-frame.png');
+  background-size: cover;
+}
+
+#player-frame-border {
+  z-index: 0;
+  position: absolute;
+  top: 3%;
   left: 2%;
-  background-color: orangered;
+  width: 100px;
+  height: 104px;
+  background-image: url('/graphic/player-frame-border.png');
+  background-size: cover;
 }
