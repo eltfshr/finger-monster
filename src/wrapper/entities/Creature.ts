@@ -75,6 +75,26 @@ export abstract class Creature implements LivingEntity {
     this.health = health;
   }
 
+  public isIdle(): boolean {
+    return this.state === EntityState.IDLE;
+  }
+
+  public isMoving(): boolean {
+    return this.state === EntityState.MOVE;
+  }
+
+  public isAttacking(): boolean {
+    return this.state === EntityState.ATTACK;
+  }
+
+  public isHurting(): boolean {
+    return this.state === EntityState.HURT;
+  }
+
+  public isDieing(): boolean {
+    return this.state === EntityState.DIE;
+  }
+  
   public abstract idle(): void;
 
   public abstract move(): void;

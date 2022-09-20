@@ -6,6 +6,16 @@ export interface LivingEntity extends Entity {
 
   setHealth(health: number): void;
 
+  isIdle(): boolean;
+
+  isMoving(): boolean;
+
+  isAttacking(): boolean;
+
+  isHurting(): boolean;
+
+  isDieing(): boolean;
+
   idle(): void;
 
   move(): void;
