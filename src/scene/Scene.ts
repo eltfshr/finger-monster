@@ -3,7 +3,7 @@ import { Entity } from '@/wrapper/entities/Entity';
 
 export abstract class Scene {
   
-  private static readonly DEBUG_MODE: boolean = true;
+  private static readonly DEBUG_MODE: boolean = false;
 
   private readonly canvas: HTMLCanvasElement;
   private readonly context: CanvasRenderingContext2D;
