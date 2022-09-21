@@ -9,8 +9,13 @@ export class PlayerBattleEvent {
     this.uiRoot = uiRoot;
   }
   
-  public onHurt(health: number): void {
-    this.uiRoot.updateHealth(health);
+  public onAttack(player: Player): void {
+    player.attack();
+  }
+
+  public onHurt(player: Player): void {
+    player.hurt();
+    this.uiRoot.updateHealth(player.getHealth());
   }
 
   public onDie(player: Player): void {
