@@ -1,46 +1,46 @@
-import { GameResource } from '@/renderer/GameResource';
+import { ImageRegistry } from '@/renderer/ImageRegistry';
+import { ImageResource } from '@/renderer/ImageResource';
 import { Scene } from '@/scene/Scene';
 
-export class Background implements GameResource {
+export class Background implements ImageResource {
 
-  private readonly image: HTMLImageElement;
-  
+  private readonly imageRegistry: ImageRegistry;
+
+  private image: HTMLImageElement | undefined;
   private x: number = 0;
   private repeatCount: number = 1;
 
-  public constructor(imagePath: string) {
-    this.image = new Image();
-    this.image.src = imagePath;
+  public constructor(imageRegistry: ImageRegistry) {
+    this.imageRegistry = imageRegistry;
   }
 
-  public async load(): Promise<void> {
-    if (this.image.complete) {
-      return;
-    }
-
-    return new Promise((resolve) => {
-      this.image.onload = () => {
-        resolve();
-      };
-    });
+  public setImage(path: string): Background {
+    this.image = this.imageRegistry.getImage(path); 
+    return this;
   }
 
-  public apply(scene: Scene): void {
+  public setScene(scene: Scene): Background {
+    if (!this.image) throw new Error('Could not set scene without image resource');
+
     const sceneWidth = scene.getWidth();
     const sceneHeight = scene.getHeight();
 
-    if (this.image.height >= sceneHeight) return;
+    if (this.image.height >= sceneHeight) return this;
 
     const bgRatio = this.image.width / this.image.height;
     this.image.width = bgRatio * sceneHeight;
     this.image.height = sceneHeight;
 
-    if (this.image.width >= sceneWidth) return;
+    if (this.image.width >= sceneWidth) return this;
 
     this.repeatCount = Math.ceil(sceneWidth / this.image.width);
+
+    return this;
   }
 
   public draw(context: CanvasRenderingContext2D, offsetY: number = 0): void {
+    if (!this.image) throw new Error('Could not set draw without image resource');
+
     for (let i = 0; i < this.repeatCount; i++) {
       context.drawImage(
         this.image,
@@ -62,6 +62,8 @@ export class Background implements GameResource {
   }
 
   public move(speed: number): void {
+    if (!this.image) throw new Error('Could not move scene without image resource');
+
     if (this.x <= -(this.repeatCount * this.image.width)) {
       this.x = 0;
     }

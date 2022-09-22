@@ -1,24 +1,20 @@
-import { GameResource } from '@/renderer/GameResource';
+import { ImageRegistry } from '@/renderer/ImageRegistry';
+import { ImageResource } from '@/renderer/ImageResource';
 
-export class Tileset implements GameResource {
+export class Tileset implements ImageResource {
 
-  private readonly image: HTMLImageElement;
-  private readonly size: number;
+  private readonly imageRegistry: ImageRegistry;
 
-  public constructor(imagePath: string, size: number) {
-    this.image = new Image();
-    this.image.src = imagePath;
-    this.size = size;
+  private image: HTMLImageElement | undefined;
+  private size: number = 0;
+
+  public constructor(imageRegistry: ImageRegistry) {
+    this.imageRegistry = imageRegistry;
   }
 
-  public async load(): Promise<void> {
-    if (this.image.complete) return;
-
-    return new Promise((resolve) => {
-      this.image.onload = () => {
-        resolve();
-      };
-    });
+  public setImage(path: string): Tileset {
+    this.image = this.imageRegistry.getImage(path);
+    return this;
   }
 
   public draw(
@@ -28,6 +24,8 @@ export class Tileset implements GameResource {
     tile: [number, number],
     scale: number = 1,
   ) {
+    if (!this.image) throw new Error('Could not draw tile set without image resource');
+
     canvas.drawImage(
       this.image,
       tile[0] * this.size,
@@ -43,6 +41,11 @@ export class Tileset implements GameResource {
 
   public getSize(): number {
     return this.size;
+  }
+
+  public setSize(size: number): Tileset {
+    this.size = size;
+    return this;
   }
   
 }

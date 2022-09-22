@@ -1,5 +1,6 @@
 import { BattleEventManager } from '@/event/battle/BattleEventManger';
 import { BattleBackgroundAudio } from '@/renderer/audio/BattleBackgroundAudio';
+import { BattleImageRegistry } from '@/renderer/BattleImageRegistry';
 import { Background } from '@/renderer/canvas/object/Background';
 import { Ground } from '@/renderer/canvas/object/Ground';
 import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
@@ -9,10 +10,12 @@ import { Player } from '@/wrapper/entities/living/Player';
 
 export class BattleScene extends Scene {
 
-  private readonly baseBackground     = new Background('bg/battle/base.png');
-  private readonly midBackground      = new Background('bg/battle/mid.png');
+  private readonly imageRegistry      = new BattleImageRegistry();
+  private readonly baseBackground     = new Background(this.imageRegistry);
+  private readonly midBackground      = new Background(this.imageRegistry);
+  private readonly ground             = new Ground(this.imageRegistry);
+
   private readonly backgroundAudio    = new BattleBackgroundAudio();
-  private readonly ground             = new Ground();
 
   private readonly creatureSpawner    = new CreatureSpawner();
   private readonly player             = new Player(0, 0);
@@ -21,30 +24,33 @@ export class BattleScene extends Scene {
   private readonly eventManager       = new BattleEventManager(this.uiRoot);
 
   public async load(): Promise<void> {
-    await Promise.all([
-      this.baseBackground.load(),
-      this.midBackground.load(),
-      this.backgroundAudio.load(),
-      this.ground.load(),
-      this.player.load(),
-    ]);
+    await this.imageRegistry.load(),
 
-    this.baseBackground.apply(this);
-    this.midBackground.apply(this);
-
-    this.ground.apply(this, this.getHeight() * 0.2, 2);
-    this.ground.init();
+    // await Promise.all([
+    //   this.imageRegistry.load(),
+    //   this.backgroundAudio.load(),
+    //   this.ground.load(),
+    //   this.player.load(),
+    // ]);
 
     this.backgroundAudio.setVolume(0.25);
     // this.backgroundAudio.play();
 
-    this.creatureSpawner.apply(
-      this,
-      this.getHeight() * 0.6,
-      this.getHeight() * 0.22,
-    );
+    this.baseBackground
+      .setImage('bg/battle/base.png')
+      .setScene(this);
+    this.midBackground
+      .setImage('bg/battle/mid.png')
+      .setScene(this);
 
-    // this.player.setX(this.getWidth() / 2.5); // Center
+    this.ground
+      .setImage('tiles/tileset1.png')
+      .setSize(16)
+      .setScene(this)
+      .apply(this.getHeight() * 0.2, 2)
+      .init();
+
+    this.creatureSpawner.apply(this, this.getHeight() * 0.6, this.getHeight() * 0.22);
 
     this.player.setX(this.getWidth() / 9);
     this.player.setY(this.getHeight() * 0.61);
@@ -54,6 +60,11 @@ export class BattleScene extends Scene {
   public update(): void {
     this.updateAllBackgrounds();
     this.drawEntity(this.player, 1.25);
+
+    // if (this.sceneFrame === 100) {
+    //   this.player.idle();
+    //   this.player.attack();
+    // }
 
     // this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
     //   !creature.isAttacking() && creature.attack();
@@ -65,22 +76,6 @@ export class BattleScene extends Scene {
     // if (this.sceneFrame === 100) {
     //   this.creatureSpawner.spawn();
     //   console.log('spawn');
-    // }
-
-    // if (this.sceneFrame % 1000 === 0) {
-    //   this.player.idle();
-    // } else if (this.sceneFrame % 100 === 0) {
-    //   this.player.move();
-    // }
-
-    // if (!this.player.isDieing()) {
-    //   if (this.sceneFrame === 80) {
-    //     this.player.hurt();
-    //   }
-
-    //   if (this.sceneFrame % 100 == 0) {
-    //     this.eventManager.onPlayerHurt(this.player);
-    //   }
     // }
   }
 

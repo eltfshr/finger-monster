@@ -1,13 +1,16 @@
 import { Tileset } from '@/renderer/canvas/object/Tileset';
-import { GameResource } from '@/renderer/GameResource';
+import { ImageRegistry } from '@/renderer/ImageRegistry';
+import { ImageResource } from '@/renderer/ImageResource';
 import { Scene } from '@/scene/Scene';
 
-export class Ground implements GameResource {
+export class Ground implements ImageResource {
 
   private static readonly PLANT_PECENTAGE = 0.2;
+  private static readonly DEEP_GROUND_CHANCE = 0.3;
 
-  private readonly tileset = new Tileset('tiles/tileset1.png', 16);
+  private readonly imageRegistry: ImageRegistry;
 
+  private tileset: Tileset | undefined;
   private width: number = 0;
   private height: number = 0;
   private sceneHeight: number = 0;
@@ -15,22 +18,46 @@ export class Ground implements GameResource {
   private x: number = 0;
   private tileMap: number[][][] = [];
 
-  public async load(): Promise<void> {
-    await this.tileset.load();
+  public constructor(imageRegistry: ImageRegistry) {
+    this.imageRegistry = imageRegistry;
+  }
+
+  public setImage(path: string): Ground {
+    this.tileset = new Tileset(this.imageRegistry);
+    this.tileset.setImage(path);
+    return this;
+  }
+
+  public setSize(size: number): Ground {
+    if (!this.tileset) {
+      throw new Error('Could not set size without image resource');
+    }
+
+    this.tileset.setSize(size);
+    return this;
+  }
+
+  public setScene(scene: Scene): Ground {
+    this.width = scene.getWidth();
+    this.sceneHeight = scene.getHeight();
+    return this;
+  }
+
+  public apply(height: number, scale: number = 1): Ground {
+    this.height = height;
+    this.scale = scale;
+    return this;
   }
 
   public init(): void {
     this.tileMap = this.generate(2);
   }
 
-  public apply(scene: Scene, height: number, scale: number = 1): void {
-    this.width = scene.getWidth();
-    this.sceneHeight = scene.getHeight();
-    this.height = height;
-    this.scale = scale;
-  }
-
   private generate(chunk: number): number[][][] {
+    if (!this.tileset) throw new Error('Could not generate ground without image resource');
+
+    console.log(this.tileset.getSize());
+
     const resultTileMap: number[][][] = [];
     const tileSize = this.tileset.getSize() * this.scale;
     const tileXCount = Math.ceil(this.width / tileSize) * chunk;
@@ -50,7 +77,8 @@ export class Ground implements GameResource {
           }
         } else if (i === 1) {
           // Top ground layer
-          const groundTile = Math.floor(Math.random() * (9 - 8 + 1) + 8);
+          const deepGroundChance = (Math.floor(Math.random() * 100) + 1) / 100;
+          const groundTile = (deepGroundChance <= Ground.DEEP_GROUND_CHANCE) ? 8 : 9;
           resultTileMap[i][j] = [groundTile, 3];
         } else if (i === 2) {
           // Secondary ground layer
@@ -66,6 +94,8 @@ export class Ground implements GameResource {
   }
 
   public regenerate(): void {
+    if (!this.tileset) throw new Error('Could not regenerate ground without image resource');
+
     const tileSize = this.tileset.getSize() * this.scale;
     const tileXCount = Math.ceil(this.width / tileSize);
     const tileYCount = Math.ceil(this.height / tileSize);
@@ -77,6 +107,8 @@ export class Ground implements GameResource {
   }
 
   public draw(context: CanvasRenderingContext2D): void {
+    if (!this.tileset) throw new Error('Could not draw ground without image resource');
+
     const tileSize = this.tileset.getSize() * this.scale;
     const tileXCount = Math.ceil(this.width / tileSize) * 2;
     const tileYCount = Math.ceil(this.height / tileSize);
