@@ -56,8 +56,6 @@ export class Ground implements ImageResource {
   private generate(chunk: number): number[][][] {
     if (!this.tileset) throw new Error('Could not generate ground without image resource');
 
-    console.log(this.tileset.getSize());
-
     const resultTileMap: number[][][] = [];
     const tileSize = this.tileset.getSize() * this.scale;
     const tileXCount = Math.ceil(this.width / tileSize) * chunk;

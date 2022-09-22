@@ -1,18 +1,31 @@
+import { BlueSlimeAnimation } from '@/renderer/canvas/sprite/entities/BlueSlimeAnimation';
+import { ImageRegistry } from '@/renderer/ImageRegistry';
 import { Scene } from '@/scene/Scene';
 import { Creature } from '@/wrapper/entities/Creature';
 import { BlueSlime } from '@/wrapper/entities/living/BlueSlime';
 
 export class CreatureSpawner {
   
+  private readonly imageRegistry: ImageRegistry;
+
   private height: number = 0;
   private offsetX: number = 0;
   private offsetY: number = 0;
   private creatures: Creature[] = [];
 
-  public apply(scene: Scene, height: number, offsetY: number): void {
-    this.height = height;
+  public constructor(imageRegistry: ImageRegistry) {
+    this.imageRegistry = imageRegistry;
+  }
+
+  public setScene(scene: Scene): CreatureSpawner {
     this.offsetX = scene.getWidth();
+    return this;
+  }
+
+  public apply(height: number, offsetY: number): CreatureSpawner {
+    this.height = height;
     this.offsetY = offsetY;
+    return this;
   }
 
   public spawn(): void {
@@ -20,8 +33,10 @@ export class CreatureSpawner {
     const minY = this.offsetY;
     const y = Math.floor(Math.random() * (maxY - minY + 1) + minY);
 
-    const creature = new BlueSlime(this.offsetX, y);
-    creature.load();
+    const creature = new BlueSlime();
+    creature.setAnimation(new BlueSlimeAnimation(this.imageRegistry));
+    creature.setX(this.offsetX);
+    creature.setY(520);
 
     this.creatures.push(creature);
   }

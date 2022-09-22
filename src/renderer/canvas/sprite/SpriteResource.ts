@@ -1,10 +1,11 @@
-import { GameResource } from '@/renderer/GameResource';
+import { ImageRegistry } from '@/renderer/ImageRegistry';
 
-export class SpriteResource implements GameResource {
+export class SpriteResource {
 
-  private readonly image: HTMLImageElement;
+  private readonly imagePath: string;
   private readonly maxFrame: number;
 
+  private image: HTMLImageElement | undefined;
   private width: number = 0;
   private height: number = 0;
   private frame: number = 0;
@@ -13,32 +14,21 @@ export class SpriteResource implements GameResource {
   private endLoopCallback: Function = () => {};
 
   public constructor(imagePath: string, maxFrame: number, frameHold: number) {
-    this.image = new Image();
-    this.image.src = imagePath;
+    this.imagePath = imagePath;
     this.maxFrame = maxFrame;
     this.frameHold = frameHold;
   }
 
-  public async load(): Promise<void> {
-    if (this.image.complete) {
-      this.loadSpriteDimension();
-      return;
-    }
-
-    return new Promise((resolve) => {
-      this.image.onload = () => {
-        this.loadSpriteDimension();
-        resolve();
-      };
-    });
-  }
-
-  private loadSpriteDimension(): void {
+  public loadFromImageRegistry(imageRegistry: ImageRegistry): void {
+    this.image = imageRegistry.getImage(this.imagePath);
     this.width = this.image.width / (this.maxFrame + 1);
     this.height = this.image.height;
   }
 
   public getImage(): HTMLImageElement {
+    if (!this.image) {
+      throw new Error(`Could not get image (${this.imagePath}) from the Image registry`);
+    }
     return this.image;
   }
 

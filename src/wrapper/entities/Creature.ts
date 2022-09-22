@@ -1,26 +1,18 @@
-import { EntitySprites } from '@/renderer/canvas/sprite/entities/EntitySprites';
+import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
-import { EntityState } from '@/wrapper/entities/Entity';
-import { LivingEntity } from '@/wrapper/entities/LivingEntity';
+import { Entity } from '@/wrapper/entities/Entity';
+import { EntityState } from '@/wrapper/entities/EntityState';
+export abstract class Creature implements Entity {
 
-export abstract class Creature implements LivingEntity {
-
-  protected readonly sprites: EntitySprites;
-
-  protected x: number;
-  protected y: number;
+  protected animation: EntityAnimation | undefined;
+  protected x: number = 0;
+  protected y: number = 0;
   protected velocity: number = 1.0;
   protected health: number = 100;
   protected state: EntityState = EntityState.IDLE;
 
-  public constructor(sprites: EntitySprites, x: number, y: number) {
-    this.sprites = sprites;
-    this.x = x;
-    this.y = y;
-  }
-
-  public async load(): Promise<void> {
-    await this.sprites.loadAllSprites();
+  public setAnimation(animation: EntityAnimation): void {
+    this.animation = animation;
   }
 
   public getX(): number {
@@ -52,19 +44,31 @@ export abstract class Creature implements LivingEntity {
   }
 
   public setCurrentState(state: EntityState): void {
+    if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
+
     this.state = state;
-    this.sprites.setCurrentSprite(state);
+    this.animation.setCurrentSprite(state);
   }
 
   public setCurrentTemporaryState(state: EntityState, afterState: EntityState): void {
+    if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
+
     this.state = state;
-    this.sprites.setCurrentSprite(state, () => {
+    this.animation.setCurrentSprite(state, () => {
       this.setCurrentState(afterState);
     });
   }
 
+  public getAnimation(): EntityAnimation {
+    if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
+
+    return this.animation;
+  }
+
   public getCurrentSprite(): SpriteResource {
-    return this.sprites.getCurrentSprite();
+    if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
+
+    return this.animation.getCurrentSprite();
   }
 
   public getHealth(): number {
@@ -94,14 +98,14 @@ export abstract class Creature implements LivingEntity {
   public isDieing(): boolean {
     return this.state === EntityState.DIE;
   }
-  
+
   public abstract idle(): void;
 
   public abstract move(): void;
 
-  public abstract attack(): void;
+  public abstract updatePosition(): void;
 
-  public abstract damage(): void;
+  public abstract attack(): void;
 
   public abstract hurt(): void;
 

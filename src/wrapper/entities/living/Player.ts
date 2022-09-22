@@ -1,12 +1,7 @@
-import { PlayerSprites } from '@/renderer/canvas/sprite/entities/PlayerSprites';
 import { Creature } from '@/wrapper/entities/Creature';
-import { EntityState } from '@/wrapper/entities/Entity';
+import { EntityState } from '@/wrapper/entities/EntityState';
 
 export class Player extends Creature {
-
-  public constructor(x: number, y: number) {
-    super(new PlayerSprites(), x, y);
-  }
 
   public idle(): void {
     this.setCurrentState(EntityState.IDLE);
@@ -16,21 +11,23 @@ export class Player extends Creature {
     this.setCurrentState(EntityState.MOVE);
   }
 
-  public attack(): void {
-    this.setCurrentState(EntityState.ATTACK);
+  public updatePosition(): void {
+
   }
 
-  public damage(): void {
-    this.setCurrentState(EntityState.HURT);
+  public attack(): void {
+    const previousState = this.getCurrentState();
+    this.setCurrentTemporaryState(EntityState.ATTACK, previousState);
   }
 
   public hurt(): void {
-    this.setCurrentTemporaryState(EntityState.HURT, EntityState.IDLE);
+    const previousState = this.getCurrentState();
+    this.setCurrentTemporaryState(EntityState.HURT, previousState);
   }
 
   public die(): void {
     this.setCurrentState(EntityState.DIE);
-    this.sprites.getCurrentSprite().setStopLastFrame(true);
+    this.getCurrentSprite().setStopLastFrame(true);
   }
 
 }
