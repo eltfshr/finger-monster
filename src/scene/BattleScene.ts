@@ -4,6 +4,7 @@ import { BattleImageRegistry } from '@/renderer/BattleImageRegistry';
 import { Background } from '@/renderer/canvas/object/Background';
 import { Ground } from '@/renderer/canvas/object/Ground';
 import { PlayerAnimation } from '@/renderer/canvas/sprite/entities/PlayerAnimation';
+import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
 import { Scene } from '@/scene/Scene';
 import { CreatureSpawner } from '@/wrapper/entities/CreatureSpawner';
@@ -12,6 +13,7 @@ import { Player } from '@/wrapper/entities/living/Player';
 export class BattleScene extends Scene {
 
   private readonly imageRegistry      = new BattleImageRegistry();
+  private readonly collisionRegistry  = new CollisionRegistry();
 
   private readonly baseBackground     = new Background(this.imageRegistry);
   private readonly midBackground      = new Background(this.imageRegistry);
@@ -19,7 +21,7 @@ export class BattleScene extends Scene {
 
   private readonly backgroundAudio    = new BattleBackgroundAudio();
 
-  private readonly creatureSpawner    = new CreatureSpawner(this.imageRegistry);
+  private readonly creatureSpawner    = new CreatureSpawner(this.imageRegistry, this.collisionRegistry);
   private readonly player             = new Player();
 
   private readonly uiRoot             = new BattleUserInterfaceRoot(this.player);
@@ -52,7 +54,7 @@ export class BattleScene extends Scene {
       .setScene(this)
       .apply(this.getHeight() * 0.6, this.getHeight() * 0.22);
 
-    this.player.setAnimation(new PlayerAnimation(this.imageRegistry));
+    this.player.setAnimation(new PlayerAnimation(this.imageRegistry, this.collisionRegistry));
     this.player.setX(this.getWidth() / 9);
     this.player.setY(this.getHeight() * 0.61);
     this.player.move();

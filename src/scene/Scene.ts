@@ -4,7 +4,7 @@ import { Entity } from '@/wrapper/entities/Entity';
 
 export abstract class Scene {
   
-  private static readonly DEBUG_MODE: boolean = false;
+  private static readonly DEBUG_MODE: boolean = true;
 
   private readonly canvas: HTMLCanvasElement;
   private readonly context: CanvasRenderingContext2D;
@@ -28,6 +28,7 @@ export abstract class Scene {
   public drawSprite(sprite: SpriteResource, x: number, y: number, scale: number = 1.0): void {
     const spriteWidth = sprite.getWidth();
     const spriteHeight = sprite.getHeight();
+    const collision = sprite.getCollision();
 
     this.context.drawImage(
       sprite.getImage(),
@@ -42,7 +43,7 @@ export abstract class Scene {
     );
 
     // Debug sprite bouding box
-    Scene.DEBUG_MODE && this.context.strokeRect(x, y, spriteWidth * scale, spriteHeight * scale);
+    Scene.DEBUG_MODE && this.context.strokeRect(x + collision.getLeft() * scale, y + collision.getTop() * scale, collision.getWidth() * scale, collision.getHeight() * scale);
 
     if (this.sceneFrame % sprite.getFrameHold() === 0) {
       sprite.nextFrame();

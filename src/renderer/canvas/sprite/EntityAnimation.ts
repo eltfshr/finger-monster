@@ -1,4 +1,5 @@
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
 import { EntityState } from '@/wrapper/entities/EntityState';
 
@@ -8,18 +9,22 @@ export abstract class EntityAnimation {
   
   private entityState: EntityState;
 
-  public constructor(imageRegistry: ImageRegistry) {
+  public constructor(imageRegistry: ImageRegistry, collisionRegistry: CollisionRegistry) {
     this.spriteResourceByState = this.createSpriteMap();
     this.entityState = this.spriteResourceByState.keys().next().value;
-    this.loadAllSprites(imageRegistry);
+    this.loadAllSprites(imageRegistry, collisionRegistry);
   }
 
-  private loadAllSprites(imageRegistry: ImageRegistry): void {
+  private loadAllSprites(imageRegistry: ImageRegistry, collisionRegistry: CollisionRegistry): void {
     try {
       console.log(this.spriteResourceByState.values());
       Array
         .from(this.spriteResourceByState.values())
         .map((resource) => resource.loadFromImageRegistry(imageRegistry));
+
+      Array
+        .from(this.spriteResourceByState.values())
+        .map((resource) => resource.loadFromCollisionRegistry(collisionRegistry));
     } catch (error) {
       console.log(error);
       throw new Error(`Could not load a resource for ${this.constructor.name}`);

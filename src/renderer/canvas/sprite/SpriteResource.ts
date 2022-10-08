@@ -1,3 +1,5 @@
+import { Collision } from '@/renderer/collision/Collision';
+import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
 
 export class SpriteResource {
@@ -5,6 +7,7 @@ export class SpriteResource {
   private readonly imagePath: string;
   private readonly maxFrame: number;
 
+  private collision: Collision | undefined;
   private image: HTMLImageElement | undefined;
   private width: number = 0;
   private height: number = 0;
@@ -25,11 +28,22 @@ export class SpriteResource {
     this.height = this.image.height;
   }
 
+  public loadFromCollisionRegistry(collisionRegistry: CollisionRegistry): void {
+    this.collision = collisionRegistry.getCollision(this);
+  }
+
   public getImage(): HTMLImageElement {
     if (!this.image) {
       throw new Error(`Could not get image (${this.imagePath}) from the Image registry`);
     }
     return this.image;
+  }
+
+  public getCollision(): Collision {
+    if (!this.collision) {
+      throw new Error(`Could not get collision (${this.imagePath}) from the Collision registry`);
+    }
+    return this.collision;
   }
 
   public getWidth(): number {
@@ -38,6 +52,10 @@ export class SpriteResource {
 
   public getHeight(): number {
     return this.height;
+  }
+
+  public getImagePath(): string {
+    return this.imagePath;
   }
 
   public nextFrame(): void {
