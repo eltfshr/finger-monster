@@ -7,8 +7,8 @@ export class CollisionProcessor {
   private context: CanvasRenderingContext2D = this.canvas.getContext('2d')!;
 
   public process(sprite: SpriteResource): Collision {
-    this.canvas.width = sprite.getWidth() * (sprite.getMaxFrame() + 1);
-    this.canvas.height = sprite.getHeight();
+    this.canvas.width = Math.floor(sprite.getWidth() * (sprite.getMaxFrame() + 1));
+    this.canvas.height = Math.floor(sprite.getHeight());
     this.context.drawImage(sprite.getImage(), 0, 0);
 
     const imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
@@ -23,7 +23,7 @@ export class CollisionProcessor {
           isUpperFound = true;
           upperBound = Math.floor(i / 4 / imageData.width);
 
-          let j = upperBound * imageData.width * 4;
+          let j = Math.floor(upperBound * imageData.width * 4);
           let isFirstTime = true;
 
           while (j < (upperBound + 1) * imageData.width * 4) {
@@ -40,12 +40,12 @@ export class CollisionProcessor {
               if (isFirstTime) {
                 j += 4;
               } else {
-                j += sprite.getWidth() * 4;
+                j += Math.floor(sprite.getWidth() * 4);
               }
             } else {
               if (isFirstTime) {
                 isFirstTime = false;
-                j += sprite.getWidth() * 4;
+                j += Math.floor(sprite.getWidth() * 4);
               } else {
                 j -= 4;
               }
@@ -58,12 +58,12 @@ export class CollisionProcessor {
     let isLowerFound = false
     let rightBound = imageData.width;
 
-    for (let i = imageData.height * imageData.width * 4 - 4; (i > 0) && !isLowerFound; i -= 4) {
+    for (let i = Math.floor(imageData.height * imageData.width * 4 - 4); (i > 0) && !isLowerFound; i -= 4) {
         if (data[i + 3] != 0) {
           isLowerFound = true;
           lowerBound = Math.floor(i / 4 / imageData.width);
 
-          let j = lowerBound * imageData.width * 4;
+          let j = Math.floor(lowerBound * imageData.width * 4);
           let isFirstTime = true;
 
           while (j > (lowerBound - 1) * imageData.width * 4) {
@@ -80,12 +80,12 @@ export class CollisionProcessor {
               if (isFirstTime) {
                 j -= 4;
               } else {
-                j -= sprite.getWidth() * 4;
+                j -= Math.floor(sprite.getWidth() * 4);
               }
             } else {
               if (isFirstTime) {
                 isFirstTime = false;
-                j -= sprite.getWidth() * 4;
+                j -= Math.floor(sprite.getWidth() * 4);
               } else {
                 j += 4;
               }
