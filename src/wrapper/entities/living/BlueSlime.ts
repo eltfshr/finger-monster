@@ -1,23 +1,22 @@
-import { BlueSlimeSprites } from '@/renderer/canvas/sprite/entities/BlueSlimeSprites';
-import { Creature } from '@/wrapper/entities/Creature';
-import { EntityState } from '@/wrapper/entities/Entity';
+import { EntityState } from '@/wrapper/entities/EntityState';
+import { HostileCreature } from '@/wrapper/entities/HostileCreature';
 
-export class BlueSlime extends Creature {
-
-  public constructor(x: number, y: number) {
-    super(new BlueSlimeSprites(), x, y);
-  }
+export class BlueSlime extends HostileCreature {
 
   public idle(): void {
     this.setCurrentState(EntityState.IDLE);
   }
 
-  public attack(): void {
-    this.setCurrentState(EntityState.ATTACK);
+  public move(): void {
+    this.setCurrentState(EntityState.MOVE);
   }
 
-  public damage(): void {
-    this.setCurrentState(EntityState.HURT);
+  public updatePosition(): void {
+
+  }
+
+  public attack(): void {
+    this.setCurrentState(EntityState.ATTACK);
   }
 
   public hurt(): void {

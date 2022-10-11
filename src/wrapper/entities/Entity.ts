@@ -1,9 +1,11 @@
+import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
-
+import { EntityState } from '@/wrapper/entities/EntityState';
+``
 export interface Entity {
-
-  load(): Promise<void>;
   
+  setAnimation(animation: EntityAnimation): void;
+
   getX(): number;
 
   setX(x: number): void;
@@ -22,14 +24,8 @@ export interface Entity {
 
   setCurrentTemporaryState(state: EntityState, afterState: EntityState): void;
 
+  getAnimation(): EntityAnimation;
+
   getCurrentSprite(): SpriteResource;
 
 }
-
-export enum EntityState {
-  IDLE,
-  MOVE,
-  ATTACK,
-  HURT,
-  DIE,
-};

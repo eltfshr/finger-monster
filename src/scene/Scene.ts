@@ -1,4 +1,5 @@
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { GameScreen } from '@/renderer/GameScreen';
 import { Entity } from '@/wrapper/entities/Entity';
 
 export abstract class Scene {
@@ -13,10 +14,10 @@ export abstract class Scene {
   private lastUpdateTimestamp: number = Date.now();
   private elapsedTime: number = 0;
 
-  public constructor(width: number, height: number) {
+  public constructor(gameScreen: GameScreen) {
     this.canvas = document.querySelector<HTMLCanvasElement>('#scene')!;
-    this.canvas.width = width;
-    this.canvas.height = height;
+    this.canvas.width = gameScreen.getWidth();
+    this.canvas.height = gameScreen.getHeight();
     this.context = this.canvas.getContext('2d')!;
   }
 
@@ -27,6 +28,7 @@ export abstract class Scene {
   public drawSprite(sprite: SpriteResource, x: number, y: number, scale: number = 1.0): void {
     const spriteWidth = sprite.getWidth();
     const spriteHeight = sprite.getHeight();
+    const collision = sprite.getCollision();
 
     this.context.drawImage(
       sprite.getImage(),
@@ -41,7 +43,7 @@ export abstract class Scene {
     );
 
     // Debug sprite bouding box
-    Scene.DEBUG_MODE && this.context.strokeRect(x, y, spriteWidth * scale, spriteHeight * scale);
+    Scene.DEBUG_MODE && this.context.strokeRect(x + collision.getLeft() * scale, y + collision.getTop() * scale, collision.getWidth() * scale, collision.getHeight() * scale);
 
     if (this.sceneFrame % sprite.getFrameHold() === 0) {
       sprite.nextFrame();

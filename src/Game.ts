@@ -1,8 +1,10 @@
+import { GameScreen } from '@/renderer/GameScreen';
 import { BattleScene } from '@/scene/BattleScene';
 
 export class Game {
  
-  private readonly battleScene: BattleScene = new BattleScene(1280, 720);
+  private readonly gameScreen: GameScreen = new GameScreen(1280, 720);
+  private readonly battleScene: BattleScene = new BattleScene(this.gameScreen);
 
   public async start(): Promise<void> {
     console.log('Loading the battle scene');
