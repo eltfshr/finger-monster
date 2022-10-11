@@ -8,6 +8,6 @@ export interface ItemEntity extends Entity {
 
   effect() : void;
   
-  destroy(): void;
+  expire(): void;
 
 }

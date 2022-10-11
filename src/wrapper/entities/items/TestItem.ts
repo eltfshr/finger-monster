@@ -1,11 +1,8 @@
-import { ItemSprites } from "@/renderer/canvas/sprite/entities/ItemSprites";
-import { EntityState } from "../Entity";
-import { ItemFactory } from "../ItemFactory";
+//import { ItemAnimation } from "@/renderer/canvas/sprite/entities/ItemAnimation";
+import { EntityState } from "@/wrapper/entities/EntityState";
+import { ItemFactory } from "@/wrapper/entities/ItemFactory";
 
 export class TestItem extends ItemFactory {
-    public constructor(x: number, y: number) {
-        super(new ItemSprites(), x, y);
-    }
     
     public idle() : void {
         this.setCurrentState(EntityState.IDLE);
@@ -19,7 +16,8 @@ export class TestItem extends ItemFactory {
         
     }
 
-    public destroy(): void {
-        this.sprites.getCurrentSprite().setStopLastFrame(false);
+    public expire(): void {
+        this.setCurrentState(EntityState.DIE);
+        this.getCurrentSprite().setStopLastFrame(false);
     }
 }
