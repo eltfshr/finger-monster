@@ -104,6 +104,16 @@ export class Ground implements ImageResource {
     }
   }
 
+  public getGroundY(): number {
+    if (!this.tileset) throw new Error('Could not draw ground without image resource');
+    
+    const tileSize = this.tileset.getSize() * this.scale;
+    const tileYCount = Math.ceil(this.height / tileSize);
+    const offsetY = this.sceneHeight - ((tileYCount - 1) * tileSize);
+    
+    return offsetY;
+  }
+
   public draw(context: CanvasRenderingContext2D): void {
     if (!this.tileset) throw new Error('Could not draw ground without image resource');
 
