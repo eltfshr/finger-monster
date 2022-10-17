@@ -3,7 +3,7 @@ export class Collision {
   private top: number;
   private bottom: number;
   private left: number;
-  private right: number
+  private right: number;
 
   public constructor(top: number, bottom: number, left: number, right: number) {
     this.top = top;
