@@ -36,4 +36,13 @@ export class Collision {
     return this.bottom - this.top + 1;
   }
 
+  public isCollide(x: number, y: number, targetX: number, targetY: number, targetCollision: Collision, scale: number, targetScale: number): boolean {
+    return (
+      x + (this.getLeft() * scale) < targetX + (targetCollision.getLeft() + targetCollision.getWidth()) * targetScale
+      && x + (this.getLeft() + this.getWidth()) * scale > targetX + targetCollision.getLeft() * targetScale
+      && y + (this.getTop() * scale) < targetY + (targetCollision.getTop() + targetCollision.getHeight()) * targetScale
+      && y + (this.getTop() + this.getHeight()) * scale > targetY + targetCollision.getTop() * targetScale
+     );
+  }
+
 }

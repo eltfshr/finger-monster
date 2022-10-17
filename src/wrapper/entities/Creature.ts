@@ -1,5 +1,6 @@
 import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { Collision } from '@/renderer/collision/Collision';
 import { Entity } from '@/wrapper/entities/Entity';
 import { EntityState } from '@/wrapper/entities/EntityState';
 export abstract class Creature implements Entity {
@@ -97,6 +98,14 @@ export abstract class Creature implements Entity {
 
   public isDieing(): boolean {
     return this.state === EntityState.DIE;
+  }
+
+  public getCollision(): Collision {
+    return this.getAnimation().getCurrentSprite().getCollision();
+  }
+
+  public isCollide(target: Entity, scale: number = 1, targetScale: number = 1): boolean {
+    return this.getCollision().isCollide(this.getX(), this.getY(), target.getX(), target.getY(), target.getCollision(), scale, targetScale);
   }
 
   public abstract idle(): void;
