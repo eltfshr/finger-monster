@@ -1,5 +1,6 @@
 import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { Collision } from '@/renderer/collision/Collision';
 import { EntityState } from '@/wrapper/entities/EntityState';
 ``
 export interface Entity {
@@ -27,5 +28,9 @@ export interface Entity {
   getAnimation(): EntityAnimation;
 
   getCurrentSprite(): SpriteResource;
+
+  getCollision(): Collision;
+
+  isCollide(target: Entity, scale: number, targetScale: number): boolean;
 
 }
