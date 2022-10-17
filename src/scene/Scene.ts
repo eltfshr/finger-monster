@@ -21,8 +21,8 @@ export abstract class Scene {
     this.context = this.canvas.getContext('2d')!;
   }
 
-  public drawEntity(entity: Entity, scale: number = 1): void {
-    this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), scale);
+  public drawEntity(entity: Entity): void {
+    this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), entity.getScale());
   }
 
   public drawSprite(sprite: SpriteResource, x: number, y: number, scale: number = 1.0): void {

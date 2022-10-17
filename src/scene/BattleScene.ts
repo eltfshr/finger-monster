@@ -52,32 +52,36 @@ export class BattleScene extends Scene {
 
     this.creatureSpawner
       .setScene(this)
-      .apply(this.getHeight() * 0.6, this.getHeight() * 0.22);
+      .apply(this.ground.getGroundY());
 
     this.player.setAnimation(new PlayerAnimation(this.imageRegistry, this.collisionRegistry));
+    this.player.setScale(1.25);
     this.player.setX(this.getWidth() / 9);
-    this.player.setY(this.getHeight() * 0.61);
+    this.player.setY(this.ground.getGroundY() - (this.player.getCollision().getHeight() + this.player.getCollision().getTop()) * this.player.getScale());
     this.player.move();
   }
 
   public update(): void {
     this.updateAllBackgrounds();
-    this.drawEntity(this.player, 1.25);
+    this.drawEntity(this.player);
 
     if (this.sceneFrame === 100) {
+      this.player.move();
       this.player.attack();
-      this.player.idle();
     }
 
     this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
       !creature.isAttacking() && creature.attack();
       creature.setX(creature.getX() - 1);
-      // console.log(creature.getX(), creature.getY());
-      this.drawEntity(creature, 3.0);
+
+      this.drawEntity(creature);
+      if (creature.isCollide(this.player, creature.getScale(), this.player.getScale())) {
+        console.log('hit');
+      }
     });
 
     if (this.sceneFrame === 100) {
-      this.creatureSpawner.spawn();
+      this.creatureSpawner.spawn(3);
     }
   }
 
