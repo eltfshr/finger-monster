@@ -10,7 +10,7 @@ export class CreatureSpawner {
   private readonly imageRegistry: ImageRegistry;
   private readonly collisionRegistry: CollisionRegistry;
 
-  private height: number = 0;
+  private sceneHeight: number = 0;
   private offsetX: number = 0;
   private offsetY: number = 0;
   private creatures: Creature[] = [];
@@ -22,24 +22,21 @@ export class CreatureSpawner {
 
   public setScene(scene: Scene): CreatureSpawner {
     this.offsetX = scene.getWidth();
+    this.sceneHeight = scene.getHeight();
     return this;
   }
 
-  public apply(height: number, offsetY: number): CreatureSpawner {
-    this.height = height;
+  public apply(offsetY: number): CreatureSpawner {
     this.offsetY = offsetY;
     return this;
   }
 
-  public spawn(): void {
-    const maxY = this.offsetY + this.height;
-    const minY = this.offsetY;
-    const y = Math.floor(Math.random() * (maxY - minY + 1) + minY);
-
+  public spawn(scale: number): void {
     const creature = new BlueSlime();
+    creature.setScale(scale);
     creature.setAnimation(new BlueSlimeAnimation(this.imageRegistry, this.collisionRegistry));
     creature.setX(this.offsetX);
-    creature.setY(520);
+    creature.setY(this.offsetY - (creature.getCollision().getHeight() + creature.getCollision().getTop()) * scale);
 
     this.creatures.push(creature);
   }
