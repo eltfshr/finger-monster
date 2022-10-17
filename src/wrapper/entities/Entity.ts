@@ -15,6 +15,10 @@ export interface Entity {
 
   setY(y: number): void;
 
+  getScale(): number;
+
+  setScale(scale: number): void;
+
   getVelocity(): number;
 
   setVelocity(velocity: number): void;

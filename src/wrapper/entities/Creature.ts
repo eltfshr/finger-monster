@@ -10,6 +10,7 @@ export abstract class Creature implements Entity {
   protected y: number = 0;
   protected velocity: number = 1.0;
   protected health: number = 100;
+  protected scale: number = 1;
   protected state: EntityState = EntityState.IDLE;
 
   public setAnimation(animation: EntityAnimation): void {
@@ -30,6 +31,14 @@ export abstract class Creature implements Entity {
 
   public setY(y: number): void {
     this.y = y;
+  }
+
+  public getScale(): number {
+    return this.scale;
+  }
+
+  public setScale(scale: number): void {
+    this.scale = scale;
   }
 
   public getVelocity(): number {
