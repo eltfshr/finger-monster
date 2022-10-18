@@ -36,7 +36,7 @@ export class CreatureSpawner {
     creature.setScale(scale);
     creature.setAnimation(new BlueSlimeAnimation(this.imageRegistry, this.collisionRegistry));
     creature.setX(this.offsetX);
-    creature.setY(this.offsetY - (creature.getCollision().getHeight() + creature.getCollision().getTop()) * scale);
+    creature.setOnGround(this.offsetY);
 
     this.creatures.push(creature);
   }

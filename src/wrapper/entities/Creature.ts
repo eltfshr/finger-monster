@@ -69,6 +69,10 @@ export abstract class Creature implements Entity {
     });
   }
 
+  public setOnGround(groundY: number): void {
+    this.setY(groundY - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
+  }
+
   public getAnimation(): EntityAnimation {
     if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
 

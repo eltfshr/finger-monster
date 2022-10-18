@@ -57,7 +57,7 @@ export class BattleScene extends Scene {
     this.player.setAnimation(new PlayerAnimation(this.imageRegistry, this.collisionRegistry));
     this.player.setScale(1.25);
     this.player.setX(this.getWidth() / 9);
-    this.player.setY(this.ground.getGroundY() - (this.player.getCollision().getHeight() + this.player.getCollision().getTop()) * this.player.getScale());
+    this.player.setOnGround(this.ground.getGroundY());
     this.player.move();
   }
 
