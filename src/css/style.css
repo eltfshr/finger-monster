@@ -49,25 +49,77 @@ html, body {
 #health-bar {
   position: absolute;
   top: 4.7%;
-  left: calc(2% + 100px - 5px);
+  left: calc(2% + 100px - 10px);
   width: 180px;
   height: 23px;
   background-image: url('/graphic/health-bar.png');
   background-size: cover;
+  overflow: hidden;
+}
+
+#health-bar-indicator {
+  z-index: 1;
+  position: absolute;
+  top: 29%;
+  left: 0;
+  width: 163px;
+  height: 10px;
+  margin-left: 5%;
+  background-image: url('/graphic/health-bar-indicator.png');
+  background-size: cover;
+}
+
+#health-bar-sub-indicator {
+  z-index: 0;  
+  position: absolute;
+  top: 29%;
+  left: 0;
+  width: 163px;
+  height: 10px;
+  margin-left: 5%;
+  background-image: url('/graphic/health-bar-sub-indicator.png');
+  background-size: cover;
+  transition: margin 1000ms;
 }
 
 #mana-bar {
   position: absolute;
   top: calc(4.7% + 23px - 3px);
-  left: calc(2% + 100px - 5px);
+  left: calc(2% + 100px - 10px);
   width: 158px;
   height: 23px;
   background-image: url('/graphic/mana-bar.png');
   background-size: cover;
+  overflow: hidden;
+}
+
+#mana-bar-indicator {
+  z-index: 1;
+  position: absolute;
+  top: 29%;
+  left: 0;
+  width: 163px;
+  height: 10px;
+  margin-left: -8%;
+  background-image: url('/graphic/mana-bar-indicator.png');
+  background-size: cover;
+}
+
+#mana-bar-sub-indicator {
+  z-index: 0;
+  position: absolute;
+  top: 29%;
+  left: 0;
+  width: 163px;
+  height: 10px;
+  margin-left: -8%;
+  background-image: url('/graphic/mana-bar-sub-indicator.png');
+  background-size: cover;
+  transition: margin 1000ms;
 }
 
 #player-frame {
-  z-index: 1;
+  z-index: 100;
   position: absolute;
   top: 4.7%;
   left: 3%;
@@ -78,7 +130,7 @@ html, body {
 }
 
 #player-frame-border {
-  z-index: 0;
+  z-index: 99;
   position: absolute;
   top: 3%;
   left: 2%;

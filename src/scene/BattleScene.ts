@@ -59,6 +59,8 @@ export class BattleScene extends Scene {
     this.player.setX(this.getWidth() / 9);
     this.player.setOnGround(this.ground.getGroundY());
     this.player.move();
+
+    this.eventManager.onHeal(100);
   }
 
   public update(): void {
@@ -69,6 +71,29 @@ export class BattleScene extends Scene {
       this.player.move();
       this.player.attack();
     }
+
+    if (this.sceneFrame % 200 === 0) {
+      // this.player.idle()
+      this.player.setHealth(this.player.getHealth() - 10);
+      this.eventManager.onHeal(this.player.getHealth());
+    }
+
+    if (this.sceneFrame === 1200) {
+      this.player.move();
+    }
+
+    if (this.sceneFrame === 1600) {
+      this.player.die();
+    }
+
+    // if (this.sceneFrame % 120 === 0) {
+    //   this.uiRoot.updateMana(this.player.getHealth());
+    // }
+
+    // if (this.sceneFrame === 100) {
+    //   this.player.attack();
+    //   this.player.idle();
+    // }
 
     this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
       !creature.isAttacking() && creature.attack();

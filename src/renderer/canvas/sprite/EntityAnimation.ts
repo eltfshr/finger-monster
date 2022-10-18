@@ -17,7 +17,6 @@ export abstract class EntityAnimation {
 
   private loadAllSprites(imageRegistry: ImageRegistry, collisionRegistry: CollisionRegistry): void {
     try {
-      console.log(this.spriteResourceByState.values());
       Array
         .from(this.spriteResourceByState.values())
         .map((resource) => resource.loadFromImageRegistry(imageRegistry));
@@ -26,7 +25,6 @@ export abstract class EntityAnimation {
         .from(this.spriteResourceByState.values())
         .map((resource) => resource.loadFromCollisionRegistry(collisionRegistry));
     } catch (error) {
-      console.log(error);
       throw new Error(`Could not load a resource for ${this.constructor.name}`);
     }
   }

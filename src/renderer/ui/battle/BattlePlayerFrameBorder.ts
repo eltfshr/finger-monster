@@ -1,9 +1,11 @@
 import { UserInterface } from '@/renderer/ui/UserInterface';
 
 export class BattlePlayerFrameBorder extends UserInterface {
-  
-  public constructor() {
-    super('player-frame-border');
+
+  public createElement(): HTMLElement {
+    const element = document.createElement('div');
+    element.setAttribute('id', 'player-frame-border');
+    return element;
   }
 
 }

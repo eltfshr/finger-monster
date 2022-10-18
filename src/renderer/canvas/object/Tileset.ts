@@ -23,7 +23,7 @@ export class Tileset implements ImageResource {
     y: number,
     tile: [number, number],
     scale: number = 1,
-  ) {
+  ): void {
     if (!this.image) throw new Error('Could not draw tile set without image resource');
 
     canvas.drawImage(

@@ -18,10 +18,10 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
     super();
     this.player = player;
 
-    this.healthBar = new BattleHealthBar(this.player.getHealth());
+    this.healthBar = new BattleHealthBar();
     this.append(this.healthBar.getNode());
 
-    this.manaBar = new BattleManaBar(this.player.getHealth());
+    this.manaBar = new BattleManaBar();
     this.append(this.manaBar.getNode());
 
     this.playerFrame = new BattlePlayerFrame();
@@ -33,6 +33,10 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
 
   public updateHealth(health: number): void {
     this.healthBar.update(health);
+  }
+
+  public updateMana(mana: number): void {
+    this.manaBar.update(mana);
   }
 
 }

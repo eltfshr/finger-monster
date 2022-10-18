@@ -1,13 +1,14 @@
 export abstract class UserInterface {
 
-  protected readonly node: HTMLDivElement;
+  protected readonly node: HTMLElement;
 
-  public constructor(id: string) {
-    this.node = document.createElement('div');
-    this.node.setAttribute('id', id);
+  public constructor() {
+    this.node = this.createElement();
   }
 
-  public getNode(): HTMLDivElement {
+  public abstract createElement(): HTMLElement;
+
+  public getNode(): HTMLElement {
     return this.node;
   }
 

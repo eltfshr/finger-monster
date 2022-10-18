@@ -17,6 +17,10 @@ export class BattleEventManager {
     this.enemyEvent = new EnemyBattleEvent(this.uiRoot);
   }
 
+  public onHeal(amount: number): void {
+    this.uiRoot.updateHealth(amount);
+  }
+
   public onPlayerAttack(player: Player): void {
     this.playerEvent.onAttack(player);
   }
