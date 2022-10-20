@@ -29,6 +29,8 @@ export interface Entity {
 
   setCurrentTemporaryState(state: EntityState, afterState: EntityState): void;
 
+  isOnGround(): boolean;
+
   setOnGround(groundY: number): void;
 
   getAnimation(): EntityAnimation;

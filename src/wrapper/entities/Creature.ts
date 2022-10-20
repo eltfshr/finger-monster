@@ -11,6 +11,7 @@ export abstract class Creature implements Entity {
   protected velocity: number = 1.0;
   protected health: number = 100;
   protected scale: number = 1;
+  protected onGround: boolean = false;
   protected state: EntityState = EntityState.IDLE;
 
   public setAnimation(animation: EntityAnimation): void {
@@ -69,7 +70,12 @@ export abstract class Creature implements Entity {
     });
   }
 
+  public isOnGround(): boolean {
+    return this.onGround;
+  }
+
   public setOnGround(groundY: number): void {
+    this.onGround = true;
     this.setY(groundY - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
   }
 
