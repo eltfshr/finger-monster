@@ -4,7 +4,9 @@ import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { Collision } from '@/renderer/collision/Collision';
 import { Entity } from '@/wrapper/entities/Entity';
 import { EntityState } from '@/wrapper/entities/EntityState';
-export abstract class Creature implements Entity {
+import { LivingEntity } from '@/wrapper/entities/living/LivingEntity';
+
+export abstract class Creature implements LivingEntity {
 
   protected animation: EntityAnimation | null = null;
   protected x: number = 0;
@@ -15,7 +17,7 @@ export abstract class Creature implements Entity {
   protected onGround: boolean = false;
   protected state: EntityState = EntityState.IDLE;
 
-  public setAnimation(animation: EntityAnimation): Entity {
+  public setAnimation(animation: EntityAnimation): Creature {
     this.animation = animation;
     return this;
   }
@@ -24,7 +26,7 @@ export abstract class Creature implements Entity {
     return this.x;
   }
 
-  public setX(x: number): Entity {
+  public setX(x: number): Creature {
     this.x = x;
     return this;
   }
@@ -33,12 +35,12 @@ export abstract class Creature implements Entity {
     return this.y;
   }
 
-  public setY(y: number): Entity {
+  public setY(y: number): Creature {
     this.y = y;
     return this;
   }
 
-  public setYOnGround(ground: Ground): Entity {
+  public setYOnGround(ground: Ground): Creature {
     this.setY(ground.getGroundY() - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
     return this;
   }
@@ -47,7 +49,7 @@ export abstract class Creature implements Entity {
     return this.scale;
   }
 
-  public setScale(scale: number): Entity {
+  public setScale(scale: number): Creature {
     this.scale = scale;
     return this;
   }
@@ -56,7 +58,7 @@ export abstract class Creature implements Entity {
     return this.velocity;
   }
 
-  public setVelocity(velocity: number): Entity {
+  public setVelocity(velocity: number): Creature {
     this.velocity = velocity;
     return this;
   }
@@ -65,7 +67,7 @@ export abstract class Creature implements Entity {
     return this.state;
   }
 
-  public setCurrentState(state: EntityState): Entity {
+  public setCurrentState(state: EntityState): Creature {
     if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     this.state = state;
@@ -73,13 +75,14 @@ export abstract class Creature implements Entity {
     return this;
   }
 
-  public setCurrentTemporaryState(state: EntityState, afterState: EntityState): Entity {
+  public setCurrentTemporaryState(state: EntityState, afterState: EntityState): Creature {
     if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     this.state = state;
     this.animation.setCurrentSprite(state, () => {
       this.setCurrentState(afterState);
     });
+
     return this;
   }
 
@@ -87,7 +90,7 @@ export abstract class Creature implements Entity {
     return this.onGround;
   }
 
-  public setOnGround(onGround: boolean): Entity {
+  public setOnGround(onGround: boolean): Creature {
     this.onGround = onGround;
     return this;
   }
@@ -108,7 +111,7 @@ export abstract class Creature implements Entity {
     return this.health;
   }
 
-  public setHealth(health: number): Entity {
+  public setHealth(health: number): Creature {
     this.health = health;
     return this;
   }
