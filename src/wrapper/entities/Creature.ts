@@ -1,3 +1,4 @@
+import { Ground } from '@/renderer/canvas/object/Ground';
 import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { Collision } from '@/renderer/collision/Collision';
@@ -36,6 +37,11 @@ export abstract class Creature implements LivingEntity {
 
   public setY(y: number): Creature {
     this.y = y;
+    return this;
+  }
+
+  public setYOnGround(ground: Ground): Creature {
+    this.setY(ground.getGroundY() - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
     return this;
   }
 
@@ -84,9 +90,8 @@ export abstract class Creature implements LivingEntity {
     return this.onGround;
   }
 
-  public setOnGround(groundY: number): Creature {
-    this.onGround = true;
-    this.setY(groundY - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
+  public setOnGround(onGround: boolean): Creature {
+    this.onGround = onGround;
     return this;
   }
 
@@ -106,8 +111,9 @@ export abstract class Creature implements LivingEntity {
     return this.health;
   }
 
-  public setHealth(health: number): void {
+  public setHealth(health: number): Creature {
     this.health = health;
+    return this;
   }
 
   public isIdle(): boolean {

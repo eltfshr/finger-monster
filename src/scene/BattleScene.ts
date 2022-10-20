@@ -52,12 +52,11 @@ export class BattleScene extends Scene {
 
     this.creatureSpawner
       .setScene(this)
-      .apply(this.ground.getGroundY());
 
     this.player.setAnimation(new PlayerAnimation(this.imageRegistry, this.collisionRegistry));
     this.player.setScale(1.25);
     this.player.setX(this.getWidth() / 9);
-    this.player.setOnGround(this.ground.getGroundY());
+    this.player.setYOnGround(this.ground);
     this.player.move();
 
     this.eventManager.onHeal(100);
@@ -106,7 +105,7 @@ export class BattleScene extends Scene {
     });
 
     if (this.sceneFrame === 100) {
-      this.creatureSpawner.spawn(3);
+      this.creatureSpawner.spawn(this.ground, 3);
     }
   }
 

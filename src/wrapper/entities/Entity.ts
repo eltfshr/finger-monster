@@ -1,3 +1,4 @@
+import { Ground } from '@/renderer/canvas/object/Ground';
 import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { Collision } from '@/renderer/collision/Collision';
@@ -15,6 +16,8 @@ export interface Entity {
 
   setY(y: number): Entity;
 
+  setYOnGround(ground: Ground): Entity;
+
   getScale(): number;
 
   setScale(scale: number): Entity;
@@ -31,7 +34,7 @@ export interface Entity {
 
   isOnGround(): boolean;
 
-  setOnGround(groundY: number): void;
+  setOnGround(onGround: boolean): Entity;
 
   getAnimation(): EntityAnimation;
 
