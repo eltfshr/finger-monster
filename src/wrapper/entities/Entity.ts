@@ -5,29 +5,29 @@ import { EntityState } from '@/wrapper/entities/EntityState';
 ``
 export interface Entity {
   
-  setAnimation(animation: EntityAnimation): void;
+  setAnimation(animation: EntityAnimation): Entity;
 
   getX(): number;
 
-  setX(x: number): void;
+  setX(x: number): Entity;
   
   getY(): number;
 
-  setY(y: number): void;
+  setY(y: number): Entity;
 
   getScale(): number;
 
-  setScale(scale: number): void;
+  setScale(scale: number): Entity;
 
   getVelocity(): number;
 
-  setVelocity(velocity: number): void;
+  setVelocity(velocity: number): Entity;
 
   getCurrentState(): EntityState;
 
-  setCurrentState(state: EntityState): void;
+  setCurrentState(state: EntityState): Entity;
 
-  setCurrentTemporaryState(state: EntityState, afterState: EntityState): void;
+  setCurrentTemporaryState(state: EntityState, afterState: EntityState): Entity;
 
   isOnGround(): boolean;
 
