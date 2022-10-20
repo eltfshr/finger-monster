@@ -1,3 +1,4 @@
+import { Ground } from '@/renderer/canvas/object/Ground';
 import { BlueSlimeAnimation } from '@/renderer/canvas/sprite/entities/BlueSlimeAnimation';
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
@@ -12,7 +13,6 @@ export class CreatureSpawner {
 
   private sceneHeight: number = 0;
   private offsetX: number = 0;
-  private offsetY: number = 0;
   private creatures: Creature[] = [];
 
   public constructor(imageRegistry: ImageRegistry, collisionRegistry: CollisionRegistry) {
@@ -26,17 +26,12 @@ export class CreatureSpawner {
     return this;
   }
 
-  public apply(offsetY: number): CreatureSpawner {
-    this.offsetY = offsetY;
-    return this;
-  }
-
-  public spawn(scale: number): void {
+  public spawn(ground: Ground, scale: number): void {
     const creature = new BlueSlime();
     creature.setScale(scale);
     creature.setAnimation(new BlueSlimeAnimation(this.imageRegistry, this.collisionRegistry));
     creature.setX(this.offsetX);
-    creature.setOnGround(this.offsetY);
+    creature.setYOnGround(ground);
 
     this.creatures.push(creature);
   }

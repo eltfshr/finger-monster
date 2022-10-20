@@ -1,3 +1,4 @@
+import { Ground } from '@/renderer/canvas/object/Ground';
 import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { Collision } from '@/renderer/collision/Collision';
@@ -14,69 +15,81 @@ export abstract class Creature implements Entity {
   protected onGround: boolean = false;
   protected state: EntityState = EntityState.IDLE;
 
-  public setAnimation(animation: EntityAnimation): void {
+  public setAnimation(animation: EntityAnimation): Entity {
     this.animation = animation;
+    return this;
   }
 
   public getX(): number {
     return this.x;
   }
 
-  public setX(x: number): void {
+  public setX(x: number): Entity {
     this.x = x;
+    return this;
   }
 
   public getY(): number {
     return this.y;
   }
 
-  public setY(y: number): void {
+  public setY(y: number): Entity {
     this.y = y;
+    return this;
+  }
+
+  public setYOnGround(ground: Ground): Entity {
+    this.setY(ground.getGroundY() - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
+    return this;
   }
 
   public getScale(): number {
     return this.scale;
   }
 
-  public setScale(scale: number): void {
+  public setScale(scale: number): Entity {
     this.scale = scale;
+    return this;
   }
 
   public getVelocity(): number {
     return this.velocity;
   }
 
-  public setVelocity(velocity: number): void {
+  public setVelocity(velocity: number): Entity {
     this.velocity = velocity;
+    return this;
   }
 
   public getCurrentState(): EntityState {
     return this.state;
   }
 
-  public setCurrentState(state: EntityState): void {
+  public setCurrentState(state: EntityState): Entity {
     if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     this.state = state;
     this.animation.setCurrentSprite(state);
+    return this;
   }
 
-  public setCurrentTemporaryState(state: EntityState, afterState: EntityState): void {
+  public setCurrentTemporaryState(state: EntityState, afterState: EntityState): Entity {
     if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     this.state = state;
     this.animation.setCurrentSprite(state, () => {
       this.setCurrentState(afterState);
     });
+    return this;
   }
 
   public isOnGround(): boolean {
     return this.onGround;
   }
 
-  public setOnGround(groundY: number): void {
-    this.onGround = true;
-    this.setY(groundY - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
+  public setOnGround(onGround: boolean): Entity {
+    this.onGround = onGround;
+    return this;
   }
 
   public getAnimation(): EntityAnimation {
@@ -95,8 +108,9 @@ export abstract class Creature implements Entity {
     return this.health;
   }
 
-  public setHealth(health: number): void {
+  public setHealth(health: number): Entity {
     this.health = health;
+    return this;
   }
 
   public isIdle(): boolean {
