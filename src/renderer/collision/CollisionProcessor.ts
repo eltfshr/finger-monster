@@ -4,7 +4,7 @@ import { Collision } from '@/renderer/collision/Collision';
 export class CollisionProcessor {
 
   private canvas: HTMLCanvasElement = document.createElement('canvas');
-  private context: CanvasRenderingContext2D = this.canvas.getContext('2d')!;
+  private context: CanvasRenderingContext2D = this.canvas.getContext('2d', { willReadFrequently: true })!;
 
   public process(sprite: SpriteResource): Collision {
     this.canvas.width = Math.floor(sprite.getWidth() * (sprite.getMaxFrame() + 1));
