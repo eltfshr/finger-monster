@@ -3,23 +3,32 @@ import { Player } from '@/wrapper/entities/living/Player';
 
 export class PlayerBattleEvent {
 
-  private uiRoot: BattleUserInterfaceRoot;
+  private readonly uiRoot: BattleUserInterfaceRoot;
+  private readonly player: Player;
 
-  public constructor(uiRoot: BattleUserInterfaceRoot) {
+  public constructor(uiRoot: BattleUserInterfaceRoot, player: Player) {
     this.uiRoot = uiRoot;
+    this.player = player;
   }
   
-  public onAttack(player: Player): void {
-    player.attack();
+  public onAttack(): void {
+    this.player.attack();
   }
 
-  public onHurt(player: Player): void {
-    player.hurt();
-    this.uiRoot.updateHealth(player.getHealth());
+  public onHurt(damage: number): boolean {
+    if (this.player.isDieing()) return true;
+
+    this.player.hurt();
+    this.player.setHealth(this.player.getHealth() - damage);
+    this.uiRoot.updateHealth(this.player.getHealth());
+
+    const isFatal = (this.player.getHealth() <= 0);
+    if (isFatal) this.onDie();
+    return isFatal;
   }
 
-  public onDie(player: Player): void {
-    player.die();
+  public onDie(): void {
+    this.player.die();
   }
 
 }
