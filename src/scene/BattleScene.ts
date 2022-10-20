@@ -100,7 +100,7 @@ export class BattleScene extends Scene {
       creature.setX(creature.getX() - 1);
 
       this.drawEntity(creature);
-      if (creature.isCollide(this.player, creature.getScale(), this.player.getScale())) {
+      if (creature.isCollide(this.player)) {
         console.log('hit');
       }
     });

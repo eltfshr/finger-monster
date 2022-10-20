@@ -5,7 +5,7 @@ import { Entity } from '@/wrapper/entities/Entity';
 import { EntityState } from '@/wrapper/entities/EntityState';
 export abstract class Creature implements Entity {
 
-  protected animation: EntityAnimation | undefined;
+  protected animation: EntityAnimation | null = null;
   protected x: number = 0;
   protected y: number = 0;
   protected velocity: number = 1.0;
@@ -117,8 +117,16 @@ export abstract class Creature implements Entity {
     return this.getAnimation().getCurrentSprite().getCollision();
   }
 
-  public isCollide(target: Entity, scale: number = 1, targetScale: number = 1): boolean {
-    return this.getCollision().isCollide(this.getX(), this.getY(), target.getX(), target.getY(), target.getCollision(), scale, targetScale);
+  public isCollide(target: Entity): boolean {
+    return this.getCollision().isCollide(
+      this.getX(),
+      this.getY(),
+      target.getX(),
+      target.getY(),
+      target.getCollision(),
+      this.getScale(),
+      target.getScale(),
+    );
   }
 
   public abstract idle(): void;

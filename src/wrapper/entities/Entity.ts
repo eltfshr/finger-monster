@@ -37,6 +37,6 @@ export interface Entity {
 
   getCollision(): Collision;
 
-  isCollide(target: Entity, scale: number, targetScale: number): boolean;
+  isCollide(target: Entity): boolean;
 
 }
