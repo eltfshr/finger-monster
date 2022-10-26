@@ -6,37 +6,32 @@ import { Player } from '@/wrapper/entities/living/Player';
 
 export class BattleEventManager {
 
-  protected uiRoot: BattleUserInterfaceRoot;
+  protected readonly uiRoot: BattleUserInterfaceRoot;
 
-  private playerEvent: PlayerBattleEvent;
-  private enemyEvent: EnemyBattleEvent;
+  private readonly playerEvent: PlayerBattleEvent;
+  private readonly player: Player;
+  private readonly enemyEvent: EnemyBattleEvent;
 
-  public constructor(uiRoot: BattleUserInterfaceRoot) {
+  public constructor(uiRoot: BattleUserInterfaceRoot, player: Player) {
     this.uiRoot = uiRoot;
-    this.playerEvent = new PlayerBattleEvent(this.uiRoot);
     this.enemyEvent = new EnemyBattleEvent(this.uiRoot);
+    this.playerEvent = new PlayerBattleEvent(this.uiRoot, player);
+    this.player = player;
   }
 
-  public onHeal(amount: number): void {
-    this.uiRoot.updateHealth(amount);
+  public onPlayerAttack(): void {
+    this.playerEvent.onAttack();
   }
 
-  public onPlayerAttack(player: Player): void {
-    this.playerEvent.onAttack(player);
+  public onPlayerHurt(damage: number): void {
+    if (this.player.isDieing()) return;
+
+    const isPlayerFatal = this.playerEvent.onHurt(damage);
+    if (isPlayerFatal) this.onPlayerDie();
   }
 
-  public onPlayerHurt(player: Player): void {
-    player.setHealth(player.getHealth() - 20);
+  public onPlayerDie(): void {
 
-    this.playerEvent.onHurt(player);
-
-    if (player.getHealth() <= 0) {
-      this.onPlayerDie(player);
-    }
-  }
-
-  public onPlayerDie(player: Player): void {
-    this.playerEvent.onDie(player);
   }
 
   public onEnemySpawn(): void {

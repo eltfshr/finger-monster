@@ -71,10 +71,10 @@ export abstract class Scene {
     if (Scene.DEBUG_MODE) {
       const fps = Math.round(1 / this.elapsedTime * 1000);
       this.context.fillStyle = 'white';
-      this.context.fillRect(10, 10, 60, 30);
+      this.context.fillRect(this.getWidth() - 10 - 60, 10, 60, 30);
       this.context.font = '16px Tahoma';
       this.context.fillStyle = 'black';
-      this.context.fillText(`FPS ${fps}`, 15, 31);
+      this.context.fillText(`FPS ${fps}`, this.getWidth() - 10 - 60 + 5, 31);
     }
 
     this.sceneFrame++;
