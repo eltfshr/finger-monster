@@ -44,6 +44,7 @@ export abstract class Scene {
 
     // Debug sprite bouding box
     Scene.DEBUG_MODE && this.context.strokeRect(x + collision.getLeft() * scale, y + collision.getTop() * scale, collision.getWidth() * scale, collision.getHeight() * scale);
+    Scene.DEBUG_MODE && this.context.strokeRect(x, y, sprite.getWidth() * scale, sprite.getHeight() * scale);
 
     if (this.sceneFrame % sprite.getFrameHold() === 0) {
       sprite.nextFrame();
@@ -54,16 +55,21 @@ export abstract class Scene {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  public startScene(timestamp: number = Date.now()): void {
+  public startScene(timestamp: number): void {
+    this.elapsedTime = (timestamp - this.lastUpdateTimestamp);
+
+    if (this.elapsedTime < 16) {
+      requestAnimationFrame(this.startScene.bind(this));
+      return;
+    }
+    this.lastUpdateTimestamp = timestamp;
+    
     this.clearScene();
     this.update();
 
     // Debug FPS
     if (Scene.DEBUG_MODE) {
-      this.elapsedTime = (timestamp - this.lastUpdateTimestamp) / 1000;
-      this.lastUpdateTimestamp = timestamp;
-      const fps = Math.round(1 / this.elapsedTime);
-
+      const fps = Math.round(1 / this.elapsedTime * 1000);
       this.context.fillStyle = 'white';
       this.context.fillRect(this.getWidth() - 10 - 60, 10, 60, 30);
       this.context.font = '16px Tahoma';

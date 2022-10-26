@@ -4,21 +4,19 @@ import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { Collision } from '@/renderer/collision/Collision';
 import { Entity } from '@/wrapper/entities/Entity';
 import { EntityState } from '@/wrapper/entities/EntityState';
-import { LivingEntity } from '@/wrapper/entities/living/LivingEntity';
 
-export abstract class Creature implements LivingEntity {
+export class Projectile implements Entity {
 
   protected animation: EntityAnimation | null = null;
   protected x: number = 0;
   protected y: number = 0;
   protected xVelocity: number = 1.0;
   protected yVelocity: number = 0;
-  protected health: number = 100;
   protected scale: number = 1;
   protected onGround: boolean = false;
-  protected state: EntityState = EntityState.IDLE;
+  protected state: EntityState = EntityState.MOVE;
 
-  public setAnimation(animation: EntityAnimation): Creature {
+  public setAnimation(animation: EntityAnimation): Entity {
     this.animation = animation;
     return this;
   }
@@ -27,7 +25,7 @@ export abstract class Creature implements LivingEntity {
     return this.x;
   }
 
-  public setX(x: number): Creature {
+  public setX(x: number): Entity {
     this.x = x;
     return this;
   }
@@ -36,12 +34,12 @@ export abstract class Creature implements LivingEntity {
     return this.y;
   }
 
-  public setY(y: number): Creature {
+  public setY(y: number): Entity {
     this.y = y;
     return this;
   }
 
-  public setYOnGround(ground: Ground): Creature {
+  public setYOnGround(ground: Ground): Entity {
     this.setY(ground.getGroundY() - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
     return this;
   }
@@ -50,7 +48,7 @@ export abstract class Creature implements LivingEntity {
     return this.scale;
   }
 
-  public setScale(scale: number): Creature {
+  public setScale(scale: number): Entity {
     this.scale = scale;
     return this;
   }
@@ -59,7 +57,7 @@ export abstract class Creature implements LivingEntity {
     return this.xVelocity;
   }
 
-  public setXVelocity(velocity: number): Creature {
+  public setXVelocity(velocity: number): Entity {
     this.xVelocity = velocity;
     return this;
   }
@@ -68,7 +66,7 @@ export abstract class Creature implements LivingEntity {
     return this.yVelocity;
   }
 
-  public setYVelocity(velocity: number): Creature {
+  public setYVelocity(velocity: number): Entity {
     this.yVelocity = velocity;
     return this;
   }
@@ -77,7 +75,7 @@ export abstract class Creature implements LivingEntity {
     return this.state;
   }
 
-  public setCurrentState(state: EntityState): Creature {
+  public setCurrentState(state: EntityState): Entity {
     if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     this.state = state;
@@ -85,7 +83,7 @@ export abstract class Creature implements LivingEntity {
     return this;
   }
 
-  public setCurrentTemporaryState(state: EntityState, afterState: EntityState): Creature {
+  public setCurrentTemporaryState(state: EntityState, afterState: EntityState): Entity {
     if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     this.state = state;
@@ -99,7 +97,7 @@ export abstract class Creature implements LivingEntity {
     return this.onGround;
   }
 
-  public setOnGround(onGround: boolean): Creature {
+  public setOnGround(onGround: boolean): Entity {
     this.onGround = onGround;
     return this;
   }
@@ -114,42 +112,6 @@ export abstract class Creature implements LivingEntity {
     if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     return this.animation.getCurrentSprite();
-  }
-
-  public getHealth(): number {
-    return this.health;
-  }
-
-  public setHealth(health: number): Creature {
-    this.health = health;
-    return this;
-  }
-
-  public isIdle(): boolean {
-    return this.state === EntityState.IDLE;
-  }
-
-  public isMoving(): boolean {
-    return this.state === EntityState.MOVE;
-  }
-
-  public isAttacking(): boolean {
-    return this.state === EntityState.ATTACK;
-  }
-
-  public isHurting(): boolean {
-    return this.state === EntityState.HURT;
-  }
-
-  public isDieing(): boolean {
-    return this.state === EntityState.DIE;
-  }
-
-  public jump():void {
-    if (this.isOnGround()) {
-      this.setYVelocity(-7);
-      this.setOnGround(false);
-    }
   }
 
   public getCollision(): Collision {
@@ -167,17 +129,5 @@ export abstract class Creature implements LivingEntity {
       target.getScale(),
     );
   }
-
-  public abstract idle(): void;
-
-  public abstract move(): void;
-
-  public abstract updatePosition(): void;
-
-  public abstract attack(): void;
-
-  public abstract hurt(): void;
-
-  public abstract die(): void;
 
 }

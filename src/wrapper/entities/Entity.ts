@@ -22,9 +22,13 @@ export interface Entity {
 
   setScale(scale: number): Entity;
 
-  getVelocity(): number;
+  getXVelocity(): number;
 
-  setVelocity(velocity: number): Entity;
+  setXVelocity(velocity: number): Entity;
+  
+  getYVelocity(): number;
+
+  setYVelocity(velocity: number): Entity;
 
   getCurrentState(): EntityState;
 
