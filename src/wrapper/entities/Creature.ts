@@ -9,7 +9,8 @@ export abstract class Creature implements Entity {
   protected animation: EntityAnimation | null = null;
   protected x: number = 0;
   protected y: number = 0;
-  protected velocity: number = 1.0;
+  protected xVelocity: number = 1.0;
+  protected yVelocity: number = 0;
   protected health: number = 100;
   protected scale: number = 1;
   protected onGround: boolean = false;
@@ -52,12 +53,21 @@ export abstract class Creature implements Entity {
     return this;
   }
 
-  public getVelocity(): number {
-    return this.velocity;
+  public getXVelocity(): number {
+    return this.xVelocity;
   }
 
-  public setVelocity(velocity: number): Entity {
-    this.velocity = velocity;
+  public setXVelocity(velocity: number): Entity {
+    this.xVelocity = velocity;
+    return this;
+  }
+
+  public getYVelocity(): number {
+    return this.yVelocity;
+  }
+
+  public setYVelocity(velocity: number): Entity {
+    this.yVelocity = velocity;
     return this;
   }
 
@@ -131,6 +141,13 @@ export abstract class Creature implements Entity {
 
   public isDieing(): boolean {
     return this.state === EntityState.DIE;
+  }
+
+  public jump():void {
+    if (this.isOnGround()) {
+      this.setYVelocity(-7);
+      this.setOnGround(false);
+    }
   }
 
   public getCollision(): Collision {
