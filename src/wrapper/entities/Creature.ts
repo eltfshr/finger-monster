@@ -5,6 +5,7 @@ import { Collision } from '@/renderer/collision/Collision';
 import { Entity } from '@/wrapper/entities/Entity';
 import { EntityState } from '@/wrapper/entities/EntityState';
 import { LivingEntity } from '@/wrapper/entities/living/LivingEntity';
+import { Projectile } from '@/wrapper/entities/Projectile';
 
 export abstract class Creature implements LivingEntity {
 
@@ -36,14 +37,30 @@ export abstract class Creature implements LivingEntity {
     return this.y;
   }
 
+  public getRealX(): number {
+    return this.getX() + this.getCollision().getLeft() * this.getScale();
+  }
+
   public setY(y: number): Creature {
     this.y = y;
     return this;
   }
 
+  public getRealY(): number {
+    return this.getY() + this.getCollision().getTop() * this.getScale();
+  }
+
   public setYOnGround(ground: Ground): Creature {
     this.setY(ground.getGroundY() - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
     return this;
+  }
+
+  public getRealWidth(): number {
+    return this.getCollision().getWidth() * this.getScale();
+  }
+
+  public getRealHeight(): number {
+    return this.getCollision().getHeight() * this.getScale();
   }
 
   public getScale(): number {
@@ -174,7 +191,7 @@ export abstract class Creature implements LivingEntity {
 
   public abstract updatePosition(): void;
 
-  public abstract attack(): void;
+  public abstract attack(): void | Projectile;
 
   public abstract hurt(): void;
 

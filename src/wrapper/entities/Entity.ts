@@ -12,11 +12,19 @@ export interface Entity {
 
   setX(x: number): Entity;
   
+  getRealX(): number;
+
   getY(): number;
 
   setY(y: number): Entity;
 
+  getRealY(): number;
+
   setYOnGround(ground: Ground): Entity;
+
+  getRealWidth(): number;
+
+  getRealHeight(): number;
 
   getScale(): number;
 

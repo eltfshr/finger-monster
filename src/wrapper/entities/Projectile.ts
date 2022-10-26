@@ -30,6 +30,10 @@ export class Projectile implements Entity {
     return this;
   }
 
+  public getRealX(): number {
+    return this.getX() + this.getCollision().getLeft() * this.getScale();
+  }
+
   public getY(): number {
     return this.y;
   }
@@ -39,9 +43,21 @@ export class Projectile implements Entity {
     return this;
   }
 
+  public getRealY(): number {
+    return this.getY() + this.getCollision().getTop() * this.getScale();
+  }
+
   public setYOnGround(ground: Ground): Entity {
     this.setY(ground.getGroundY() - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
     return this;
+  }
+
+  public getRealWidth(): number {
+    return this.getCollision().getWidth() * this.getScale();
+  }
+
+  public getRealHeight(): number {
+    return this.getCollision().getHeight() * this.getScale();
   }
 
   public getScale(): number {
