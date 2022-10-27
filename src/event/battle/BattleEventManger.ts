@@ -31,7 +31,7 @@ export class BattleEventManager {
   }
 
   public onPlayerDie(): void {
-
+    this.player.die();
   }
 
   public onEnemySpawn(): void {
