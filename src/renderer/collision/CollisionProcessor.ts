@@ -1,5 +1,5 @@
-import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { Collision } from '@/renderer/collision/Collision';
+import { SpriteResource } from '@/renderer/sprite/SpriteResource';
 
 export class CollisionProcessor {
 
