@@ -49,7 +49,7 @@ export class ItemEntityAnimation {
     public createSpriteMap(imagePath: string): Map<EntityState, SpriteResource> {
         if(!this.imagePath) throw new Error(`${this.constructor.name}'s sprite image path is undefined`)
         return new Map([
-            [EntityState.IDLE, new SpriteResource(imagePath,5,10)]
+            [EntityState.IDLE, new SpriteResource(imagePath, 0, 10, false)]
         ])
     }
 }

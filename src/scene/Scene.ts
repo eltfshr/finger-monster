@@ -24,11 +24,10 @@ export abstract class Scene {
   public drawEntity(entity: Entity, scale: number = 1): void {
     this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), scale);
   }
-
+  
   public drawSprite(sprite: SpriteResource, x: number, y: number, scale: number = 1.0): void {
     const spriteWidth = sprite.getWidth();
     const spriteHeight = sprite.getHeight();
-    const collision = sprite.getCollision();
 
     this.context.drawImage(
       sprite.getImage(),
@@ -42,8 +41,12 @@ export abstract class Scene {
       spriteHeight * scale,
     );
 
-    // Debug sprite bouding box
-    Scene.DEBUG_MODE && this.context.strokeRect(x + collision.getLeft() * scale, y + collision.getTop() * scale, collision.getWidth() * scale, collision.getHeight() * scale);
+    if (sprite.canCollide()) { 
+      const collision = sprite.getCollision();
+
+      //Debug Sprite Bounding Box
+      Scene.DEBUG_MODE && this.context.strokeRect(x + collision.getLeft() * scale, y + collision.getTop() * scale, collision.getWidth() * scale, collision.getHeight() * scale); 
+    }
 
     if (this.sceneFrame % sprite.getFrameHold() === 0) {
       sprite.nextFrame();

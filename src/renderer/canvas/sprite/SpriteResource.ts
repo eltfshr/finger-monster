@@ -4,6 +4,8 @@ import { ImageRegistry } from '@/renderer/ImageRegistry';
 
 export class SpriteResource {
 
+  private collide: boolean = true;
+
   private readonly imagePath: string;
   private readonly maxFrame: number;
 
@@ -16,10 +18,14 @@ export class SpriteResource {
   private needStopLastFrame: boolean = false;
   private endLoopCallback: Function = () => {};
 
-  public constructor(imagePath: string, maxFrame: number, frameHold: number) {
+  public constructor(imagePath: string, maxFrame: number, frameHold: number, collide?: boolean) {
     this.imagePath = imagePath;
     this.maxFrame = maxFrame;
     this.frameHold = frameHold;
+    
+    if (collide != undefined) { 
+      this.collide = collide; 
+    }
   }
 
   public loadFromImageRegistry(imageRegistry: ImageRegistry): void {
@@ -42,6 +48,9 @@ export class SpriteResource {
   public getCollision(): Collision {
     if (!this.collision) {
       throw new Error(`Could not get collision (${this.imagePath}) from the Collision registry`);
+    }
+    if (this.collide == false) {
+      throw new Error(`Collision not available, ${this.constructor.name} have collide properties set to FALSE`)
     }
     return this.collision;
   }
@@ -98,6 +107,10 @@ export class SpriteResource {
 
   public setEndLoopCallback(callback: Function): void {
     this.endLoopCallback = callback;
+  }
+
+  public canCollide(): boolean {
+    return this.collide;
   }
 
 }
