@@ -3,6 +3,7 @@ import { ImageRegistry } from '@/renderer/ImageRegistry';
 export class BattleImageRegistry extends ImageRegistry {
 
   public getPaths(): string[] {
+    console.log(`Registering ${this.constructor.name}`);
     return [
       'bg/battle/base.png',
       'bg/battle/mid.png',
