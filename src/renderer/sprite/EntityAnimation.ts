@@ -1,6 +1,6 @@
-import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
+import { SpriteResource } from '@/renderer/sprite/SpriteResource';
 import { EntityState } from '@/wrapper/entities/EntityState';
 
 export abstract class EntityAnimation {

@@ -1,5 +1,5 @@
-import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
-import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { EntityAnimation } from '@/renderer/sprite/EntityAnimation';
+import { SpriteResource } from '@/renderer/sprite/SpriteResource';
 import { EntityState } from '@/wrapper/entities/EntityState';
 
 export class PlayerAnimation extends EntityAnimation {
