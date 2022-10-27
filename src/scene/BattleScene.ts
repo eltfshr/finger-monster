@@ -1,13 +1,15 @@
 import { BattleEventManager } from '@/event/battle/BattleEventManger';
 import { BattleBackgroundAudio } from '@/renderer/audio/BattleBackgroundAudio';
 import { BattleImageRegistry } from '@/renderer/BattleImageRegistry';
-import { Background } from '@/renderer/canvas/object/Background';
-import { Ground } from '@/renderer/canvas/object/Ground';
-import { PlayerAnimation } from '@/renderer/canvas/sprite/entities/PlayerAnimation';
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
+import { Background } from '@/renderer/object/Background';
+import { Ground } from '@/renderer/object/Ground';
+import { PlayerAnimation } from '@/renderer/sprite/entities/PlayerAnimation';
 import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
 import { Scene } from '@/scene/Scene';
 import { CreatureSpawner } from '@/wrapper/entities/CreatureSpawner';
+import { EntityState } from '@/wrapper/entities/EntityState';
+import { BlueSlime } from '@/wrapper/entities/living/BlueSlime';
 import { Player } from '@/wrapper/entities/living/Player';
 
 export class BattleScene extends Scene {
@@ -25,7 +27,10 @@ export class BattleScene extends Scene {
   private readonly player             = new Player();
 
   private readonly uiRoot             = new BattleUserInterfaceRoot(this.player);
-  private readonly eventManager       = new BattleEventManager(this.uiRoot);
+  private readonly eventManager       = new BattleEventManager(this.uiRoot, this.player);
+
+  private attackInterval: NodeJS.Timer | undefined;
+  private relativeVelocity: number = 1.0;
 
   public async load(): Promise<void> {
     await Promise.all([
@@ -57,9 +62,7 @@ export class BattleScene extends Scene {
     this.player.setScale(1.25);
     this.player.setX(this.getWidth() / 9);
     this.player.setYOnGround(this.ground);
-    this.player.move();
-
-    this.eventManager.onHeal(100);
+    this.player.idle();
   }
 
   public update(): void {
@@ -68,52 +71,44 @@ export class BattleScene extends Scene {
 
     if (this.sceneFrame === 100) {
       this.player.move();
-      this.player.attack();
     }
-
-    if (this.sceneFrame % 200 === 0) {
-      // this.player.idle()
-      this.player.setHealth(this.player.getHealth() - 10);
-      this.eventManager.onHeal(this.player.getHealth());
-    }
-
-    if (this.sceneFrame === 1200) {
-      this.player.move();
-    }
-
-    if (this.sceneFrame === 1600) {
-      this.player.die();
-    }
-
-    // if (this.sceneFrame % 120 === 0) {
-    //   this.uiRoot.updateMana(this.player.getHealth());
-    // }
-
-    // if (this.sceneFrame === 100) {
-    //   this.player.attack();
-    //   this.player.idle();
-    // }
 
     this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
-      !creature.isAttacking() && creature.attack();
-      creature.setX(creature.getX() - 1);
+      if (creature.getCurrentState() === EntityState.MOVE) {
+        creature.setX(creature.getX() - (1.3 * this.relativeVelocity));
+      }
 
       this.drawEntity(creature);
-      if (creature.isCollide(this.player)) {
-        console.log('hit');
+
+      if ((this.player.getCurrentState() !== EntityState.DIE) && creature.isCollide(this.player)) {
+        this.player.idle();
+        creature.attack();
+
+        this.attackInterval = setInterval(() => {
+          this.eventManager.onPlayerHurt(10);
+        }, 1000);
       }
     });
 
+    if (this.player.isDieing() && this.attackInterval) {
+      clearInterval(this.attackInterval);
+      this.attackInterval = undefined;
+      this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
+        creature.idle();
+      });
+    }
+
     if (this.sceneFrame === 100) {
-      this.creatureSpawner.spawn(this.ground, 3);
+      const spawnedCreate = this.creatureSpawner.spawn(BlueSlime, this.ground, 3);
+      spawnedCreate.move();
     }
   }
 
   private updateAllBackgrounds(): void {
     if ((this.player.isMoving()) && (this.sceneFrame % 3 === 0)) {
-      this.baseBackground.move(1);
-      this.midBackground.move(2);
-      this.ground.move(3);
+      this.baseBackground.move(1 * this.relativeVelocity);
+      this.midBackground.move(2 * this.relativeVelocity);
+      this.ground.move(3 * this.relativeVelocity);
     }
 
     this.baseBackground.draw(this.getCanvasContext());

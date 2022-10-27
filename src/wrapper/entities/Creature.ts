@@ -181,3 +181,5 @@ export abstract class Creature implements LivingEntity {
   public abstract die(): void;
 
 }
+
+export type CreatureConstructor<T extends Creature = Creature> = new (...args: any[]) => T;
