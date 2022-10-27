@@ -1,20 +1,18 @@
-import { ItemAnimation } from '@/renderer/canvas/sprite/entities/ItemAnimation';
-import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
+import { ItemEntityAnimation } from '@/renderer/canvas/sprite/ItemEntityAnimation';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { EntityState } from '@/wrapper/entities/EntityState';
 import { ItemEntity } from '@/wrapper/entities/ItemEntity';
 
-export abstract class ItemFactory implements ItemEntity {
+export abstract class ItemFactory implements ItemEntity  {
     
-    //protected readonly sprites: ItemSprites;
-    protected animation: ItemAnimation | undefined;
+    protected animation: ItemEntityAnimation | undefined;
     protected x: number = 0;
     protected y: number = 0;
     protected velocity: number = 1.0;
     protected health: number = 30;
     protected state: EntityState = EntityState.IDLE;
 
-    public setAnimation(animation: EntityAnimation): void {
+    public setAnimation(animation: ItemEntityAnimation): void {
         this.animation = animation;
     }
 
@@ -59,16 +57,8 @@ export abstract class ItemFactory implements ItemEntity {
         return this.animation.getCurrentSprite();
     }
 
-    public setCurrentTemporaryState(state: EntityState, afterState: EntityState): void {
-        if(!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`)
-        
-        this.state = state;
-        this.animation.setCurrentSprite(state, () => {
-            this.setCurrentState(afterState);
-        });
-    }
 
-    public getAnimation(): EntityAnimation {
+    public getAnimation(): ItemEntityAnimation {
         if(!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
         
         return this.animation;
@@ -82,7 +72,7 @@ export abstract class ItemFactory implements ItemEntity {
 
     public abstract collect(): void;
 
-    public abstract effect(): void;
+    public abstract properties(): void;
 
-    public abstract expire(): void;
+    public abstract destroy(): void;
 }

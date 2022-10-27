@@ -1,13 +1,29 @@
-import { Entity } from '@/wrapper/entities/Entity';
+import { ItemEntityAnimation } from '@/renderer/canvas/sprite/ItemEntityAnimation';
+import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { EntityState } from '@/wrapper/entities/EntityState';
 
-export interface ItemEntity extends Entity {
+export interface ItemEntity {
+ 
+  setAnimation(animation: ItemEntityAnimation): void;
 
-  idle(): void;
+  getX(): number;
 
-  collect() : void;
-
-  effect() : void;
+  setX(x: number): void;
   
-  expire(): void;
+  getY(): number;
 
+  setY(y: number): void;
+
+  getVelocity(): number;
+
+  setVelocity(velocity: number): void;
+
+  getCurrentState(): EntityState;
+
+  setCurrentState(state: EntityState): void;
+
+  getAnimation(): ItemEntityAnimation;
+
+  getCurrentSprite(): SpriteResource;
+  
 }
