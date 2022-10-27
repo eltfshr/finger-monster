@@ -1,6 +1,7 @@
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { GameScreen } from '@/renderer/GameScreen';
 import { Entity } from '@/wrapper/entities/Entity';
+import { ItemEntity } from '@/wrapper/entities/ItemEntity';
 
 export abstract class Scene {
   
@@ -23,6 +24,10 @@ export abstract class Scene {
 
   public drawEntity(entity: Entity, scale: number = 1): void {
     this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), scale);
+  }
+
+  public drawItem(item: ItemEntity, scale: number = 1): void {
+    this.drawSprite(item.getCurrentSprite(), item.getX(), item.getY(), scale);
   }
   
   public drawSprite(sprite: SpriteResource, x: number, y: number, scale: number = 1.0): void {
