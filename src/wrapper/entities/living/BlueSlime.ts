@@ -20,11 +20,13 @@ export class BlueSlime extends HostileCreature {
   }
 
   public hurt(): void {
-    this.setCurrentState(EntityState.HURT);
+    const previousState = this.getCurrentState();
+    this.setCurrentTemporaryState(EntityState.HURT, previousState);
   }
 
   public die(): void {
     this.setCurrentState(EntityState.DIE);
+    this.getCurrentSprite().setStopLastFrame(true);
   }
   
 }

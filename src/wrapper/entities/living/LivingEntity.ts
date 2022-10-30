@@ -1,4 +1,5 @@
 import { Entity } from '@/wrapper/entities/Entity';
+import { Projectile } from '@/wrapper/entities/Projectile';
 
 export interface LivingEntity extends Entity {
   
@@ -8,7 +9,7 @@ export interface LivingEntity extends Entity {
 
   updatePosition(): void;
 
-  attack(): void;
+  attack(): void | Projectile;
 
   hurt(): void;
 
