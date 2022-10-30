@@ -1,15 +1,17 @@
 import { BattleEventManager } from '@/event/battle/BattleEventManger';
 import { BattleBackgroundAudio } from '@/renderer/audio/BattleBackgroundAudio';
 import { BattleImageRegistry } from '@/renderer/BattleImageRegistry';
-import { Background } from '@/renderer/canvas/object/Background';
-import { Ground } from '@/renderer/canvas/object/Ground';
 import { ArrowAnimation } from '@/renderer/canvas/sprite/entities/ArrowAnimation';
-import { PlayerAnimation } from '@/renderer/canvas/sprite/entities/PlayerAnimation';
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
+import { Background } from '@/renderer/object/Background';
+import { Ground } from '@/renderer/object/Ground';
 import { PhysicsEngine } from '@/renderer/PhysicsEngine';
+import { PlayerAnimation } from '@/renderer/sprite/entities/PlayerAnimation';
 import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
 import { Scene } from '@/scene/Scene';
 import { CreatureSpawner } from '@/wrapper/entities/CreatureSpawner';
+import { EntityState } from '@/wrapper/entities/EntityState';
+import { BlueSlime } from '@/wrapper/entities/living/BlueSlime';
 import { Player } from '@/wrapper/entities/living/Player';
 import { Projectile } from '@/wrapper/entities/Projectile';
 
@@ -32,6 +34,9 @@ export class BattleScene extends Scene {
 
   private readonly physicsEngine      = new PhysicsEngine();
   private readonly projectiles: Projectile[] = [];
+  
+  private attackInterval: NodeJS.Timer | undefined;
+  private relativeVelocity: number = 1.0;
 
   public async load(): Promise<void> {
     await Promise.all([
@@ -65,13 +70,6 @@ export class BattleScene extends Scene {
     // this.player.setY(0);
     this.player.setYOnGround(this.ground);
     this.player.idle();
-
-    // this.eventManager.onPlayerHurt(50);
-
-    // const arrow = new Arrow();
-    // arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
-    // arrow.setX(this.player.getX() + 50);
-    // arrow.setY(this.player.getY());
   }
 
   public update(): void {
@@ -127,27 +125,35 @@ export class BattleScene extends Scene {
       this.player.die();
     }
 
-    // if (this.sceneFrame % 120 === 0) {
-    //   this.uiRoot.updateMana(this.player.getHealth());
-    // }
-
-    // if (this.sceneFrame === 100) {
-    //   this.player.attack();
-    //   this.player.idle();
-    // }
-
     this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
       // !creature.isAttacking() && creature.attack();
-      !this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - 1);
-      this.player.isMoving() && creature.setX(creature.getX() - 1);
+      if (creature.getCurrentState() === EntityState.MOVE) {
+        !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity));
+      }
+
       this.drawEntity(creature);
-      if (creature.isCollide(this.player)) {
-        console.log('hit');
+
+      if ((this.player.getCurrentState() !== EntityState.DIE) && creature.isCollide(this.player)) {
+        this.player.idle();
+        creature.attack();
+
+        this.attackInterval = setInterval(() => {
+          this.eventManager.onPlayerHurt(10);
+        }, 1000);
       }
     });
 
-    if (this.sceneFrame === 50 || this.sceneFrame === 120 || this.sceneFrame === 200) {
-      this.creatureSpawner.spawn(this.ground, 3);
+    if (this.player.isDieing() && this.attackInterval) {
+      clearInterval(this.attackInterval);
+      this.attackInterval = undefined;
+      this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
+        creature.idle();
+      });
+    }
+
+    if (this.sceneFrame === 50 || this.sceneFrame === 100 || this.sceneFrame === 200 ) {
+      const spawnedCreate = this.creatureSpawner.spawn(BlueSlime, this.ground, 3);
+      spawnedCreate.move();
     }
     // if (this.sceneFrame === 120) {
     //   this.creatureSpawner.spawn(this.ground, 3);
@@ -159,9 +165,9 @@ export class BattleScene extends Scene {
 
   private updateAllBackgrounds(): void {
     if ((this.player.isMoving()) && (this.sceneFrame % 3 === 0)) {
-      this.baseBackground.move(1);
-      this.midBackground.move(2);
-      this.ground.move(3);
+      this.baseBackground.move(1 * this.relativeVelocity);
+      this.midBackground.move(2 * this.relativeVelocity);
+      this.ground.move(3 * this.relativeVelocity);
     }
 
     this.baseBackground.draw(this.getCanvasContext());

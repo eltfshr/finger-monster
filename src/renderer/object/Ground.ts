@@ -1,6 +1,6 @@
-import { Tileset } from '@/renderer/canvas/object/Tileset';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
 import { ImageResource } from '@/renderer/ImageResource';
+import { Tileset } from '@/renderer/object/Tileset';
 import { Scene } from '@/scene/Scene';
 
 export class Ground implements ImageResource {

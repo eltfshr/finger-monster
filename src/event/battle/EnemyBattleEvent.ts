@@ -7,7 +7,6 @@ export class EnemyBattleEvent {
 
   public constructor(uiRoot: BattleUserInterfaceRoot) {
     this.uiRoot = uiRoot;
-    console.log(this.uiRoot);
   }
   
   public onSpawn(): void {

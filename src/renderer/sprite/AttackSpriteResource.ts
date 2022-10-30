@@ -1,4 +1,4 @@
-import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
+import { SpriteResource } from '@/renderer/sprite/SpriteResource';
 
 export class AttackSpriteResource extends SpriteResource {
 

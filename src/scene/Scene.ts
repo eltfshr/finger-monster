@@ -1,5 +1,5 @@
-import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { GameScreen } from '@/renderer/GameScreen';
+import { SpriteResource } from '@/renderer/sprite/SpriteResource';
 import { Entity } from '@/wrapper/entities/Entity';
 
 export abstract class Scene {
@@ -11,7 +11,9 @@ export abstract class Scene {
 
   protected sceneFrame: number = 0;
 
-  private lastUpdateTimestamp: number = Date.now();
+  private fpsInterval: number = 0;
+  private startTimestamp: number = 0;
+  private lastUpdateTimestamp: number = 0;
   private elapsedTime: number = 0;
 
   public constructor(gameScreen: GameScreen) {
@@ -55,31 +57,38 @@ export abstract class Scene {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  public startScene(timestamp: number): void {
-    this.elapsedTime = (timestamp - this.lastUpdateTimestamp);
-
-    if (this.elapsedTime < 16) {
-      requestAnimationFrame(this.startScene.bind(this));
-      return;
-    }
-    this.lastUpdateTimestamp = timestamp;
-    
-    this.clearScene();
-    this.update();
-
-    // Debug FPS
-    if (Scene.DEBUG_MODE) {
-      const fps = Math.round(1 / this.elapsedTime * 1000);
-      this.context.fillStyle = 'white';
-      this.context.fillRect(this.getWidth() - 10 - 60, 10, 60, 30);
-      this.context.font = '16px Tahoma';
-      this.context.fillStyle = 'black';
-      this.context.fillText(`FPS ${fps}`, this.getWidth() - 10 - 60 + 5, 31);
-    }
-
-    this.sceneFrame++;
-    requestAnimationFrame(this.startScene.bind(this));
+  public startScene(fps: number): void {
+    this.fpsInterval = 1000 / fps;
+    this.lastUpdateTimestamp = Date.now();
+    this.startTimestamp = this.lastUpdateTimestamp;
+    this.loopScene();
   };
+
+  private loopScene() {
+    requestAnimationFrame(this.loopScene.bind(this));
+
+    const nowTimestamp = Date.now();
+    this.elapsedTime = nowTimestamp - this.lastUpdateTimestamp;
+
+    if (this.elapsedTime > this.fpsInterval) {
+      this.lastUpdateTimestamp = nowTimestamp - (this.elapsedTime % this.fpsInterval);
+
+      this.clearScene();
+      this.update();
+      this.sceneFrame++;
+      
+      // Debug FPS
+      if (Scene.DEBUG_MODE) {
+        const sinceStartTimestamp = nowTimestamp - this.startTimestamp;
+        const fps = Math.round((1000 / (sinceStartTimestamp / this.sceneFrame) * 100) / 100);
+        this.context.fillStyle = 'white';
+        this.context.fillRect(this.getWidth() - 10 - 60, 10, 60, 30);
+        this.context.font = '16px Tahoma';
+        this.context.fillStyle = 'black';
+        this.context.fillText(`FPS ${fps}`, this.getWidth() - 10 - 60 + 5, 31);
+      }
+    }
+  }
 
   public getWidth(): number {
     return this.canvas.width;

@@ -16,6 +16,8 @@ export class BattleImageRegistry extends ImageRegistry {
       'character/player/death.png',
       'character/player/arrow.png',
 
+      'character/blueslime/idle.png',
+      'character/blueslime/move.png',
       'character/blueslime/attack.png',
       'character/blueslime/hurt.png',
       'character/blueslime/die.png',

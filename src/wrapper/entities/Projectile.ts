@@ -1,7 +1,7 @@
-import { Ground } from '@/renderer/canvas/object/Ground';
-import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
-import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { Collision } from '@/renderer/collision/Collision';
+import { Ground } from '@/renderer/object/Ground';
+import { EntityAnimation } from '@/renderer/sprite/EntityAnimation';
+import { SpriteResource } from '@/renderer/sprite/SpriteResource';
 import { Creature } from '@/wrapper/entities/Creature';
 import { Entity } from '@/wrapper/entities/Entity';
 import { EntityState } from '@/wrapper/entities/EntityState';

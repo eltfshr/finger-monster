@@ -1,4 +1,4 @@
-import { AttackSpriteResource } from '@/renderer/canvas/sprite/AttackSpriteResource';
+import { AttackSpriteResource } from '@/renderer/sprite/AttackSpriteResource';
 import { Arrow } from '@/wrapper/entities/Arrow';
 import { Creature } from '@/wrapper/entities/Creature';
 import { EntityState } from '@/wrapper/entities/EntityState';
