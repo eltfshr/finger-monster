@@ -1,3 +1,7 @@
+import { CharacterAttackAction } from '@/action/CharacterAttackAction';
+import { JumpAction } from '@/action/JumpAction';
+import { RunAction } from '@/action/RunAction';
+import { KeyboardEmitter } from '@/emitter/KeyboardEmitter';
 import { BattleEventManager } from '@/event/battle/BattleEventManger';
 import { BattleBackgroundAudio } from '@/renderer/audio/BattleBackgroundAudio';
 import { BattleImageRegistry } from '@/renderer/BattleImageRegistry';
@@ -30,7 +34,9 @@ export class BattleScene extends Scene {
   private readonly player             = new Player();
 
   private readonly uiRoot             = new BattleUserInterfaceRoot(this.player);
-  private readonly eventManager       = new BattleEventManager(this.uiRoot, this.player);
+  private readonly eventManager       = new BattleEventManager(this.uiRoot, this.player, this);
+
+  private readonly keyboardEmitter = new KeyboardEmitter();
 
   private readonly physicsEngine      = new PhysicsEngine();
   private readonly projectiles: Projectile[] = [];
@@ -70,6 +76,18 @@ export class BattleScene extends Scene {
     // this.player.setY(0);
     this.player.setYOnGround(this.ground);
     this.player.idle();
+
+    this.keyboardEmitter.attach([
+      new CharacterAttackAction<string>(this.eventManager, this.uiRoot)
+        .loadKeys(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']),
+      new RunAction<string>(this.eventManager, this.uiRoot)
+        .loadKeys(['ArrowRight', 'ArrowLeft']),
+
+      new JumpAction<string>(this.eventManager, this.uiRoot)
+        .loadKeys([' ']),
+    ])
+
+    this.keyboardEmitter.init();
   }
 
   public update(): void {
@@ -97,7 +115,7 @@ export class BattleScene extends Scene {
       if (isProjectileHit) {
         if (projectile.isCollide(projectile.getTarget())) {
           // projectile.getTarget().attack();
-          projectile.getTarget().die();
+          projectile.getTarget().hurt();
         }
         this.projectiles.splice(array.length - 1 - index, 1);
       }
@@ -173,6 +191,13 @@ export class BattleScene extends Scene {
     this.baseBackground.draw(this.getCanvasContext());
     this.midBackground.draw(this.getCanvasContext());
     this.ground.draw(this.getCanvasContext());
+  }
+
+  public shoot(): void {
+    this.player.idle();
+    const arrow = this.player.attack();
+    arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
+    this.projectiles.push(arrow);
   }
   
 }

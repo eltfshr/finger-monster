@@ -2,6 +2,7 @@ import { BattleHealthBar } from '@/renderer/ui/battle/BattleHealthBar';
 import { BattleManaBar } from '@/renderer/ui/battle/BattleManaBar';
 import { BattlePlayerFrame } from '@/renderer/ui/battle/BattlePlayerFrame';
 import { BattlePlayerFrameBorder } from '@/renderer/ui/battle/BattlePlayerFrameBorder';
+import { CharacterBar } from '@/renderer/ui/battle/CharacterBar';
 import { UserInterfaceRoot } from '@/renderer/ui/UserInterfaceRoot';
 import { Player } from '@/wrapper/entities/living/Player';
 
@@ -13,10 +14,14 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
   private readonly playerFrameBorder: BattlePlayerFrameBorder;
   private readonly healthBar: BattleHealthBar;
   private readonly manaBar: BattleManaBar;
+  private readonly characterBar: CharacterBar;
   
   public constructor(player: Player) {
     super();
     this.player = player;
+
+    this.characterBar = new CharacterBar();
+    this.append(this.characterBar.getNode());
 
     this.healthBar = new BattleHealthBar();
     this.append(this.healthBar.getNode());
@@ -37,6 +42,10 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
 
   public updateMana(mana: number): void {
     this.manaBar.update(mana);
+  }
+
+  public updateCharacter(character: string): void {
+    this.characterBar.update(character);
   }
 
 }
