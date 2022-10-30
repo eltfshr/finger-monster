@@ -1,6 +1,7 @@
 import { EnemyBattleEvent } from '@/event/battle/EnemyBattleEvent';
 import { PlayerBattleEvent } from '@/event/battle/PlayerBattleEvent';
 import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
+import { BattleScene } from '@/scene/BattleScene';
 import { Creature } from '@/wrapper/entities/Creature';
 import { Player } from '@/wrapper/entities/living/Player';
 
@@ -12,15 +13,26 @@ export class BattleEventManager {
   private readonly player: Player;
   private readonly enemyEvent: EnemyBattleEvent;
 
-  public constructor(uiRoot: BattleUserInterfaceRoot, player: Player) {
+  // TODO: REMOVE THIS PLEASE
+  private readonly battleScene: BattleScene;
+
+  public constructor(uiRoot: BattleUserInterfaceRoot, player: Player, battleScene: BattleScene) {
     this.uiRoot = uiRoot;
     this.enemyEvent = new EnemyBattleEvent(this.uiRoot);
     this.playerEvent = new PlayerBattleEvent(this.uiRoot, player);
     this.player = player;
+    
+    this.battleScene = battleScene;
   }
 
   public onPlayerAttack(): void {
-    this.playerEvent.onAttack();
+    // this.player.idle();
+    // this.playerEvent.onAttack();
+
+    this.battleScene.shoot();
+    // const arrow = this.player.attack();
+    // arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
+    // this.projectiles.push(arrow);
   }
 
   public onPlayerHurt(damage: number): void {
@@ -32,6 +44,18 @@ export class BattleEventManager {
 
   public onPlayerDie(): void {
     this.player.die();
+  }
+
+  public onPlayerMove(): void {
+    !this.player.isMoving() && this.player.move();
+  }
+
+  public onPlayerStopMove(): void {
+    this.player.idle();
+  }
+
+  public onPlayerJump(): void {
+    this.player.jump();
   }
 
   public onEnemySpawn(): void {
