@@ -2,17 +2,22 @@ import { Ground } from '@/renderer/canvas/object/Ground';
 import { EntityAnimation } from '@/renderer/canvas/sprite/EntityAnimation';
 import { SpriteResource } from '@/renderer/canvas/sprite/SpriteResource';
 import { Collision } from '@/renderer/collision/Collision';
+import { Creature } from '@/wrapper/entities/Creature';
 import { Entity } from '@/wrapper/entities/Entity';
 import { EntityState } from '@/wrapper/entities/EntityState';
 
 export class Projectile implements Entity {
 
   protected animation: EntityAnimation | null = null;
+  protected target: Creature | null = null;
   protected x: number = 0;
   protected y: number = 0;
   protected xVelocity: number = 1.0;
   protected yVelocity: number = 0;
   protected scale: number = 1;
+  protected speedMultiplier: number = 1;
+  protected attackFrame: number = -1;
+  protected frameCount: number = 0;
   protected onGround: boolean = false;
   protected state: EntityState = EntityState.MOVE;
 
@@ -144,6 +149,41 @@ export class Projectile implements Entity {
       this.getScale(),
       target.getScale(),
     );
+  }
+
+  public getTarget(): Creature {
+    return this.target!;
+  }
+
+  public setTarget(target: Creature): Projectile {
+    this.target = target;
+    return this;
+  }
+
+  public getSpeedMultiplier(): number {
+    return this.speedMultiplier;
+  }
+
+  public setSpeedMultiplier(speedMultiplier: number): Projectile {
+    this.speedMultiplier = speedMultiplier;
+    return this;
+  }
+
+  public getAttackFrame(): number {
+    return this.attackFrame;
+  }
+
+  public setAttackFrame(attackFrame: number): Projectile {
+    this.attackFrame = attackFrame;
+    return this;
+  }
+
+  public getFrameCount(): number {
+    return this.frameCount;
+  }
+
+  public nextFrameCount(): void {
+    this.frameCount++;
   }
 
 }
