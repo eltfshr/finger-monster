@@ -139,3 +139,29 @@ html, body {
   background-image: url('/graphic/player-frame-border.png');
   background-size: cover;
 }
+
+#character-box-border {
+  z-index: 98;
+  position: absolute;
+  top: 17%;
+  left: 2%;
+  width: 102px;
+  height: 106px;
+  background-image: url('/graphic/player-frame-border.png');
+  background-size: cover;
+}
+
+#character-box {
+  z-index: 100;
+  position: absolute;
+  top: 12%;
+  left: 12.5%;
+  width: 75px;
+  height: 78px;
+  background-size: cover;
+  font-size: 54px;
+  font-weight: 900;
+  text-align: center;
+  padding-top: 8px;
+  color: #f2f2f2;
+}
