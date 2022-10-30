@@ -31,7 +31,7 @@ export class CreatureSpawner {
     creature.setAnimation(new BlueSlimeAnimation(this.imageRegistry, this.collisionRegistry));
     creature.setX(this.offsetX);
     creature.setYOnGround(ground);
-
+    creature.attack();
     this.creatures.push(creature);
     return creature;
   }
