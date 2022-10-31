@@ -1,6 +1,7 @@
 import { Collision } from '@/renderer/collision/Collision';
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
+import 'reflect-metadata';
 
 export class SpriteResource {
 
@@ -98,6 +99,19 @@ export class SpriteResource {
 
   public setEndLoopCallback(callback: Function): void {
     this.endLoopCallback = callback;
+  }
+
+  public setMetadata(key: string, value: any): SpriteResource {
+    Reflect.defineMetadata(key, value, this);
+    return this;
+  }
+
+  public getMetadata(key: string): any {
+    if (!Reflect.hasOwnMetadata(key, this)) {
+       throw new Error(`Coud not get metadata by key: ${key}`);
+    }
+
+    return Reflect.getOwnMetadata(key, this);
   }
 
 }

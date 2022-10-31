@@ -1,4 +1,3 @@
-import { AttackSpriteResource } from '@/renderer/sprite/AttackSpriteResource';
 import { Arrow } from '@/wrapper/entities/Arrow';
 import { Creature } from '@/wrapper/entities/Creature';
 import { EntityState } from '@/wrapper/entities/EntityState';
@@ -24,7 +23,7 @@ export class Player extends Creature {
 
     return new Arrow()
       .setSpeedMultiplier(30)
-      .setAttackFrame((this.animation!.getCurrentSprite() as AttackSpriteResource).getAttackFrame());
+      .setAttackFrame(this.animation!.getCurrentSprite().getMetadata('attack-frame'));
   }
 
   public hurt(): void {
