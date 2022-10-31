@@ -5,11 +5,11 @@ import { KeyboardEmitter } from '@/emitter/KeyboardEmitter';
 import { BattleEventManager } from '@/event/battle/BattleEventManger';
 import { BattleBackgroundAudio } from '@/renderer/audio/BattleBackgroundAudio';
 import { BattleImageRegistry } from '@/renderer/BattleImageRegistry';
-import { ArrowAnimation } from '@/renderer/canvas/sprite/entities/ArrowAnimation';
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { Background } from '@/renderer/object/Background';
 import { Ground } from '@/renderer/object/Ground';
 import { PhysicsEngine } from '@/renderer/PhysicsEngine';
+import { ArrowAnimation } from '@/renderer/sprite/entities/ArrowAnimation';
 import { PlayerAnimation } from '@/renderer/sprite/entities/PlayerAnimation';
 import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
 import { Scene } from '@/scene/Scene';
@@ -114,20 +114,20 @@ export class BattleScene extends Scene {
       const isProjectileHit = this.physicsEngine.projectileMotion(projectile, projectile.getTarget(), this.ground);
       if (isProjectileHit) {
         if (projectile.isCollide(projectile.getTarget())) {
-          // projectile.getTarget().attack();
-          projectile.getTarget().hurt();
+          projectile.getTarget().move();
+          projectile.getTarget().die();
         }
         this.projectiles.splice(array.length - 1 - index, 1);
       }
     });
 
-    if (this.sceneFrame === 100 || this.sceneFrame === 200 || this.sceneFrame === 300) {
-      this.player.idle();
-      const arrow = this.player.attack();
-      arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
-      this.projectiles.push(arrow);
-      // this.player.jump();
-    }
+    // if (this.sceneFrame === 100 || this.sceneFrame === 200 || this.sceneFrame === 300) {
+    //   this.player.idle();
+    //   const arrow = this.player.attack();
+    //   arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
+    //   this.projectiles.push(arrow);
+    //   // this.player.jump();
+    // }
 
     // if (this.sceneFrame % 200 === 0) {
     //   // this.player.idle()
@@ -135,23 +135,25 @@ export class BattleScene extends Scene {
     //   this.eventManager.onPlayerHurt(10);
     // }
 
-    if (this.sceneFrame === 1200) {
-      this.player.move();
-    }
+    // if (this.sceneFrame === 1200) {
+    //   this.player.move();
+    // }
 
-    if (this.sceneFrame === 1600) {
-      this.player.die();
-    }
+    // if (this.sceneFrame === 1600) {
+    //   this.player.die();
+    // }
 
     this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
       // !creature.isAttacking() && creature.attack();
-      if (creature.getCurrentState() === EntityState.MOVE) {
-        !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity));
+      if (creature.getCurrentState() === EntityState.MOVE || creature.isDieing()) {
+        !this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity));
+        this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity * 2));
+        this.player.isMoving() && creature.setX(creature.getX() - (this.relativeVelocity));
       }
 
       this.drawEntity(creature);
 
-      if ((this.player.getCurrentState() !== EntityState.DIE) && creature.isCollide(this.player)) {
+      if ((this.player.getCurrentState() !== EntityState.DIE) && !creature.isDieing() && creature.isCollide(this.player)) {
         this.player.idle();
         creature.attack();
 
