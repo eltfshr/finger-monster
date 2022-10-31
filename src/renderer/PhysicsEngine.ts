@@ -49,10 +49,10 @@ export class PhysicsEngine {
     if (creatures.length == 0) {
       return null;
     }
-    let nearestCreature: Creature = creatures[0];
-    let nearestDistance: number = this.distanceBetweenEntity(creature, creatures[0]);
+    let nearestCreature: Creature = creatures[creatures.length - 1];
+    let nearestDistance: number = Number.MAX_SAFE_INTEGER;
 
-    for (let i = 1; i < creatures.length; i++) {
+    for (let i = 0; i < creatures.length; i++) {
       const distance = this.distanceBetweenEntity(creature, creatures[i]);
       if (distance < nearestDistance && !creatures[i].isDieing()) {
         nearestCreature = creatures[i];
