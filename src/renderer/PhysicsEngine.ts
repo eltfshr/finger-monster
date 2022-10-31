@@ -1,4 +1,4 @@
-import { Ground } from '@/renderer/canvas/object/Ground';
+import { Ground } from '@/renderer/object/Ground';
 import { Creature } from '@/wrapper/entities/Creature';
 import { Entity } from '@/wrapper/entities/Entity';
 import { Projectile } from '@/wrapper/entities/Projectile';
