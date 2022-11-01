@@ -1,12 +1,12 @@
 import { Collision } from '@/renderer/collision/Collision';
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
-import 'reflect-metadata';
 
 export class SpriteResource {
 
   private readonly imagePath: string;
   private readonly maxFrame: number;
+  private readonly metaData: Map<string, any> = new Map();
 
   private collision: Collision | undefined;
   private image: HTMLImageElement | undefined;
@@ -101,17 +101,17 @@ export class SpriteResource {
     this.endLoopCallback = callback;
   }
 
-  public setMetadata(key: string, value: any): SpriteResource {
-    Reflect.defineMetadata(key, value, this);
+  public setMetaData(key: string, value: any): SpriteResource {
+    this.metaData.set(key, value);
     return this;
   }
 
-  public getMetadata(key: string): any {
-    if (!Reflect.hasOwnMetadata(key, this)) {
+  public getMetaData(key: string): any {
+    if (!this.metaData.has(key)) {
        throw new Error(`Coud not get metadata by key: ${key}`);
     }
 
-    return Reflect.getOwnMetadata(key, this);
+    return this.metaData.get(key);
   }
 
 }

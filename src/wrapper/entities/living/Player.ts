@@ -23,7 +23,7 @@ export class Player extends Creature {
 
     return new Arrow()
       .setSpeedMultiplier(30)
-      .setAttackFrame(this.animation!.getCurrentSprite().getMetadata('attack-frame'));
+      .setAttackFrame(this.animation!.getCurrentSprite().getMetaData('attack-frame'));
   }
 
   public hurt(): void {
