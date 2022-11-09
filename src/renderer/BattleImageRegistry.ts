@@ -32,6 +32,12 @@ export class BattleImageRegistry extends ImageRegistry {
       'character/goblin/attack.png',
       'character/goblin/hurt.png',
       'character/goblin/death.png',
+
+      'character/mushroom/idle.png',
+      'character/mushroom/move.png',
+      'character/mushroom/attack.png',
+      'character/mushroom/hurt.png',
+      'character/mushroom/death.png',
     ];
   }
 
