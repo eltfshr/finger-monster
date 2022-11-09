@@ -9,7 +9,7 @@ export class FlyingEyeAnimation extends EntityAnimation {
       [EntityState.MOVE,    new SpriteResource('character/flyingeye/move.png',    7, 10)],
       [EntityState.ATTACK,  new SpriteResource('character/flyingeye/attack.png',  7, 10)],
       [EntityState.HURT,    new SpriteResource('character/flyingeye/hurt.png',    3, 10)],
-      [EntityState.DIE,     new SpriteResource('character/flyingeye/death.png',     3, 10)],
+      [EntityState.DIE,     new SpriteResource('character/flyingeye/death.png',   3, 10)],
     ]);
   }
 
