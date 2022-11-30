@@ -17,6 +17,7 @@ export abstract class Creature implements LivingEntity {
   protected health: number = 100;
   protected scale: number = 1;
   protected onGround: boolean = false;
+  protected placeHolder: boolean = false;
   protected state: EntityState = EntityState.IDLE;
 
   public setAnimation(animation: EntityAnimation): Creature {
@@ -29,7 +30,10 @@ export abstract class Creature implements LivingEntity {
   }
 
   public setX(x: number): Creature {
-    this.x = x;
+    if (!this.isPlaceHolder()) {
+      this.x = x;
+    }
+
     return this;
   }
 
@@ -121,6 +125,15 @@ export abstract class Creature implements LivingEntity {
     return this;
   }
 
+  public isPlaceHolder(): boolean {
+    return this.placeHolder;
+  }
+
+  public setPlaceHolder(placeHolder: boolean): Creature {
+    this.placeHolder = placeHolder;
+    return this;
+  }
+
   public getAnimation(): EntityAnimation {
     if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
 
@@ -138,7 +151,10 @@ export abstract class Creature implements LivingEntity {
   }
 
   public setHealth(health: number): Creature {
-    this.health = health;
+    if (!this.isPlaceHolder()) {
+      this.health = health;
+    }
+    
     return this;
   }
 

@@ -26,8 +26,10 @@ export class Skeleton extends HostileCreature {
   }
 
   public die(): void {
-    this.setCurrentState(EntityState.DIE);
-    this.getCurrentSprite().setStopLastFrame(true);
+    if (!this.isPlaceHolder()) {
+      this.setCurrentState(EntityState.DIE);
+      this.getCurrentSprite().setStopLastFrame(true);
+    }
   }
   
 }

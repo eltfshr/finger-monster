@@ -2,8 +2,10 @@ import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
 import { Ground } from '@/renderer/object/Ground';
 import { MushroomAnimation } from '@/renderer/sprite/entities/MushroomAnimation';
+import { SkeletonAnimation } from '@/renderer/sprite/entities/SkeletonAnimation';
 import { Scene } from '@/scene/Scene';
 import { Creature, CreatureConstructor } from '@/wrapper/entities/Creature';
+import { Skeleton } from '@/wrapper/entities/living/Skeleton';
 
 export class CreatureSpawner {
   
@@ -22,6 +24,13 @@ export class CreatureSpawner {
   public setScene(scene: Scene): CreatureSpawner {
     this.offsetX = scene.getWidth();
     this.sceneHeight = scene.getHeight();
+    this.creatures.push(new Skeleton()
+      .setX(this.offsetX * 2)
+      .setPlaceHolder(true)
+      .setScale(2)
+      .setAnimation(new SkeletonAnimation(this.imageRegistry, this.collisionRegistry))
+    )
+    
     return this;
   }
 
