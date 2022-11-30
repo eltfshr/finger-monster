@@ -11,11 +11,12 @@ import { Ground } from '@/renderer/object/Ground';
 import { PhysicsEngine } from '@/renderer/PhysicsEngine';
 import { ArrowAnimation } from '@/renderer/sprite/entities/ArrowAnimation';
 import { PlayerAnimation } from '@/renderer/sprite/entities/PlayerAnimation';
+import { SpriteDirection } from '@/renderer/sprite/SpriteDirection';
 import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
 import { Scene } from '@/scene/Scene';
 import { CreatureSpawner } from '@/wrapper/entities/CreatureSpawner';
 import { EntityState } from '@/wrapper/entities/EntityState';
-import { BlueSlime } from '@/wrapper/entities/living/BlueSlime';
+import { Mushroom } from '@/wrapper/entities/living/Mushroom';
 import { Player } from '@/wrapper/entities/living/Player';
 import { Projectile } from '@/wrapper/entities/Projectile';
 
@@ -92,7 +93,7 @@ export class BattleScene extends Scene {
 
   public update(): void {
     this.updateAllBackgrounds();
-    this.drawEntity(this.player);
+    this.drawEntity(this.player, SpriteDirection.RIGHT);
     this.physicsEngine.gravitate(this.player, this.ground);
 
     const nearEnermy = this.physicsEngine.getNearestCreature(
@@ -109,7 +110,7 @@ export class BattleScene extends Scene {
         projectile.setY(this.player.getRealY() + this.player.getRealHeight() / 2);
       }
       
-      this.drawEntity(projectile);
+      this.drawEntity(projectile, SpriteDirection.LEFT);
       
       const isProjectileHit = this.physicsEngine.projectileMotion(projectile, projectile.getTarget(), this.ground);
       if (isProjectileHit) {
@@ -151,7 +152,8 @@ export class BattleScene extends Scene {
         this.player.isMoving() && creature.setX(creature.getX() - (this.relativeVelocity));
       }
 
-      this.drawEntity(creature);
+      creature.setYOnGround(this.ground);
+      this.drawEntity(creature, SpriteDirection.LEFT);
 
       if ((this.player.getCurrentState() !== EntityState.DIE) && !creature.isDieing() && creature.isCollide(this.player)) {
         this.player.idle();
@@ -171,8 +173,8 @@ export class BattleScene extends Scene {
       });
     }
 
-    if (this.sceneFrame === 50 || this.sceneFrame === 100 || this.sceneFrame === 200 ) {
-      const spawnedCreate = this.creatureSpawner.spawn(BlueSlime, this.ground, 3);
+    if (this.sceneFrame === 50 || this.sceneFrame === 100 || this.sceneFrame === 200) {
+      const spawnedCreate = this.creatureSpawner.spawn(Mushroom, this.ground, 3);
       spawnedCreate.move();
     }
     // if (this.sceneFrame === 120) {

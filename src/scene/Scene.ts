@@ -1,4 +1,5 @@
 import { GameScreen } from '@/renderer/GameScreen';
+import { SpriteDirection } from '@/renderer/sprite/SpriteDirection';
 import { SpriteResource } from '@/renderer/sprite/SpriteResource';
 import { Entity } from '@/wrapper/entities/Entity';
 
@@ -8,6 +9,8 @@ export abstract class Scene {
 
   private readonly canvas: HTMLCanvasElement;
   private readonly context: CanvasRenderingContext2D;
+  private readonly invertedCanvas: HTMLCanvasElement = document.createElement('canvas');
+  private readonly invertedContext: CanvasRenderingContext2D = this.invertedCanvas.getContext('2d', { willReadFrequently: true })!;
 
   protected sceneFrame: number = 0;
 
@@ -23,18 +26,25 @@ export abstract class Scene {
     this.context = this.canvas.getContext('2d')!;
   }
 
-  public drawEntity(entity: Entity): void {
-    this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), entity.getScale());
+  public drawEntity(entity: Entity, direction: SpriteDirection): void {
+    this.drawSprite(entity.getCurrentSprite(), entity.getX(), entity.getY(), direction, entity.getScale());
   }
 
-  public drawSprite(sprite: SpriteResource, x: number, y: number, scale: number = 1.0): void {
+  public drawSprite(sprite: SpriteResource, x: number, y: number, direction: SpriteDirection, scale: number = 1.0): void {
     const spriteWidth = sprite.getWidth();
     const spriteHeight = sprite.getHeight();
     const collision = sprite.getCollision();
+    const flip = direction * sprite.getDirection() < 0;
 
+    if (flip) {
+      this.invertedCanvas.width = spriteWidth * (sprite.getMaxFrame() + 1);
+      this.invertedContext.scale(-1, 1);
+      this.invertedContext.drawImage(sprite.getImage(), -spriteWidth * (sprite.getMaxFrame() + 1), 0);
+    }
+    
     this.context.drawImage(
-      sprite.getImage(),
-      sprite.getCurrentFrame() * spriteWidth,
+      flip ? this.invertedCanvas : sprite.getImage(),
+      flip ? spriteWidth * (sprite.getMaxFrame() - sprite.getCurrentFrame()) : sprite.getCurrentFrame() * spriteWidth,
       0,
       spriteWidth,
       spriteHeight,

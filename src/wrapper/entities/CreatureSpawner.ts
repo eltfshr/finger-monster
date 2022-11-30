@@ -1,7 +1,7 @@
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
 import { Ground } from '@/renderer/object/Ground';
-import { BlueSlimeAnimation } from '@/renderer/sprite/entities/BlueSlimeAnimation';
+import { MushroomAnimation } from '@/renderer/sprite/entities/MushroomAnimation';
 import { Scene } from '@/scene/Scene';
 import { Creature, CreatureConstructor } from '@/wrapper/entities/Creature';
 
@@ -28,7 +28,7 @@ export class CreatureSpawner {
   public spawn(creatureClass: CreatureConstructor, ground: Ground, scale: number): Creature {
     const creature = new creatureClass();
     creature.setScale(scale);
-    creature.setAnimation(new BlueSlimeAnimation(this.imageRegistry, this.collisionRegistry));
+    creature.setAnimation(new MushroomAnimation(this.imageRegistry, this.collisionRegistry));
     creature.setX(this.offsetX);
     creature.setYOnGround(ground);
     creature.attack();

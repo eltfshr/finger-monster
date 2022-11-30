@@ -1,6 +1,7 @@
 import { Collision } from '@/renderer/collision/Collision';
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
+import { SpriteDirection } from '@/renderer/sprite/SpriteDirection';
 
 export class SpriteResource {
 
@@ -14,6 +15,7 @@ export class SpriteResource {
   private height: number = 0;
   private frame: number = 0;
   private frameHold: number = 0;
+  private direction: SpriteDirection = SpriteDirection.RIGHT;
   private needStopLastFrame: boolean = false;
   private endLoopCallback: Function = () => {};
 
@@ -87,6 +89,15 @@ export class SpriteResource {
 
   public getFrameHold(): number {
     return this.frameHold;
+  }
+
+  public getDirection(): SpriteDirection {
+    return this.direction;
+  }
+
+  public setDirection(direction: SpriteDirection): SpriteResource {
+    this.direction = direction;
+    return this;
   }
 
   public setFrameHold(frameHold: number): void {
