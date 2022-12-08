@@ -10,6 +10,7 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
 
   private readonly player: Player;
 
+  private readonly playerHudRoot = document.createElement('div');
   private readonly playerFrame: BattlePlayerFrame;
   private readonly playerFrameBorder: BattlePlayerFrameBorder;
   private readonly healthBar: BattleHealthBar;
@@ -18,22 +19,24 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
   
   public constructor(player: Player) {
     super();
-    this.player = player;
+    this.playerHudRoot.setAttribute('id', 'player-info-hud');
+    this.append(this.playerHudRoot);
 
+    this.player = player;
     this.characterBar = new CharacterBar();
-    this.append(this.characterBar.getNode());
+    this.playerHudRoot.append(this.characterBar.getNode());
 
     this.healthBar = new BattleHealthBar();
-    this.append(this.healthBar.getNode());
+    this.playerHudRoot.append(this.healthBar.getNode());
 
     this.manaBar = new BattleManaBar();
-    this.append(this.manaBar.getNode());
+    this.playerHudRoot.append(this.manaBar.getNode());
 
     this.playerFrame = new BattlePlayerFrame();
-    this.append(this.playerFrame.getNode());
+    this.playerHudRoot.append(this.playerFrame.getNode());
 
     this.playerFrameBorder = new BattlePlayerFrameBorder();
-    this.append(this.playerFrameBorder.getNode());
+    this.playerHudRoot.append(this.playerFrameBorder.getNode());
   }
 
   public updateHealth(health: number): void {

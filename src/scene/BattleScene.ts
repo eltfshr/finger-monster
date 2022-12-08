@@ -20,6 +20,12 @@ import { Mushroom } from '@/wrapper/entities/living/Mushroom';
 import { Player } from '@/wrapper/entities/living/Player';
 import { Projectile } from '@/wrapper/entities/Projectile';
 
+export enum BattleScenePhase {
+  START,
+  BATTLE,
+  PAUSE,
+}
+
 export class BattleScene extends Scene {
 
   private readonly imageRegistry      = new BattleImageRegistry();
@@ -37,11 +43,12 @@ export class BattleScene extends Scene {
   private readonly uiRoot             = new BattleUserInterfaceRoot(this.player);
   private readonly eventManager       = new BattleEventManager(this.uiRoot, this.player, this);
 
-  private readonly keyboardEmitter = new KeyboardEmitter();
+  private readonly keyboardEmitter    = new KeyboardEmitter();
 
   private readonly physicsEngine      = new PhysicsEngine();
   private readonly projectiles: Projectile[] = [];
   
+  private phase: BattleScenePhase = BattleScenePhase.BATTLE;
   private attackInterval: NodeJS.Timer | undefined;
   private relativeVelocity: number = 1.0;
 
@@ -92,98 +99,112 @@ export class BattleScene extends Scene {
   }
 
   public update(): void {
-    this.updateAllBackgrounds();
-    this.drawEntity(this.player, SpriteDirection.RIGHT);
-    this.physicsEngine.gravitate(this.player, this.ground);
-
-    const nearEnermy = this.physicsEngine.getNearestCreature(
-      this.player
-    , this.creatureSpawner.getSpawnedCreatures());
-
-    this.projectiles.slice().reverse().forEach((projectile, index, array) => {
-      projectile.nextFrameCount();
-      if (projectile.getFrameCount() < projectile.getAttackFrame() * this.player.getAnimation().getCurrentSprite().getFrameHold()) {
-        return
-      } else if (projectile.getFrameCount() == projectile.getAttackFrame() * this.player.getAnimation().getCurrentSprite().getFrameHold()) {
-        projectile.setTarget(nearEnermy!);
-        projectile.setX(this.player.getRealX() + this.player.getRealWidth());
-        projectile.setY(this.player.getRealY() + this.player.getRealHeight() / 2);
-      }
-      
-      this.drawEntity(projectile, SpriteDirection.LEFT);
-      
-      const isProjectileHit = this.physicsEngine.projectileMotion(projectile, projectile.getTarget(), this.ground);
-      if (isProjectileHit) {
-        if (projectile.isCollide(projectile.getTarget())) {
-          projectile.getTarget().move();
-          projectile.getTarget().die();
-        }
-        this.projectiles.splice(array.length - 1 - index, 1);
-      }
-    });
-
-    // if (this.sceneFrame === 100 || this.sceneFrame === 200 || this.sceneFrame === 300) {
-    //   this.player.idle();
-    //   const arrow = this.player.attack();
-    //   arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
-    //   this.projectiles.push(arrow);
-    //   // this.player.jump();
-    // }
-
-    // if (this.sceneFrame % 200 === 0) {
-    //   // this.player.idle()
-    //   this.player.setHealth(this.player.getHealth() - 10);
-    //   this.eventManager.onPlayerHurt(10);
-    // }
-
-    // if (this.sceneFrame === 1200) {
-    //   this.player.move();
-    // }
-
-    // if (this.sceneFrame === 1600) {
-    //   this.player.die();
-    // }
-
-    this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
-      // !creature.isAttacking() && creature.attack();
-      if (creature.getCurrentState() === EntityState.MOVE || creature.isDieing()) {
-        !this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity));
-        this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity * 2));
-        this.player.isMoving() && creature.setX(creature.getX() - (this.relativeVelocity));
-      }
-
-      creature.setYOnGround(this.ground);
-      this.drawEntity(creature, SpriteDirection.LEFT);
-
-      if ((this.player.getCurrentState() !== EntityState.DIE) && !creature.isDieing() && creature.isCollide(this.player)) {
-        this.player.idle();
-        creature.attack();
-
-        this.attackInterval = setInterval(() => {
-          this.eventManager.onPlayerHurt(10);
-        }, 1000);
-      }
-    });
-
-    if (this.player.isDieing() && this.attackInterval) {
-      clearInterval(this.attackInterval);
-      this.attackInterval = undefined;
-      this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
-        creature.idle();
-      });
+    if (this.phase === BattleScenePhase.START) {
+      this.updateOnStart();
+    } else {
+      this.updateOnBattle();
     }
-
-    if (this.sceneFrame === 50 || this.sceneFrame === 100 || this.sceneFrame === 200) {
-      const spawnedCreate = this.creatureSpawner.spawn(Mushroom, this.ground, 3);
-      spawnedCreate.move();
-    }
-    // if (this.sceneFrame === 120) {
-    //   this.creatureSpawner.spawn(this.ground, 3);
-    // }
   }
 
+  private updateOnStart(): void {
+    this.baseBackground.move(1 * this.relativeVelocity);
+    this.midBackground.move(2 * this.relativeVelocity);
+    this.ground.move(3 * this.relativeVelocity);
+    this.baseBackground.draw(this.getCanvasContext());
+    this.midBackground.draw(this.getCanvasContext());
+    this.ground.draw(this.getCanvasContext());
+  }
 
+  private updateOnBattle(): void {
+    this.updateAllBackgrounds();
+      this.drawEntity(this.player, SpriteDirection.RIGHT);
+      this.physicsEngine.gravitate(this.player, this.ground);
 
+      const nearEnermy = this.physicsEngine.getNearestCreature(
+        this.player
+      , this.creatureSpawner.getSpawnedCreatures());
+
+      this.projectiles.slice().reverse().forEach((projectile, index, array) => {
+        projectile.nextFrameCount();
+        if (projectile.getFrameCount() < projectile.getAttackFrame() * this.player.getAnimation().getCurrentSprite().getFrameHold()) {
+          return
+        } else if (projectile.getFrameCount() == projectile.getAttackFrame() * this.player.getAnimation().getCurrentSprite().getFrameHold()) {
+          projectile.setTarget(nearEnermy!);
+          projectile.setX(this.player.getRealX() + this.player.getRealWidth());
+          projectile.setY(this.player.getRealY() + this.player.getRealHeight() / 2);
+        }
+        
+        this.drawEntity(projectile, SpriteDirection.LEFT);
+        
+        const isProjectileHit = this.physicsEngine.projectileMotion(projectile, projectile.getTarget(), this.ground);
+        if (isProjectileHit) {
+          if (projectile.isCollide(projectile.getTarget())) {
+            projectile.getTarget().move();
+            projectile.getTarget().die();
+          }
+          this.projectiles.splice(array.length - 1 - index, 1);
+        }
+      });
+
+      // if (this.sceneFrame === 100 || this.sceneFrame === 200 || this.sceneFrame === 300) {
+      //   this.player.idle();
+      //   const arrow = this.player.attack();
+      //   arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
+      //   this.projectiles.push(arrow);
+      //   // this.player.jump();
+      // }
+
+      // if (this.sceneFrame % 200 === 0) {
+      //   // this.player.idle()
+      //   this.player.setHealth(this.player.getHealth() - 10);
+      //   this.eventManager.onPlayerHurt(10);
+      // }
+
+      // if (this.sceneFrame === 1200) {
+      //   this.player.move();
+      // }
+
+      // if (this.sceneFrame === 1600) {
+      //   this.player.die();
+      // }
+
+      this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
+        // !creature.isAttacking() && creature.attack();
+        if (creature.getCurrentState() === EntityState.MOVE || creature.isDieing()) {
+          !this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity));
+          this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity * 2));
+          this.player.isMoving() && creature.setX(creature.getX() - (this.relativeVelocity));
+        }
+
+        creature.setYOnGround(this.ground);
+        this.drawEntity(creature, SpriteDirection.LEFT);
+
+        if ((this.player.getCurrentState() !== EntityState.DIE) && !creature.isDieing() && creature.isCollide(this.player)) {
+          this.player.idle();
+          creature.attack();
+
+          this.attackInterval = setInterval(() => {
+            this.eventManager.onPlayerHurt(10);
+          }, 1000);
+        }
+      });
+
+      if (this.player.isDieing() && this.attackInterval) {
+        clearInterval(this.attackInterval);
+        this.attackInterval = undefined;
+        this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
+          creature.idle();
+        });
+      }
+
+      if (this.sceneFrame === 50 || this.sceneFrame === 100 || this.sceneFrame === 200) {
+        const spawnedCreate = this.creatureSpawner.spawn(Mushroom, this.ground, 3);
+        spawnedCreate.move();
+      }
+      // if (this.sceneFrame === 120) {
+      //   this.creatureSpawner.spawn(this.ground, 3);
+      // }
+  }
 
   private updateAllBackgrounds(): void {
     if ((this.player.isMoving()) && (this.sceneFrame % 3 === 0)) {
