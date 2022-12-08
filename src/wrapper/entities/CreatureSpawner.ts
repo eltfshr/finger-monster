@@ -1,8 +1,8 @@
 import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
 import { ImageRegistry } from '@/renderer/ImageRegistry';
 import { Ground } from '@/renderer/object/Ground';
-import { MushroomAnimation } from '@/renderer/sprite/entities/MushroomAnimation';
 import { SkeletonAnimation } from '@/renderer/sprite/entities/SkeletonAnimation';
+import { AnimationConstructor } from '@/renderer/sprite/EntityAnimation';
 import { Scene } from '@/scene/Scene';
 import { Creature, CreatureConstructor } from '@/wrapper/entities/Creature';
 import { Skeleton } from '@/wrapper/entities/living/Skeleton';
@@ -34,10 +34,10 @@ export class CreatureSpawner {
     return this;
   }
 
-  public spawn(creatureClass: CreatureConstructor, ground: Ground, scale: number): Creature {
+  public spawn(creatureClass: CreatureConstructor, animationClass: AnimationConstructor, ground: Ground, scale: number): Creature {
     const creature = new creatureClass();
     creature.setScale(scale);
-    creature.setAnimation(new MushroomAnimation(this.imageRegistry, this.collisionRegistry));
+    creature.setAnimation(new animationClass(this.imageRegistry, this.collisionRegistry));
     creature.setX(this.offsetX);
     creature.setYOnGround(ground);
     creature.attack();

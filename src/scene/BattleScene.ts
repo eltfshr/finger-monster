@@ -10,6 +10,7 @@ import { Background } from '@/renderer/object/Background';
 import { Ground } from '@/renderer/object/Ground';
 import { PhysicsEngine } from '@/renderer/PhysicsEngine';
 import { ArrowAnimation } from '@/renderer/sprite/entities/ArrowAnimation';
+import { MushroomAnimation } from '@/renderer/sprite/entities/MushroomAnimation';
 import { PlayerAnimation } from '@/renderer/sprite/entities/PlayerAnimation';
 import { SpriteDirection } from '@/renderer/sprite/SpriteDirection';
 import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
@@ -198,7 +199,7 @@ export class BattleScene extends Scene {
       }
 
       if (this.sceneFrame === 50 || this.sceneFrame === 100 || this.sceneFrame === 200) {
-        const spawnedCreate = this.creatureSpawner.spawn(Mushroom, this.ground, 3);
+        const spawnedCreate = this.creatureSpawner.spawn(Mushroom, MushroomAnimation, this.ground, 3);
         spawnedCreate.move();
       }
       // if (this.sceneFrame === 120) {

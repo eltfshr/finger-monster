@@ -55,3 +55,5 @@ export abstract class EntityAnimation {
   public abstract createSpriteMap(): Map<EntityState, SpriteResource>;
 
 }
+
+export type AnimationConstructor<T extends EntityAnimation = EntityAnimation> = new (...args: any[]) => T;
