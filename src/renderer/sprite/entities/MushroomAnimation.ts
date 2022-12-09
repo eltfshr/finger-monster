@@ -9,7 +9,7 @@ export class MushroomAnimation extends EntityAnimation {
     return new Map([
       [EntityState.IDLE,    new SpriteResource('character/mushroom/idle.png',    3, 10).setDirection(SpriteDirection.RIGHT)],
       [EntityState.MOVE,    new SpriteResource('character/mushroom/move.png',    7, 10).setDirection(SpriteDirection.RIGHT)],
-      [EntityState.ATTACK,  new SpriteResource('character/mushroom/attack.png',  7, 10).setDirection(SpriteDirection.RIGHT)],
+      [EntityState.ATTACK,  new SpriteResource('character/mushroom/attack.png',  7, 10).setDirection(SpriteDirection.RIGHT).setMetaData('attack-frame', 6)],
       [EntityState.HURT,    new SpriteResource('character/mushroom/hurt.png',    3, 10).setDirection(SpriteDirection.RIGHT)],
       [EntityState.DIE,     new SpriteResource('character/mushroom/death.png',   3, 10).setDirection(SpriteDirection.RIGHT)],
     ]);
