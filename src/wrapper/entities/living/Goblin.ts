@@ -3,6 +3,10 @@ import { HostileCreature } from '@/wrapper/entities/HostileCreature';
 
 export class Goblin extends HostileCreature {
 
+  protected health: number = 200;
+  protected damage: number = 15;
+  protected speedMultiplier: number = 1.2;
+
   public idle(): void {
     this.setCurrentState(EntityState.IDLE);
   }

@@ -3,6 +3,9 @@ import { HostileCreature } from '@/wrapper/entities/HostileCreature';
 
 export class Skeleton extends HostileCreature {
 
+  protected health: number = 300;
+  protected speedMultiplier: number = 0.5;
+
   public idle(): void {
     this.setCurrentState(EntityState.IDLE);
   }

@@ -16,7 +16,8 @@ export class BlueSlime extends HostileCreature {
   }
 
   public attack(): void {
-    this.setCurrentState(EntityState.ATTACK);
+    const previousState = this.getCurrentState();
+    this.setCurrentTemporaryState(EntityState.ATTACK, previousState);
   }
 
   public hurt(): void {

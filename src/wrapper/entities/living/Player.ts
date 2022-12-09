@@ -22,7 +22,6 @@ export class Player extends Creature {
     this.setCurrentTemporaryState(EntityState.ATTACK, previousState);
 
     return new Arrow()
-      .setSpeedMultiplier(30)
       .setAttackFrame(this.animation!.getCurrentSprite().getMetaData('attack-frame'));
   }
 

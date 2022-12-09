@@ -3,6 +3,9 @@ import { HostileCreature } from '@/wrapper/entities/HostileCreature';
 
 export class Mushroom extends HostileCreature {
 
+  protected health: number = 200;
+  protected damage: number = 15;
+
   public idle(): void {
     this.setCurrentState(EntityState.IDLE);
   }
