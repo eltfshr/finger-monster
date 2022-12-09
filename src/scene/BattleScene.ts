@@ -10,15 +10,26 @@ import { Background } from '@/renderer/object/Background';
 import { Ground } from '@/renderer/object/Ground';
 import { PhysicsEngine } from '@/renderer/PhysicsEngine';
 import { ArrowAnimation } from '@/renderer/sprite/entities/ArrowAnimation';
+import { BlueSlimeAnimation } from '@/renderer/sprite/entities/BlueSlimeAnimation';
+import { FlyingEyeAnimation } from '@/renderer/sprite/entities/FlyingEyeAnimation';
+import { GoblinAnimation } from '@/renderer/sprite/entities/GoblinAnimation';
 import { MushroomAnimation } from '@/renderer/sprite/entities/MushroomAnimation';
 import { PlayerAnimation } from '@/renderer/sprite/entities/PlayerAnimation';
+import { ShieldSkeletonAnimation } from '@/renderer/sprite/entities/ShieldSkeletonAnimation';
+import { SkeletonAnimation } from '@/renderer/sprite/entities/SkeletonAnimation';
 import { SpriteDirection } from '@/renderer/sprite/SpriteDirection';
 import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
 import { Scene } from '@/scene/Scene';
 import { CreatureSpawner } from '@/wrapper/entities/CreatureSpawner';
 import { EntityState } from '@/wrapper/entities/EntityState';
+import { HostileCreature } from '@/wrapper/entities/HostileCreature';
+import { BlueSlime } from '@/wrapper/entities/living/BlueSlime';
+import { FlyingEye } from '@/wrapper/entities/living/FlyingEye';
+import { Goblin } from '@/wrapper/entities/living/Goblin';
 import { Mushroom } from '@/wrapper/entities/living/Mushroom';
 import { Player } from '@/wrapper/entities/living/Player';
+import { ShieldSkeleton } from '@/wrapper/entities/living/ShieldSkeleton';
+import { Skeleton } from '@/wrapper/entities/living/Skeleton';
 import { Projectile } from '@/wrapper/entities/Projectile';
 
 export enum BattleScenePhase {
@@ -171,8 +182,8 @@ export class BattleScene extends Scene {
       this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
         // !creature.isAttacking() && creature.attack();
         if (creature.getCurrentState() === EntityState.MOVE || creature.isDieing()) {
-          !this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity));
-          this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity * 2));
+          !this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity * (creature as HostileCreature).getSpeedMultiplier()));
+          this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity * 2 * (creature as HostileCreature).getSpeedMultiplier()));
           this.player.isMoving() && creature.setX(creature.getX() - (this.relativeVelocity));
         }
 
@@ -180,25 +191,52 @@ export class BattleScene extends Scene {
         this.drawEntity(creature, SpriteDirection.LEFT);
 
         if ((this.player.getCurrentState() !== EntityState.DIE) && !creature.isDieing() && creature.isCollide(this.player)) {
-          this.player.idle();
-          creature.attack();
+          if (!creature.isAttacking()) {
+            this.eventManager.onEnemyAttack(creature);
+          }
+          
+          if (creature.getCurrentSprite().getCurrentFrame() == creature.getCurrentSprite().getMetaData('attack-frame')) {
+            this.eventManager.onPlayerHurt((creature as HostileCreature).getDamage() / creature.getCurrentSprite().getFrameHold());
+          }
 
-          this.attackInterval = setInterval(() => {
-            this.eventManager.onPlayerHurt(10);
-          }, 1000);
         }
       });
 
-      if (this.player.isDieing() && this.attackInterval) {
-        clearInterval(this.attackInterval);
-        this.attackInterval = undefined;
+      if (this.player.isDieing()) {
         this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
-          creature.idle();
+          if (!creature.isIdle() && !creature.isDieing()) {
+            creature.idle();
+          }
         });
       }
 
-      if (this.sceneFrame === 50 || this.sceneFrame === 100 || this.sceneFrame === 200) {
+      if (this.sceneFrame === 100) {
+        const spawnedCreate = this.creatureSpawner.spawn(BlueSlime, BlueSlimeAnimation, this.ground, 3);
+        spawnedCreate.move();
+      }
+
+      if (this.sceneFrame === 200) {
         const spawnedCreate = this.creatureSpawner.spawn(Mushroom, MushroomAnimation, this.ground, 3);
+        spawnedCreate.move();
+      }
+
+      if (this.sceneFrame === 300) {
+        const spawnedCreate = this.creatureSpawner.spawn(FlyingEye, FlyingEyeAnimation, this.ground, 3);
+        spawnedCreate.move();
+      }
+
+      if (this.sceneFrame === 400) {
+        const spawnedCreate = this.creatureSpawner.spawn(Skeleton, SkeletonAnimation, this.ground, 3);
+        spawnedCreate.move();
+      }
+
+      if (this.sceneFrame === 500) {
+        const spawnedCreate = this.creatureSpawner.spawn(ShieldSkeleton, ShieldSkeletonAnimation, this.ground, 3);
+        spawnedCreate.move();
+      }
+
+      if (this.sceneFrame === 600) {
+        const spawnedCreate = this.creatureSpawner.spawn(Goblin, GoblinAnimation, this.ground, 3);
         spawnedCreate.move();
       }
       // if (this.sceneFrame === 120) {
