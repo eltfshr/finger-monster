@@ -11,6 +11,7 @@ export class CreatureSpawner {
   
   private readonly imageRegistry: ImageRegistry;
   private readonly collisionRegistry: CollisionRegistry;
+  private readonly creatureMap: Map<CreatureConstructor, AnimationConstructor> = new Map();
 
   private sceneHeight: number = 0;
   private offsetX: number = 0;
@@ -34,9 +35,18 @@ export class CreatureSpawner {
     return this;
   }
 
-  public spawn(creatureClass: CreatureConstructor, animationClass: AnimationConstructor, ground: Ground, scale: number): Creature {
+  public addCreature(creatureClass: CreatureConstructor, animationClass: AnimationConstructor): CreatureSpawner {
+    this.creatureMap.set(creatureClass, animationClass);
+    return this;
+  }
+
+  public randomlySpawn(ground: Ground): Creature {
+    const candidateCreatures = [...this.creatureMap.keys()];
+    const candidateScales = Math.random() * (3 - 2) + 2;
+    const creatureClass = candidateCreatures[Math.floor(Math.random() * candidateCreatures.length)];
+    const animationClass = this.creatureMap.get(creatureClass)!;
     const creature = new creatureClass();
-    creature.setScale(scale);
+    creature.setScale(Math.floor(Math.random() * candidateScales));
     creature.setAnimation(new animationClass(this.imageRegistry, this.collisionRegistry));
     creature.setX(this.offsetX);
     creature.setYOnGround(ground);

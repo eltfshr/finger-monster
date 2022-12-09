@@ -11,7 +11,7 @@ export class Game {
     await this.battleScene.load();
 
     console.log('Starting the battle scene');
-    this.battleScene.startScene(60);
+    this.battleScene.startScene(144);
   }
 
 }
