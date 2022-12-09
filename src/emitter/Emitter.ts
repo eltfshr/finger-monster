@@ -10,4 +10,6 @@ export interface Emitter<T> {
 
   init(): void;
 
+  getCurrentKey(): string;
+
 }

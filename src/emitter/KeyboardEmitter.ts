@@ -5,6 +5,8 @@ export class KeyboardEmitter implements Emitter<string> {
 
   public readonly actionByKey: Map<string, Action<string>> = new Map();
 
+  private currentKey: string = '';
+
   public attach(actions: Action<string>[]): void {
     actions.forEach((action) => {
       action.actionKeys.forEach((key) => {
@@ -21,9 +23,10 @@ export class KeyboardEmitter implements Emitter<string> {
     });
   }
 
-  public init(): void {
+  public async init(): Promise<void> {
     window.addEventListener('keydown', (event: KeyboardEvent) => {
       const action = this.actionByKey.get(event.key);
+      this.currentKey = event.key;
       if (action) {
         action.execute(event.key);
       }
@@ -35,6 +38,10 @@ export class KeyboardEmitter implements Emitter<string> {
         action.unExecute(event.key);
       }
     });
+  }
+
+  public getCurrentKey(): string {
+    return this.currentKey;
   }
 
 }

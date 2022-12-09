@@ -13,26 +13,15 @@ export class BattleEventManager {
   private readonly player: Player;
   private readonly enemyEvent: EnemyBattleEvent;
 
-  // TODO: REMOVE THIS PLEASE
-  private readonly battleScene: BattleScene;
-
   public constructor(uiRoot: BattleUserInterfaceRoot, player: Player, battleScene: BattleScene) {
     this.uiRoot = uiRoot;
     this.enemyEvent = new EnemyBattleEvent(this.uiRoot);
     this.playerEvent = new PlayerBattleEvent(this.uiRoot, player);
     this.player = player;
-    
-    this.battleScene = battleScene;
   }
 
   public onPlayerAttack(): void {
-    // this.player.idle();
-    // this.playerEvent.onAttack();
-
-    this.battleScene.shoot();
-    // const arrow = this.player.attack();
-    // arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
-    // this.projectiles.push(arrow);
+    
   }
 
   public onPlayerHurt(damage: number): void {
@@ -82,6 +71,10 @@ export class BattleEventManager {
 
   public onSignCorrect(): void {
     
+  }
+
+  public onCharacterChange(character: string): void {
+    this.uiRoot.updateCharacter(character);
   }
 
   public onItemSpawn(): void {

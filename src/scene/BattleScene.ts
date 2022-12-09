@@ -1,4 +1,3 @@
-import { CharacterAttackAction } from '@/action/CharacterAttackAction';
 import { JumpAction } from '@/action/JumpAction';
 import { RunAction } from '@/action/RunAction';
 import { KeyboardEmitter } from '@/emitter/KeyboardEmitter';
@@ -59,9 +58,12 @@ export class BattleScene extends Scene {
 
   private readonly physicsEngine = new PhysicsEngine();
   private readonly projectiles: Projectile[] = [];
+  
+  private readonly keys: string[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+  private targetKey: string = this.keys[Math.floor(Math.random() * 26)];
+  private correctKeyCount: number = 0;
 
   private phase: BattleScenePhase = BattleScenePhase.BATTLE;
-  private attackInterval: NodeJS.Timer | undefined;
   private relativeVelocity: number = 1.0;
 
   public async load(): Promise<void> {
@@ -103,9 +105,11 @@ export class BattleScene extends Scene {
     this.player.setYOnGround(this.ground);
     this.player.idle();
 
+    this.eventManager.onCharacterChange(this.targetKey);
+
     this.keyboardEmitter.attach([
-      new CharacterAttackAction<string>(this.eventManager, this.uiRoot)
-        .loadKeys(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']),
+      // new CharacterAttackAction<string>(this.eventManager, this.uiRoot)
+      //   .loadKeys(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']),
       new RunAction<string>(this.eventManager, this.uiRoot)
         .loadKeys(['ArrowRight', 'ArrowLeft']),
 
@@ -138,12 +142,28 @@ export class BattleScene extends Scene {
     this.drawEntity(this.player, SpriteDirection.RIGHT);
     this.physicsEngine.gravitate(this.player, this.ground);
 
+    //Find one nearest enemy for target
     const nearEnermy = this.physicsEngine.getNearestCreature(
       this.player
       , this.creatureSpawner.getSpawnedCreatures());
 
+    const currentKey = this.keyboardEmitter.getCurrentKey();
+
+    if (currentKey == this.targetKey) {
+      this.correctKeyCount++;
+
+      if (this.correctKeyCount == 10) {
+        this.correctKeyCount = 0;
+        this.shoot();
+        this.targetKey = this.keys[Math.floor(Math.random() * 26)];
+        this.eventManager.onCharacterChange(this.targetKey);
+      }
+    }
+
+    //Shooting projectiles and hurting enemies
     this.projectiles.slice().reverse().forEach((projectile, index, array) => {
       projectile.nextFrameCount();
+
       if (projectile.getFrameCount() < projectile.getAttackFrame() * this.player.getAnimation().getCurrentSprite().getFrameHold()) {
         return
       } else if (projectile.getFrameCount() == projectile.getAttackFrame() * this.player.getAnimation().getCurrentSprite().getFrameHold()) {
@@ -152,7 +172,7 @@ export class BattleScene extends Scene {
         projectile.setY(this.player.getRealY() + this.player.getRealHeight() / 2);
       }
 
-      this.drawEntity(projectile, SpriteDirection.LEFT);
+      this.drawEntity(projectile, SpriteDirection.RIGHT);
 
       const isProjectileHit = this.physicsEngine.projectileMotion(projectile, projectile.getTarget(), this.ground);
       if (isProjectileHit) {
@@ -185,11 +205,12 @@ export class BattleScene extends Scene {
     //   this.player.die();
     // }
 
+    //Moving enemies and attacking
     this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
       // !creature.isAttacking() && creature.attack();
       if (creature.getCurrentState() === EntityState.MOVE || creature.isDieing()) {
         !this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity * (creature as HostileCreature).getSpeedMultiplier()));
-        this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity * 2 * (creature as HostileCreature).getSpeedMultiplier()));
+        this.player.isMoving() && !creature.isDieing() && creature.setX(creature.getX() - (1.3 * this.relativeVelocity * 1.3 * (creature as HostileCreature).getSpeedMultiplier()));
         this.player.isMoving() && creature.setX(creature.getX() - (this.relativeVelocity));
       }
 
@@ -208,6 +229,7 @@ export class BattleScene extends Scene {
       }
     });
 
+    //Stop enemies when player dies
     if (this.player.isDieing()) {
       this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
         if (!creature.isIdle() && !creature.isDieing()) {
