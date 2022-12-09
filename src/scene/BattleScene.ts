@@ -140,8 +140,7 @@ export class BattleScene extends Scene {
         const isProjectileHit = this.physicsEngine.projectileMotion(projectile, projectile.getTarget(), this.ground);
         if (isProjectileHit) {
           if (projectile.isCollide(projectile.getTarget())) {
-            projectile.getTarget().move();
-            projectile.getTarget().die();
+            this.eventManager.onEnemyHurt(projectile.getTarget())
           }
           this.projectiles.splice(array.length - 1 - index, 1);
         }

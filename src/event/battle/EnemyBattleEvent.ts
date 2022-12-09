@@ -17,8 +17,15 @@ export class EnemyBattleEvent {
     enemy.attack();
   }
 
-  public onHurt(enemy: Creature): void {
+  public onHurt(enemy: Creature): boolean {
+    if (enemy.isDieing()) return true;
+
     enemy.hurt();
+    enemy.setHealth(enemy.getHealth() - 100);
+    //this.uiRoot.updateHealth(enemy.getHealth());
+
+    const isFatal = (enemy.getHealth() <= 0);
+    return isFatal;
   }
 
   public onDie(enemy: Creature): void {

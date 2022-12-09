@@ -67,13 +67,10 @@ export class BattleEventManager {
   }
 
   public onEnemyHurt(enemy: Creature): void {
-    enemy.setHealth(enemy.getHealth() - 10);
+    if (enemy.isDieing()) return;
 
-    this.enemyEvent.onHurt(enemy);
-
-    if (enemy.getHealth() <= 0) {
-      this.onEnemyDie(enemy);
-    }
+    const isEnemyFatal = this.enemyEvent.onHurt(enemy);
+    if (isEnemyFatal) this.onEnemyDie(enemy);
   }
 
   public onEnemyDie(enemy: Creature): void {

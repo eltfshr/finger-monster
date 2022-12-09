@@ -23,7 +23,6 @@ export class PlayerBattleEvent {
     this.uiRoot.updateHealth(this.player.getHealth());
 
     const isFatal = (this.player.getHealth() <= 0);
-    if (isFatal) this.onDie();
     return isFatal;
   }
 
