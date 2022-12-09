@@ -143,12 +143,20 @@ export class BattleScene extends Scene {
     this.physicsEngine.gravitate(this.player, this.ground);
 
     //Find one nearest enemy for target
-    const nearEnermy = this.physicsEngine.getNearestCreature(
+    const nearEnemy = this.physicsEngine.getNearestCreature(
       this.player
-      , this.creatureSpawner.getSpawnedCreatures());
+      , this.creatureSpawner.getSpawnedCreatures()
+    );
+
+    //Draw red indicator on top of nearest enemy
+    const nearEnermyX = nearEnemy.getCurrentSprite().getDirection() == SpriteDirection.LEFT
+      ? nearEnemy.getRealX() + nearEnemy.getRealWidth() / 3 - 10
+      : nearEnemy.getX() + (nearEnemy.getX() + nearEnemy.getCurrentSprite().getWidth() * nearEnemy.getScale()) - (nearEnemy.getRealX() + nearEnemy.getRealWidth() / 3 * 2 + 10);
+    
+      this.eventManager.onTargetMove(nearEnermyX, nearEnemy.getRealY() - 30 - 5);
 
     const currentKey = this.keyboardEmitter.getCurrentKey();
-
+    //Get key for shooting
     if (currentKey == this.targetKey) {
       this.correctKeyCount++;
 
@@ -167,7 +175,7 @@ export class BattleScene extends Scene {
       if (projectile.getFrameCount() < projectile.getAttackFrame() * this.player.getAnimation().getCurrentSprite().getFrameHold()) {
         return
       } else if (projectile.getFrameCount() == projectile.getAttackFrame() * this.player.getAnimation().getCurrentSprite().getFrameHold()) {
-        projectile.setTarget(nearEnermy!);
+        projectile.setTarget(nearEnemy!);
         projectile.setX(this.player.getRealX() + this.player.getRealWidth());
         projectile.setY(this.player.getRealY() + this.player.getRealHeight() / 2);
       }
@@ -238,7 +246,7 @@ export class BattleScene extends Scene {
       });
     }
 
-    if (this.sceneFrame === 600) {  // ELTFSHR will do this, TY
+    if (this.sceneFrame === 200 || this.sceneFrame === 600) {  // ELTFSHR will do this, TY
       const spawnedCreature = this.creatureSpawner.randomlySpawn(this.ground);
       spawnedCreature.move();
     }

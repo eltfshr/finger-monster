@@ -45,10 +45,7 @@ export class PhysicsEngine {
     return false;
   }
 
-  public getNearestCreature(creature: Creature, creatures: Creature[]): Creature | null {
-    if (creatures.length == 0) {
-      return null;
-    }
+  public getNearestCreature(creature: Creature, creatures: Creature[]): Creature {
     let nearestCreature: Creature = creatures[creatures.length - 1];
     let nearestDistance: number = Number.MAX_SAFE_INTEGER;
 

@@ -69,6 +69,10 @@ export class BattleEventManager {
     this.enemyEvent.onDie(enemy);
   }
 
+  public onTargetMove(x: number, y: number): void {
+    this.uiRoot.updateTarget(x, y);
+  }
+
   public onSignCorrect(): void {
     
   }

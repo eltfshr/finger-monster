@@ -165,3 +165,12 @@ html, body {
   padding-top: 8px;
   color: #f2f2f2;
 }
+
+#target-indicator {
+  z-index: 102;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+  background-image: url('/graphic/target-indicator.png');
+}

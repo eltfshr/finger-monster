@@ -3,6 +3,7 @@ import { BattleManaBar } from '@/renderer/ui/battle/BattleManaBar';
 import { BattlePlayerFrame } from '@/renderer/ui/battle/BattlePlayerFrame';
 import { BattlePlayerFrameBorder } from '@/renderer/ui/battle/BattlePlayerFrameBorder';
 import { CharacterBar } from '@/renderer/ui/battle/CharacterBar';
+import { TargetIndicator } from '@/renderer/ui/battle/TargetIndicator';
 import { UserInterfaceRoot } from '@/renderer/ui/UserInterfaceRoot';
 import { Player } from '@/wrapper/entities/living/Player';
 
@@ -16,7 +17,8 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
   private readonly healthBar: BattleHealthBar;
   private readonly manaBar: BattleManaBar;
   private readonly characterBar: CharacterBar;
-  
+  private readonly targetIndicator: TargetIndicator;
+
   public constructor(player: Player) {
     super();
     this.playerHudRoot.setAttribute('id', 'player-info-hud');
@@ -37,6 +39,9 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
 
     this.playerFrameBorder = new BattlePlayerFrameBorder();
     this.playerHudRoot.append(this.playerFrameBorder.getNode());
+
+    this.targetIndicator = new TargetIndicator();
+    this.playerHudRoot.append(this.targetIndicator.getNode())
   }
 
   public updateHealth(health: number): void {
@@ -49,6 +54,10 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
 
   public updateCharacter(character: string): void {
     this.characterBar.update(character);
+  }
+
+  public updateTarget(x: number, y: number): void {
+    this.targetIndicator.update(x, y);
   }
 
 }

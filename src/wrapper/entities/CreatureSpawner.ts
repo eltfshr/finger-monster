@@ -46,7 +46,8 @@ export class CreatureSpawner {
     const creatureClass = candidateCreatures[Math.floor(Math.random() * candidateCreatures.length)];
     const animationClass = this.creatureMap.get(creatureClass)!;
     const creature = new creatureClass();
-    creature.setScale(Math.floor(Math.random() * candidateScales));
+    
+    creature.setScale(candidateScales);
     creature.setAnimation(new animationClass(this.imageRegistry, this.collisionRegistry));
     creature.setX(this.offsetX);
     creature.setYOnGround(ground);
