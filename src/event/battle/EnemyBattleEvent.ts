@@ -20,6 +20,7 @@ export class EnemyBattleEvent {
   public onHurt(enemy: Creature): boolean {
     if (enemy.isDieing()) return true;
 
+    enemy.move();
     enemy.hurt();
     enemy.setHealth(enemy.getHealth() - 100);
     //this.uiRoot.updateHealth(enemy.getHealth());

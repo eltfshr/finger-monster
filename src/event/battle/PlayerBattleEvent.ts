@@ -17,8 +17,10 @@ export class PlayerBattleEvent {
 
   public onHurt(damage: number): boolean {
     if (this.player.isDieing()) return true;
-
-    this.player.hurt();
+    if (!this.player.isHurting()) {
+      this.player.idle();
+      this.player.hurt();
+    }
     this.player.setHealth(this.player.getHealth() - damage);
     this.uiRoot.updateHealth(this.player.getHealth());
 
