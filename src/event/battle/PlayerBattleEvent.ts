@@ -17,7 +17,7 @@ export class PlayerBattleEvent {
 
   public onHurt(damage: number): boolean {
     if (this.player.isDieing()) return true;
-    if (!this.player.isHurting()) {
+    if (!this.player.isHurting() && !this.player.isAttacking()) {
       this.player.idle();
       this.player.hurt();
     }
