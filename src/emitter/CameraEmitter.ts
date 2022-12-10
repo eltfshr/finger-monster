@@ -307,12 +307,11 @@ export class CameraEmitter implements Emitter<string> {
     if (!navigator.mediaDevices.getUserMedia) {
       throw new Error('getUserMedia() is not supported by your browser');
     }
-    
+
     const videoStream = await navigator.mediaDevices.getUserMedia({ video: true })
     const video = document.querySelector<HTMLVideoElement>("#camera-box")!;
-    
-    video.srcObject = videoStream;
 
+    video.srcObject = videoStream;
     this.video = video;
   }
 

@@ -143,7 +143,7 @@ html, body {
 #character-box-border {
   z-index: 98;
   position: absolute;
-  top: 17%;
+  top: 18%;
   left: 2%;
   width: 102px;
   height: 106px;
@@ -178,26 +178,30 @@ html, body {
 #camera-box-border {
   z-index: 98;
   position: absolute;
-  top: 30%;
+  bottom: 1%;
   left: 2%;
-  width: 102px;
-  height: 106px;
-  background-image: url('/graphic/player-frame-border.png');
+  width: 144px;
+  height: 96px;
+  background-image: url('/graphic/camera-border.png');
   background-size: cover;
 }
 
-#camera-box {
-  z-index: 100;
+#camera-box-background {
+  z-index: 99;
   position: absolute;
-  top: 30%;
-  left: 12.5%;
-  width: 128px;
-  height: 128px;
-  background-size: cover;
-  font-size: 54px;
-  font-weight: 900;
-  text-align: center;
-  padding-top: 8px;
+  overflow: hidden;
+  width: 108px;
+  height: 63px;
+  top: 18px;
+  left: 18px;
   background-color: #f2f2f2;
   color: #f2f2f2;
+}
+
+#camera-box {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

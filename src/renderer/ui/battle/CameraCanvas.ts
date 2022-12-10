@@ -3,16 +3,20 @@ import { UserInterface } from '@/renderer/ui/UserInterface';
 export class CameraCanvas extends UserInterface {
 
   public createElement(): HTMLElement {
-    const bar = document.createElement('div');
-    bar.setAttribute('id', 'camera-box-border');
+    const border = document.createElement('div');
+    border.setAttribute('id', 'camera-box-border');
 
-    const indicator = document.createElement('video');
-    indicator.setAttribute('id', 'camera-box');
-    indicator.setAttribute('autoplay', 'true');
+    const background = document.createElement('div');
+    background.setAttribute('id', 'camera-box-background')
 
-    bar.appendChild(indicator);
+    const video = document.createElement('video');
+    video.setAttribute('id', 'camera-box');
+    video.setAttribute('autoplay', 'true');
 
-    return bar;
+    background.appendChild(video)
+    border.appendChild(background);
+
+    return border;
   }
 
   public update(character: string): void {
