@@ -49,7 +49,7 @@ export class CreatureSpawner {
     
     creature.setScale(candidateScales);
     creature.setAnimation(new animationClass(this.imageRegistry, this.collisionRegistry));
-    creature.setX(this.offsetX);
+    creature.setX(this.offsetX + 50 - creature.getCurrentSprite().getCollision().getLeft() * creature.getScale());
     creature.setYOnGround(ground);
     creature.attack();
     this.creatures.push(creature);
@@ -58,6 +58,15 @@ export class CreatureSpawner {
 
   public getSpawnedCreatures(): Creature[] {
     return this.creatures;
+  }
+
+  public removeCreature(creature: Creature): void {
+    const index = this.creatures.findIndex((c) => c === creature);
+    this.creatures.splice(index, 1);
+  }
+
+  public clearCreatures(): void {
+    this.creatures.splice(1, this.creatures.length);
   }
 
 }

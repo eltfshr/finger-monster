@@ -14,6 +14,7 @@ export class EnemyBattleEvent {
   }
 
   public onAttack(enemy: Creature): void {
+    enemy.move();
     enemy.attack();
   }
 
