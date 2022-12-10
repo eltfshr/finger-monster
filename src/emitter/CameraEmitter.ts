@@ -6,6 +6,7 @@ import { FingerPinky } from '@/emitter/handsings/finger/FingerPinky';
 import { FingerRing } from '@/emitter/handsings/finger/FIngerRing';
 import { FingerThumb } from '@/emitter/handsings/finger/FingerThumb';
 import { HandGesture } from '@/emitter/handsings/HandGesture';
+import { Time } from '@/utils/time';
 import * as handpose from "@tensorflow-models/handpose";
 import * as tf from "@tensorflow/tfjs";
 import * as fp from "fingerpose";
@@ -338,10 +339,11 @@ export class CameraEmitter implements Emitter<string> {
         this.updateCurrentKey(this.network, this.video!);
       }
     }, 200);
+
+    await Time.sleep(5_000);
   }
 
   private async updateCurrentKey(network: handpose.HandPose, video: HTMLVideoElement): Promise<void> {
-
     const hand = await network.estimateHands(video);
 
     if (hand.length > 0) {
