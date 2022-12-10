@@ -169,6 +169,10 @@ export abstract class Creature implements LivingEntity {
   }
 
   public getHealth(): number {
+    if (this.isPlaceHolder()) {
+      return 1;
+    }
+
     return this.health;
   }
 

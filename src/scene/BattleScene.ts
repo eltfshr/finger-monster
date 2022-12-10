@@ -237,6 +237,7 @@ export class BattleScene extends Scene {
           newAlphabet.play();
         }, 500);
         this.eventManager.onCharacterChange(this.targetKey);
+        this.eventManager.onSignCorrect(nearEnemy);
       }
     }
 

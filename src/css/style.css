@@ -169,6 +169,7 @@ html, body {
 #target-indicator {
   z-index: 102;
   position: absolute;
+  left: 200%;
   width: 30px;
   height: 30px;
   background-size: cover;
@@ -226,6 +227,18 @@ html, body {
   height: 78px;
   background-size: cover;
   font-size: 54px;
+  font-weight: 900;
+  text-align: center;
+  padding-top: 8px;
+  color: #f2f2f2;
+}
+
+#score {
+  z-index: 102;
+  position: absolute;
+  top: 5%;
+  left: 44%;
+  font-size: 40px;
   font-weight: 900;
   text-align: center;
   padding-top: 8px;

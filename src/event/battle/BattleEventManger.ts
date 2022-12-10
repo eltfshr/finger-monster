@@ -3,6 +3,7 @@ import { PlayerBattleEvent } from "@/event/battle/PlayerBattleEvent";
 import { AudioResource } from "@/renderer/audio/AudioResource";
 import { BattleUserInterfaceRoot } from "@/renderer/ui/battle/BattleUserInterfaceRoot";
 import { Creature } from "@/wrapper/entities/Creature";
+import { HostileCreature } from '@/wrapper/entities/HostileCreature';
 import { Player } from "@/wrapper/entities/living/Player";
 
 export class BattleEventManager {
@@ -90,6 +91,7 @@ export class BattleEventManager {
     if (enemy.isDieing()) return;
 
     const isEnemyFatal = this.enemyEvent.onHurt(enemy);
+    this.uiRoot.updateScore(enemy.getHealth());
     if (isEnemyFatal) this.onEnemyDie(enemy);
   }
 
@@ -97,6 +99,7 @@ export class BattleEventManager {
     if (Math.random() > 0.5) {
       console.log("Item dropped");
     }
+    this.uiRoot.updateScore(((enemy as HostileCreature).getDamage()) * (enemy as HostileCreature).getSpeedMultiplier());
     this.enemyEvent.onDie(enemy);
   }
 
@@ -104,7 +107,9 @@ export class BattleEventManager {
     this.uiRoot.updateTarget(x, y);
   }
 
-  public onSignCorrect(): void {}
+  public onSignCorrect(enemy :Creature): void {
+    this.uiRoot.updateScore(100);
+  }
 
   public onCharacterChange(character: string): void {
     this.uiRoot.updateCharacter(character);
