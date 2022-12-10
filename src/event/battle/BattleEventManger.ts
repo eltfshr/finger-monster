@@ -25,6 +25,9 @@ export class BattleEventManager {
   private readonly deathSound: AudioResource = new AudioResource(
     "audio/character/player/death.m4a"
   );
+  private readonly jumpSound: AudioResource = new AudioResource(
+    "audio/character/player/jump.m4a"
+  );
 
   public constructor(
     uiRoot: BattleUserInterfaceRoot,
@@ -42,6 +45,8 @@ export class BattleEventManager {
     this.hurtSound.setLoop(false);
     this.deathSound.load().then();
     this.deathSound.setLoop(false);
+    this.jumpSound.load().then();
+    this.jumpSound.setLoop(false);
     this.battleScene = battleScene;
   }
 
@@ -84,6 +89,7 @@ export class BattleEventManager {
   }
 
   public onPlayerJump(): void {
+    this.jumpSound.play();
     this.player.jump();
   }
 
