@@ -276,3 +276,15 @@ html, body {
     opacity: .5;
   }
 }
+
+#wave {
+  z-index: 100;
+  position: absolute;
+  top: 12%;
+  left: 46%;
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+  padding-top: 8px;
+  color: #f2f2f2;
+}

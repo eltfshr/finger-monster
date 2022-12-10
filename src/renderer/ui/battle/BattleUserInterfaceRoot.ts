@@ -7,6 +7,7 @@ import { CharacterBar } from '@/renderer/ui/battle/CharacterBar';
 import { PlayerCharacterBar } from '@/renderer/ui/battle/PlayerCharacterBar';
 import { Score } from '@/renderer/ui/battle/Score';
 import { TargetIndicator } from '@/renderer/ui/battle/TargetIndicator';
+import { WaveNumber } from '@/renderer/ui/battle/WaveNumber';
 import { UserInterfaceRoot } from '@/renderer/ui/UserInterfaceRoot';
 import { Player } from '@/wrapper/entities/living/Player';
 
@@ -26,6 +27,7 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
   private readonly cameraCanvas: CameraCanvas;
   private readonly playerCharacterbar: PlayerCharacterBar;
   private readonly score: Score;
+  private readonly wave: WaveNumber;
 
   public constructor(player: Player) {
     super();
@@ -67,6 +69,9 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
     
     this.score = new Score();
     this.playerHudRoot.append(this.score.getNode())
+
+    this.wave = new WaveNumber();
+    this.playerHudRoot.append(this.wave.getNode())
     
   }
 
@@ -92,6 +97,10 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
   
   public updateScore(score: number): void {
     this.score.update(score);
+  }
+
+  public updateWave(wave: number): void {
+    this.wave.update(wave);
   }
 
 }

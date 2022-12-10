@@ -115,6 +115,10 @@ export class BattleEventManager {
     this.uiRoot.updateCharacter(character);
   }
 
+  public onWaveChange(wave: number): void {
+    this.uiRoot.updateWave(Math.floor((wave - 1) / 2) + 1);
+  }
+
   public onItemSpawn(): void {}
 
   public onItemCollect(): void {}
