@@ -1,35 +1,36 @@
-import { JumpAction } from "@/action/JumpAction";
-import { RunAction } from "@/action/RunAction";
-import { KeyboardEmitter } from "@/emitter/KeyboardEmitter";
-import { BattleEventManager } from "@/event/battle/BattleEventManger";
-import { BattleBackgroundAudio } from "@/renderer/audio/BattleBackgroundAudio";
-import { BattleImageRegistry } from "@/renderer/BattleImageRegistry";
-import { CollisionRegistry } from "@/renderer/collision/CollisionRegistry";
-import { Background } from "@/renderer/object/Background";
-import { Ground } from "@/renderer/object/Ground";
-import { PhysicsEngine } from "@/renderer/PhysicsEngine";
-import { ArrowAnimation } from "@/renderer/sprite/entities/ArrowAnimation";
-import { BlueSlimeAnimation } from "@/renderer/sprite/entities/BlueSlimeAnimation";
-import { FlyingEyeAnimation } from "@/renderer/sprite/entities/FlyingEyeAnimation";
-import { GoblinAnimation } from "@/renderer/sprite/entities/GoblinAnimation";
-import { MushroomAnimation } from "@/renderer/sprite/entities/MushroomAnimation";
-import { PlayerAnimation } from "@/renderer/sprite/entities/PlayerAnimation";
-import { ShieldSkeletonAnimation } from "@/renderer/sprite/entities/ShieldSkeletonAnimation";
-import { SkeletonAnimation } from "@/renderer/sprite/entities/SkeletonAnimation";
-import { SpriteDirection } from "@/renderer/sprite/SpriteDirection";
-import { BattleUserInterfaceRoot } from "@/renderer/ui/battle/BattleUserInterfaceRoot";
-import { Scene } from "@/scene/Scene";
-import { CreatureSpawner } from "@/wrapper/entities/CreatureSpawner";
-import { EntityState } from "@/wrapper/entities/EntityState";
-import { HostileCreature } from "@/wrapper/entities/HostileCreature";
-import { BlueSlime } from "@/wrapper/entities/living/BlueSlime";
-import { FlyingEye } from "@/wrapper/entities/living/FlyingEye";
-import { Goblin } from "@/wrapper/entities/living/Goblin";
-import { Mushroom } from "@/wrapper/entities/living/Mushroom";
-import { Player } from "@/wrapper/entities/living/Player";
-import { ShieldSkeleton } from "@/wrapper/entities/living/ShieldSkeleton";
-import { Skeleton } from "@/wrapper/entities/living/Skeleton";
-import { Projectile } from "@/wrapper/entities/Projectile";
+import { JumpAction } from '@/action/JumpAction';
+import { RunAction } from '@/action/RunAction';
+import { CameraEmitter } from '@/emitter/CameraEmitter';
+import { KeyboardEmitter } from '@/emitter/KeyboardEmitter';
+import { BattleEventManager } from '@/event/battle/BattleEventManger';
+import { BattleBackgroundAudio } from '@/renderer/audio/BattleBackgroundAudio';
+import { BattleImageRegistry } from '@/renderer/BattleImageRegistry';
+import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
+import { Background } from '@/renderer/object/Background';
+import { Ground } from '@/renderer/object/Ground';
+import { PhysicsEngine } from '@/renderer/PhysicsEngine';
+import { ArrowAnimation } from '@/renderer/sprite/entities/ArrowAnimation';
+import { BlueSlimeAnimation } from '@/renderer/sprite/entities/BlueSlimeAnimation';
+import { FlyingEyeAnimation } from '@/renderer/sprite/entities/FlyingEyeAnimation';
+import { GoblinAnimation } from '@/renderer/sprite/entities/GoblinAnimation';
+import { MushroomAnimation } from '@/renderer/sprite/entities/MushroomAnimation';
+import { PlayerAnimation } from '@/renderer/sprite/entities/PlayerAnimation';
+import { ShieldSkeletonAnimation } from '@/renderer/sprite/entities/ShieldSkeletonAnimation';
+import { SkeletonAnimation } from '@/renderer/sprite/entities/SkeletonAnimation';
+import { SpriteDirection } from '@/renderer/sprite/SpriteDirection';
+import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
+import { Scene } from '@/scene/Scene';
+import { CreatureSpawner } from '@/wrapper/entities/CreatureSpawner';
+import { EntityState } from '@/wrapper/entities/EntityState';
+import { HostileCreature } from '@/wrapper/entities/HostileCreature';
+import { BlueSlime } from '@/wrapper/entities/living/BlueSlime';
+import { FlyingEye } from '@/wrapper/entities/living/FlyingEye';
+import { Goblin } from '@/wrapper/entities/living/Goblin';
+import { Mushroom } from '@/wrapper/entities/living/Mushroom';
+import { Player } from '@/wrapper/entities/living/Player';
+import { ShieldSkeleton } from '@/wrapper/entities/living/ShieldSkeleton';
+import { Skeleton } from '@/wrapper/entities/living/Skeleton';
+import { Projectile } from '@/wrapper/entities/Projectile';
 
 export enum BattleScenePhase {
   START,
@@ -61,6 +62,7 @@ export class BattleScene extends Scene {
   );
 
   private readonly keyboardEmitter = new KeyboardEmitter();
+  private readonly cameraEmitter = new CameraEmitter();
 
   private readonly physicsEngine = new PhysicsEngine();
   private readonly projectiles: Projectile[] = [];
@@ -146,7 +148,10 @@ export class BattleScene extends Scene {
       new JumpAction<string>(this.eventManager, this.uiRoot).loadKeys([" "]),
     ]);
 
-    this.keyboardEmitter.init();
+    this.cameraEmitter.attach();
+
+    await this.keyboardEmitter.init();
+    await this.cameraEmitter.init();
   }
 
   public update(): void {
@@ -188,7 +193,10 @@ export class BattleScene extends Scene {
 
     this.eventManager.onTargetMove(nearEnermyX, nearEnemy.getRealY() - 30 - 5);
 
-    const currentKey = this.keyboardEmitter.getCurrentKey();
+    // const currentKey = this.keyboardEmitter.getCurrentKey();
+    const currentKey = this.cameraEmitter.getCurrentKey();
+    console.log('current: ', currentKey)
+
     //Get key for shooting
     if (currentKey == this.targetKey) {
       this.correctKeyCount++;
