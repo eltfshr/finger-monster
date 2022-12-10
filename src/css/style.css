@@ -174,3 +174,30 @@ html, body {
   background-size: cover;
   background-image: url('/graphic/target-indicator.png');
 }
+
+#camera-box-border {
+  z-index: 98;
+  position: absolute;
+  top: 30%;
+  left: 2%;
+  width: 102px;
+  height: 106px;
+  background-image: url('/graphic/player-frame-border.png');
+  background-size: cover;
+}
+
+#camera-box {
+  z-index: 100;
+  position: absolute;
+  top: 30%;
+  left: 12.5%;
+  width: 128px;
+  height: 128px;
+  background-size: cover;
+  font-size: 54px;
+  font-weight: 900;
+  text-align: center;
+  padding-top: 8px;
+  background-color: #f2f2f2;
+  color: #f2f2f2;
+}

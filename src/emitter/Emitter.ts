@@ -8,7 +8,7 @@ export interface Emitter<T> {
 
   detach(action: Action<T>[]): void;
 
-  init(): void;
+  init(): Promise<void>;
 
   getCurrentKey(): string;
 
