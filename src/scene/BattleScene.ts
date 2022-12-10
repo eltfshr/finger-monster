@@ -100,15 +100,24 @@ export class BattleScene extends Scene {
   private readonly BASE_SPAWN_RATE: number = 0.55;
   private readonly waves: Map<number, Wave> = new Map([
     [1, new Wave(450, 500, 9000)],
-    [2, new Wave(400, 450, 9000)],
-    [3, new Wave(350, 400, 7200)],
-    [4, new Wave(300, 350, 7200)],
-    [5, new Wave(250, 300, 5400)],
-    [6, new Wave(200, 250, 5400)],
-    [7, new Wave(150, 200, 3600)],
-    [8, new Wave(100, 150, 3600)],
-    [9, new Wave(50, 100, 1800)],
-    [10, new Wave(10, 50, 1800)],
+    [2, new Wave(1500, 1500, 1500)],
+    [3, new Wave(400, 450, 9000)],
+    [4, new Wave(1500, 1500, 1500)],
+    [5, new Wave(350, 400, 7200)],
+    [6, new Wave(1500, 1500, 1500)],
+    [7, new Wave(300, 350, 7200)],
+    [8, new Wave(1500, 1500, 1500)],
+    [9, new Wave(250, 300, 5400)],
+    [10, new Wave(1500, 1500, 1500)],
+    [11, new Wave(200, 250, 5400)],
+    [12, new Wave(1500, 1500, 1500)],
+    [13, new Wave(150, 200, 3600)],
+    [14, new Wave(1500, 1500, 1500)],
+    [15, new Wave(100, 150, 3600)],
+    [16, new Wave(1500, 1500, 1500)],
+    [17, new Wave(50, 100, 1800)],
+    [18, new Wave(1500, 1500, 1500)],
+    [19, new Wave(10, 50, 1800)],
   ]);
   private currentWaveNumber: number = 1;
   private nextSpawnFrame: number = 100;
@@ -117,7 +126,7 @@ export class BattleScene extends Scene {
   public async load(): Promise<void> {
     await Promise.all([this.imageRegistry.load(), this.backgroundAudio.load()]);
 
-    this.backgroundAudio.setVolume(0.10);
+    this.backgroundAudio.setVolume(0.03);
     this.backgroundAudio.play();
 
     this.baseBackground.setImage("bg/battle/base.png").setScene(this);
@@ -229,7 +238,7 @@ export class BattleScene extends Scene {
     if (currentKey == this.targetKey) {
       this.correctKeyCount++;
 
-      if (this.correctKeyCount == 10) {
+      if (this.correctKeyCount == 10 && !this.player.isDieing()) {
         this.correctKeyCount = 0;
         this.shoot();
         this.eventManager.onPlayerAttack();
@@ -318,7 +327,7 @@ export class BattleScene extends Scene {
 
       creature.setYOnGround(this.ground);
       this.drawEntity(creature, SpriteDirection.LEFT);
-
+      //collide with player to attack
       if (
         this.player.getCurrentState() !== EntityState.DIE &&
         !creature.isDieing() &&
@@ -337,6 +346,10 @@ export class BattleScene extends Scene {
               creature.getCurrentSprite().getFrameHold()
           );
         }
+      }
+      //remove when out of the scene
+      if (creature.getRealX() + creature.getRealWidth() < 0) {
+        this.creatureSpawner.removeCreature(creature);
       }
     });
 
@@ -374,23 +387,25 @@ export class BattleScene extends Scene {
         this.player.move();
         this.player.setHealth(100);
         this.sceneFrame = 0;
-        this.creatureSpawner.getSpawnedCreatures();
+        this.currentWaveNumber = 1;
+        this.nextSpawnFrame = 100;
+        this.nextWaveFrame = this.waves.get(1)!.getFrameAmount();
+        this.creatureSpawner.clearCreatures();
         loadingUi.style.display = 'none';
-
-        // TODO: reset spawning mechanism, eltfshr will do that!!!
       }
     }
 
     //Change wave
     if (this.sceneFrame == this.nextWaveFrame) {
-      this.currentWaveNumber = Math.min(this.currentWaveNumber + 1, 10);
+      this.currentWaveNumber = Math.min(this.currentWaveNumber + 1, 19);
+      this.eventManager.onWaveChange(this.currentWaveNumber);
       this.nextWaveFrame =
         this.waves.get(this.currentWaveNumber)!.getFrameAmount() +
         this.sceneFrame;
     }
 
     //Spawn enemies based on frame and wave
-    if (this.sceneFrame === this.nextSpawnFrame) {
+    if (this.sceneFrame === this.nextSpawnFrame && !this.player.isDieing()) {
       const wave = this.waves.get(this.currentWaveNumber);
       this.nextSpawnFrame =
         Math.floor(
