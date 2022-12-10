@@ -1,8 +1,7 @@
-import { GameResource } from '@/renderer/GameResource';
-import { Howl } from 'howler';
+import { GameResource } from "@/renderer/GameResource";
+import { Howl } from "howler";
 
-export abstract class AudioResource implements GameResource {
-
+export class AudioResource implements GameResource {
   private readonly audio: Howl;
 
   private volume: number = 0;
@@ -10,8 +9,9 @@ export abstract class AudioResource implements GameResource {
   public constructor(audioPath: string) {
     this.audio = new Howl({
       src: [audioPath],
-      volume: 0,
+      volume: 0.1,
       preload: false,
+      loop: true,
     });
   }
 
@@ -31,5 +31,12 @@ export abstract class AudioResource implements GameResource {
   public play(): void {
     this.audio.play();
   }
-  
+
+  public setLoop(loop: boolean): void {
+    this.audio.loop(loop);
+  }
+
+  public stop(): void {
+    this.audio.stop();
+  }
 }

@@ -1,27 +1,48 @@
-import { EnemyBattleEvent } from '@/event/battle/EnemyBattleEvent';
-import { PlayerBattleEvent } from '@/event/battle/PlayerBattleEvent';
-import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
-import { BattleScene } from '@/scene/BattleScene';
-import { Creature } from '@/wrapper/entities/Creature';
-import { Player } from '@/wrapper/entities/living/Player';
+import { EnemyBattleEvent } from "@/event/battle/EnemyBattleEvent";
+import { PlayerBattleEvent } from "@/event/battle/PlayerBattleEvent";
+import { AudioResource } from "@/renderer/audio/AudioResource";
+import { BattleUserInterfaceRoot } from "@/renderer/ui/battle/BattleUserInterfaceRoot";
+import { BattleScene } from "@/scene/BattleScene";
+import { Creature } from "@/wrapper/entities/Creature";
+import { Player } from "@/wrapper/entities/living/Player";
 
 export class BattleEventManager {
-
   protected readonly uiRoot: BattleUserInterfaceRoot;
 
   private readonly playerEvent: PlayerBattleEvent;
   private readonly player: Player;
   private readonly enemyEvent: EnemyBattleEvent;
+  private readonly battleScene: BattleScene;
+  private readonly walkSound: AudioResource = new AudioResource(
+    "audio/character/slime/walk.mp3"
+  );
+  private readonly attackSound: AudioResource = new AudioResource(
+    "audio/character/player/attack.mp3"
+  );
 
-  public constructor(uiRoot: BattleUserInterfaceRoot, player: Player, battleScene: BattleScene) {
+  public constructor(
+    uiRoot: BattleUserInterfaceRoot,
+    player: Player,
+    battleScene: BattleScene
+  ) {
     this.uiRoot = uiRoot;
     this.enemyEvent = new EnemyBattleEvent(this.uiRoot);
     this.playerEvent = new PlayerBattleEvent(this.uiRoot, player);
     this.player = player;
+    this.walkSound.load().then();
+    this.attackSound.load().then();
+    this.attackSound.setLoop(false);
+    this.battleScene = battleScene;
   }
 
   public onPlayerAttack(): void {
-    
+    // this.player.idle();
+    // this.playerEvent.onAttack();
+    this.attackSound.play();
+    this.battleScene.shoot();
+    // const arrow = this.player.attack();
+    // arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
+    // this.projectiles.push(arrow);
   }
 
   public onPlayerHurt(damage: number): void {
@@ -36,10 +57,14 @@ export class BattleEventManager {
   }
 
   public onPlayerMove(): void {
+    if (!this.player.isMoving()) {
+      this.walkSound.play();
+    }
     !this.player.isMoving() && this.player.move();
   }
 
   public onPlayerStopMove(): void {
+    this.walkSound.stop();
     this.player.idle();
   }
 
@@ -47,9 +72,7 @@ export class BattleEventManager {
     this.player.jump();
   }
 
-  public onEnemySpawn(): void {
-    
-  }
+  public onEnemySpawn(): void {}
 
   public onEnemyAttack(enemy: Creature): void {
     this.enemyEvent.onAttack(enemy);
@@ -64,7 +87,7 @@ export class BattleEventManager {
 
   public onEnemyDie(enemy: Creature): void {
     if (Math.random() > 0.5) {
-      console.log('Item dropped');
+      console.log("Item dropped");
     }
     this.enemyEvent.onDie(enemy);
   }
@@ -73,28 +96,17 @@ export class BattleEventManager {
     this.uiRoot.updateTarget(x, y);
   }
 
-  public onSignCorrect(): void {
-    
-  }
+  public onSignCorrect(): void {}
 
   public onCharacterChange(character: string): void {
     this.uiRoot.updateCharacter(character);
   }
 
-  public onItemSpawn(): void {
+  public onItemSpawn(): void {}
 
-  }
+  public onItemCollect(): void {}
 
-  public onItemCollect(): void {
+  public onItemUse(): void {}
 
-  }
-
-  public onItemUse(): void {
-
-  }
-
-  public onItemDestroy(): void {
-
-  }
-
+  public onItemDestroy(): void {}
 }

@@ -1,10 +1,9 @@
-import { Arrow } from '@/wrapper/entities/Arrow';
-import { Creature } from '@/wrapper/entities/Creature';
-import { EntityState } from '@/wrapper/entities/EntityState';
-import { Projectile } from '@/wrapper/entities/Projectile';
+import { Arrow } from "@/wrapper/entities/Arrow";
+import { Creature } from "@/wrapper/entities/Creature";
+import { EntityState } from "@/wrapper/entities/EntityState";
+import { Projectile } from "@/wrapper/entities/Projectile";
 
 export class Player extends Creature {
-
   public idle(): void {
     this.setCurrentState(EntityState.IDLE);
   }
@@ -13,16 +12,15 @@ export class Player extends Creature {
     this.setCurrentState(EntityState.MOVE);
   }
 
-  public updatePosition(): void {
-
-  }
+  public updatePosition(): void {}
 
   public attack(): Projectile {
     const previousState = this.getCurrentState();
     this.setCurrentTemporaryState(EntityState.ATTACK, previousState);
 
-    return new Arrow()
-      .setAttackFrame(this.animation!.getCurrentSprite().getMetaData('attack-frame'));
+    return new Arrow().setAttackFrame(
+      this.animation!.getCurrentSprite().getMetaData("attack-frame")
+    );
   }
 
   public hurt(): void {
@@ -34,6 +32,4 @@ export class Player extends Creature {
     this.setCurrentState(EntityState.DIE);
     this.getCurrentSprite().setStopLastFrame(true);
   }
-
 }
-

@@ -1,14 +1,14 @@
-import { Collision } from '@/renderer/collision/Collision';
-import { Ground } from '@/renderer/object/Ground';
-import { EntityAnimation } from '@/renderer/sprite/EntityAnimation';
-import { SpriteResource } from '@/renderer/sprite/SpriteResource';
-import { Entity } from '@/wrapper/entities/Entity';
-import { EntityState } from '@/wrapper/entities/EntityState';
-import { LivingEntity } from '@/wrapper/entities/living/LivingEntity';
-import { Projectile } from '@/wrapper/entities/Projectile';
+import { AudioResource } from "@/renderer/audio/AudioResource";
+import { Collision } from "@/renderer/collision/Collision";
+import { Ground } from "@/renderer/object/Ground";
+import { EntityAnimation } from "@/renderer/sprite/EntityAnimation";
+import { SpriteResource } from "@/renderer/sprite/SpriteResource";
+import { Entity } from "@/wrapper/entities/Entity";
+import { EntityState } from "@/wrapper/entities/EntityState";
+import { LivingEntity } from "@/wrapper/entities/living/LivingEntity";
+import { Projectile } from "@/wrapper/entities/Projectile";
 
 export abstract class Creature implements LivingEntity {
-
   protected animation: EntityAnimation | null = null;
   protected x: number = 0;
   protected y: number = 0;
@@ -19,6 +19,7 @@ export abstract class Creature implements LivingEntity {
   protected onGround: boolean = false;
   protected placeHolder: boolean = false;
   protected state: EntityState = EntityState.IDLE;
+  protected sound: AudioResource | null = null;
 
   public setAnimation(animation: EntityAnimation): Creature {
     this.animation = animation;
@@ -29,11 +30,21 @@ export abstract class Creature implements LivingEntity {
     return this.x;
   }
 
+  public setAudio(sound: AudioResource): Creature {
+    this.sound = sound;
+    return this;
+  }
+
+  public playAudio(): void {
+    if (this.sound) {
+      this.sound.play();
+    }
+  }
+
   public setX(x: number): Creature {
     if (!this.isPlaceHolder()) {
       this.x = x;
     }
-
     return this;
   }
 
@@ -55,7 +66,11 @@ export abstract class Creature implements LivingEntity {
   }
 
   public setYOnGround(ground: Ground): Creature {
-    this.setY(ground.getGroundY() - (this.getCollision().getTop() + this.getCollision().getHeight()) * this.getScale());
+    this.setY(
+      ground.getGroundY() -
+        (this.getCollision().getTop() + this.getCollision().getHeight()) *
+          this.getScale()
+    );
     return this;
   }
 
@@ -99,15 +114,20 @@ export abstract class Creature implements LivingEntity {
   }
 
   public setCurrentState(state: EntityState): Creature {
-    if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
+    if (!this.animation)
+      throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     this.state = state;
     this.animation.setCurrentSprite(state);
     return this;
   }
 
-  public setCurrentTemporaryState(state: EntityState, afterState: EntityState): Creature {
-    if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
+  public setCurrentTemporaryState(
+    state: EntityState,
+    afterState: EntityState
+  ): Creature {
+    if (!this.animation)
+      throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     this.state = state;
     this.animation.setCurrentSprite(state, () => {
@@ -135,13 +155,15 @@ export abstract class Creature implements LivingEntity {
   }
 
   public getAnimation(): EntityAnimation {
-    if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
+    if (!this.animation)
+      throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     return this.animation;
   }
 
   public getCurrentSprite(): SpriteResource {
-    if (!this.animation) throw new Error(`${this.constructor.name} doesn't have an animation`);
+    if (!this.animation)
+      throw new Error(`${this.constructor.name} doesn't have an animation`);
 
     return this.animation.getCurrentSprite();
   }
@@ -154,7 +176,7 @@ export abstract class Creature implements LivingEntity {
     if (!this.isPlaceHolder()) {
       this.health = health;
     }
-    
+
     return this;
   }
 
@@ -178,7 +200,7 @@ export abstract class Creature implements LivingEntity {
     return this.state === EntityState.DIE;
   }
 
-  public jump():void {
+  public jump(): void {
     if (this.isOnGround()) {
       this.setYVelocity(-7);
       this.setOnGround(false);
@@ -197,7 +219,7 @@ export abstract class Creature implements LivingEntity {
       target.getY(),
       target.getCollision(),
       this.getScale(),
-      target.getScale(),
+      target.getScale()
     );
   }
 
@@ -212,7 +234,8 @@ export abstract class Creature implements LivingEntity {
   public abstract hurt(): void;
 
   public abstract die(): void;
-
 }
 
-export type CreatureConstructor<T extends Creature = Creature> = new (...args: any[]) => T;
+export type CreatureConstructor<T extends Creature = Creature> = new (
+  ...args: any[]
+) => T;
