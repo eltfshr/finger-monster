@@ -31,6 +31,7 @@ import { Player } from '@/wrapper/entities/living/Player';
 import { ShieldSkeleton } from '@/wrapper/entities/living/ShieldSkeleton';
 import { Skeleton } from '@/wrapper/entities/living/Skeleton';
 import { Projectile } from '@/wrapper/entities/Projectile';
+import { Wave } from '@/wrapper/entities/Wave';
 
 export enum BattleScenePhase {
   START,
@@ -100,6 +101,23 @@ export class BattleScene extends Scene {
 
   private phase: BattleScenePhase = BattleScenePhase.BATTLE;
   private relativeVelocity: number = 1.0;
+
+  private readonly BASE_SPAWN_RATE: number = 0.55;
+  private readonly waves: Map<number, Wave> = new Map([
+    [1, new Wave(450, 500, 9000)],
+    [2, new Wave(400, 450, 9000)],
+    [3, new Wave(350, 400, 7200)],
+    [4, new Wave(300, 350, 7200)],
+    [5, new Wave(250, 300, 5400)],
+    [6, new Wave(200, 250, 5400)],
+    [7, new Wave(150, 200, 3600)],
+    [8, new Wave(100, 150, 3600)],
+    [9, new Wave(50, 100, 1800)],
+    [10, new Wave(10, 50, 1800)],
+  ]);
+  private currentWaveNumber: number = 1;
+  private nextSpawnFrame: number = 100;
+  private nextWaveFrame: number = this.waves.get(1)!.getFrameAmount();
 
   public async load(): Promise<void> {
     await Promise.all([this.imageRegistry.load(), this.backgroundAudio.load()]);
@@ -249,28 +267,6 @@ export class BattleScene extends Scene {
         }
       });
 
-    // if (this.sceneFrame === 100 || this.sceneFrame === 200 || this.sceneFrame === 300) {
-    //   this.player.idle();
-    //   const arrow = this.player.attack();
-    //   arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
-    //   this.projectiles.push(arrow);
-    //   // this.player.jump();
-    // }
-
-    // if (this.sceneFrame % 200 === 0) {
-    //   // this.player.idle()
-    //   this.player.setHealth(this.player.getHealth() - 10);
-    //   this.eventManager.onPlayerHurt(10);
-    // }
-
-    // if (this.sceneFrame === 1200) {
-    //   this.player.move();
-    // }
-
-    // if (this.sceneFrame === 1600) {
-    //   this.player.die();
-    // }
-
     //Moving enemies and attacking
     this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
       // !creature.isAttacking() && creature.attack();
@@ -332,10 +328,21 @@ export class BattleScene extends Scene {
       });
     }
 
-    if (this.sceneFrame === 200 || this.sceneFrame === 600) {
-      // ELTFSHR will do this, TY
-      const spawnedCreature = this.creatureSpawner.randomlySpawn(this.ground);
-      spawnedCreature.move();
+    //Change wave
+    if (this.sceneFrame == this.nextWaveFrame) {
+      this.currentWaveNumber = Math.min(this.currentWaveNumber + 1, 10);
+      this.nextWaveFrame = this.waves.get(this.currentWaveNumber)!.getFrameAmount() + this.sceneFrame;
+    }
+
+    //Spawn enemies based on frame and wave
+    if (this.sceneFrame === this.nextSpawnFrame) {
+      const wave = this.waves.get(this.currentWaveNumber);
+      this.nextSpawnFrame = Math.floor(Math.random() * (wave!.getMaxFrequency() - wave!.getMinFrequency()) + wave!.getMinFrequency()) + this.sceneFrame;
+
+      if (Math.random() < this.BASE_SPAWN_RATE + ((this.sceneFrame / 54000) * (1 - this.BASE_SPAWN_RATE)) || this.sceneFrame == 100) {
+        const spawnedCreature = this.creatureSpawner.randomlySpawn(this.ground);
+        spawnedCreature.move();
+      }
     }
   }
 
