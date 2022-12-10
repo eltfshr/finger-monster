@@ -2,7 +2,6 @@ import { EnemyBattleEvent } from "@/event/battle/EnemyBattleEvent";
 import { PlayerBattleEvent } from "@/event/battle/PlayerBattleEvent";
 import { AudioResource } from "@/renderer/audio/AudioResource";
 import { BattleUserInterfaceRoot } from "@/renderer/ui/battle/BattleUserInterfaceRoot";
-import { BattleScene } from "@/scene/BattleScene";
 import { Creature } from "@/wrapper/entities/Creature";
 import { Player } from "@/wrapper/entities/living/Player";
 
@@ -12,7 +11,6 @@ export class BattleEventManager {
   private readonly playerEvent: PlayerBattleEvent;
   private readonly player: Player;
   private readonly enemyEvent: EnemyBattleEvent;
-  private readonly battleScene: BattleScene;
   private readonly walkSound: AudioResource = new AudioResource(
     "audio/character/slime/walk.mp3"
   );
@@ -29,11 +27,7 @@ export class BattleEventManager {
     "audio/character/player/jump.m4a"
   );
 
-  public constructor(
-    uiRoot: BattleUserInterfaceRoot,
-    player: Player,
-    battleScene: BattleScene
-  ) {
+  public constructor(uiRoot: BattleUserInterfaceRoot, player: Player) {
     this.uiRoot = uiRoot;
     this.enemyEvent = new EnemyBattleEvent(this.uiRoot);
     this.playerEvent = new PlayerBattleEvent(this.uiRoot, player);
@@ -47,17 +41,10 @@ export class BattleEventManager {
     this.deathSound.setLoop(false);
     this.jumpSound.load().then();
     this.jumpSound.setLoop(false);
-    this.battleScene = battleScene;
   }
 
   public onPlayerAttack(): void {
-    // this.player.idle();
-    // this.playerEvent.onAttack();
     this.attackSound.play();
-    this.battleScene.shoot();
-    // const arrow = this.player.attack();
-    // arrow.setAnimation(new ArrowAnimation(this.imageRegistry, this.collisionRegistry));
-    // this.projectiles.push(arrow);
   }
 
   public onPlayerHurt(damage: number): void {

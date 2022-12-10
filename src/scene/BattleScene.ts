@@ -1,37 +1,38 @@
-import { JumpAction } from '@/action/JumpAction';
-import { RunAction } from '@/action/RunAction';
-import { CameraEmitter } from '@/emitter/CameraEmitter';
-import { KeyboardEmitter } from '@/emitter/KeyboardEmitter';
-import { BattleEventManager } from '@/event/battle/BattleEventManger';
-import { BattleBackgroundAudio } from '@/renderer/audio/BattleBackgroundAudio';
-import { BattleImageRegistry } from '@/renderer/BattleImageRegistry';
-import { CollisionRegistry } from '@/renderer/collision/CollisionRegistry';
-import { Background } from '@/renderer/object/Background';
-import { Ground } from '@/renderer/object/Ground';
-import { PhysicsEngine } from '@/renderer/PhysicsEngine';
-import { ArrowAnimation } from '@/renderer/sprite/entities/ArrowAnimation';
-import { BlueSlimeAnimation } from '@/renderer/sprite/entities/BlueSlimeAnimation';
-import { FlyingEyeAnimation } from '@/renderer/sprite/entities/FlyingEyeAnimation';
-import { GoblinAnimation } from '@/renderer/sprite/entities/GoblinAnimation';
-import { MushroomAnimation } from '@/renderer/sprite/entities/MushroomAnimation';
-import { PlayerAnimation } from '@/renderer/sprite/entities/PlayerAnimation';
-import { ShieldSkeletonAnimation } from '@/renderer/sprite/entities/ShieldSkeletonAnimation';
-import { SkeletonAnimation } from '@/renderer/sprite/entities/SkeletonAnimation';
-import { SpriteDirection } from '@/renderer/sprite/SpriteDirection';
-import { BattleUserInterfaceRoot } from '@/renderer/ui/battle/BattleUserInterfaceRoot';
-import { Scene } from '@/scene/Scene';
-import { CreatureSpawner } from '@/wrapper/entities/CreatureSpawner';
-import { EntityState } from '@/wrapper/entities/EntityState';
-import { HostileCreature } from '@/wrapper/entities/HostileCreature';
-import { BlueSlime } from '@/wrapper/entities/living/BlueSlime';
-import { FlyingEye } from '@/wrapper/entities/living/FlyingEye';
-import { Goblin } from '@/wrapper/entities/living/Goblin';
-import { Mushroom } from '@/wrapper/entities/living/Mushroom';
-import { Player } from '@/wrapper/entities/living/Player';
-import { ShieldSkeleton } from '@/wrapper/entities/living/ShieldSkeleton';
-import { Skeleton } from '@/wrapper/entities/living/Skeleton';
-import { Projectile } from '@/wrapper/entities/Projectile';
-import { Wave } from '@/wrapper/entities/Wave';
+import { JumpAction } from "@/action/JumpAction";
+import { RunAction } from "@/action/RunAction";
+import { CameraEmitter } from "@/emitter/CameraEmitter";
+import { KeyboardEmitter } from "@/emitter/KeyboardEmitter";
+import { BattleEventManager } from "@/event/battle/BattleEventManger";
+import { AudioResource } from "@/renderer/audio/AudioResource";
+import { BattleBackgroundAudio } from "@/renderer/audio/BattleBackgroundAudio";
+import { BattleImageRegistry } from "@/renderer/BattleImageRegistry";
+import { CollisionRegistry } from "@/renderer/collision/CollisionRegistry";
+import { Background } from "@/renderer/object/Background";
+import { Ground } from "@/renderer/object/Ground";
+import { PhysicsEngine } from "@/renderer/PhysicsEngine";
+import { ArrowAnimation } from "@/renderer/sprite/entities/ArrowAnimation";
+import { BlueSlimeAnimation } from "@/renderer/sprite/entities/BlueSlimeAnimation";
+import { FlyingEyeAnimation } from "@/renderer/sprite/entities/FlyingEyeAnimation";
+import { GoblinAnimation } from "@/renderer/sprite/entities/GoblinAnimation";
+import { MushroomAnimation } from "@/renderer/sprite/entities/MushroomAnimation";
+import { PlayerAnimation } from "@/renderer/sprite/entities/PlayerAnimation";
+import { ShieldSkeletonAnimation } from "@/renderer/sprite/entities/ShieldSkeletonAnimation";
+import { SkeletonAnimation } from "@/renderer/sprite/entities/SkeletonAnimation";
+import { SpriteDirection } from "@/renderer/sprite/SpriteDirection";
+import { BattleUserInterfaceRoot } from "@/renderer/ui/battle/BattleUserInterfaceRoot";
+import { Scene } from "@/scene/Scene";
+import { CreatureSpawner } from "@/wrapper/entities/CreatureSpawner";
+import { EntityState } from "@/wrapper/entities/EntityState";
+import { HostileCreature } from "@/wrapper/entities/HostileCreature";
+import { BlueSlime } from "@/wrapper/entities/living/BlueSlime";
+import { FlyingEye } from "@/wrapper/entities/living/FlyingEye";
+import { Goblin } from "@/wrapper/entities/living/Goblin";
+import { Mushroom } from "@/wrapper/entities/living/Mushroom";
+import { Player } from "@/wrapper/entities/living/Player";
+import { ShieldSkeleton } from "@/wrapper/entities/living/ShieldSkeleton";
+import { Skeleton } from "@/wrapper/entities/living/Skeleton";
+import { Projectile } from "@/wrapper/entities/Projectile";
+import { Wave } from "@/wrapper/entities/Wave";
 
 export enum BattleScenePhase {
   START,
@@ -58,8 +59,7 @@ export class BattleScene extends Scene {
   private readonly uiRoot = new BattleUserInterfaceRoot(this.player);
   private readonly eventManager = new BattleEventManager(
     this.uiRoot,
-    this.player,
-    this
+    this.player
   );
 
   private readonly keyboardEmitter = new KeyboardEmitter();
@@ -97,6 +97,10 @@ export class BattleScene extends Scene {
     "z",
   ];
   private targetKey: string = this.keys[Math.floor(Math.random() * 26)];
+  private firstAlphabet = new AudioResource(
+    `audio/alphabet/${this.targetKey}.mp3`
+  );
+
   private correctKeyCount: number = 0;
 
   private phase: BattleScenePhase = BattleScenePhase.BATTLE;
@@ -211,9 +215,9 @@ export class BattleScene extends Scene {
 
     this.eventManager.onTargetMove(nearEnermyX, nearEnemy.getRealY() - 30 - 5);
 
-    // const currentKey = this.keyboardEmitter.getCurrentKey();
-    const currentKey = this.cameraEmitter.getCurrentKey();
-    console.log('current: ', currentKey)
+    const currentKey = this.keyboardEmitter.getCurrentKey();
+    // const currentKey = this.cameraEmitter.getCurrentKey();
+    console.log("current: ", currentKey);
 
     //Get key for shooting
     if (currentKey == this.targetKey) {
@@ -222,7 +226,16 @@ export class BattleScene extends Scene {
       if (this.correctKeyCount == 10) {
         this.correctKeyCount = 0;
         this.shoot();
+        this.eventManager.onPlayerAttack();
         this.targetKey = this.keys[Math.floor(Math.random() * 26)];
+        let newAlphabet = new AudioResource(
+          `audio/alphabet/${this.targetKey}.mp3`
+        );
+        newAlphabet.load();
+        newAlphabet.setLoop(false);
+        setTimeout(() => {
+          newAlphabet.play();
+        }, 500);
         this.eventManager.onCharacterChange(this.targetKey);
       }
     }
@@ -319,6 +332,13 @@ export class BattleScene extends Scene {
       }
     });
 
+    //audio first alphabet
+    if (this.sceneFrame === 50) {
+      this.firstAlphabet.load();
+      this.firstAlphabet.setLoop(false);
+      this.firstAlphabet.play();
+    }
+
     //Stop enemies when player dies
     if (this.player.isDieing()) {
       this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
@@ -331,15 +351,26 @@ export class BattleScene extends Scene {
     //Change wave
     if (this.sceneFrame == this.nextWaveFrame) {
       this.currentWaveNumber = Math.min(this.currentWaveNumber + 1, 10);
-      this.nextWaveFrame = this.waves.get(this.currentWaveNumber)!.getFrameAmount() + this.sceneFrame;
+      this.nextWaveFrame =
+        this.waves.get(this.currentWaveNumber)!.getFrameAmount() +
+        this.sceneFrame;
     }
 
     //Spawn enemies based on frame and wave
     if (this.sceneFrame === this.nextSpawnFrame) {
       const wave = this.waves.get(this.currentWaveNumber);
-      this.nextSpawnFrame = Math.floor(Math.random() * (wave!.getMaxFrequency() - wave!.getMinFrequency()) + wave!.getMinFrequency()) + this.sceneFrame;
+      this.nextSpawnFrame =
+        Math.floor(
+          Math.random() * (wave!.getMaxFrequency() - wave!.getMinFrequency()) +
+            wave!.getMinFrequency()
+        ) + this.sceneFrame;
 
-      if (Math.random() < this.BASE_SPAWN_RATE + ((this.sceneFrame / 54000) * (1 - this.BASE_SPAWN_RATE)) || this.sceneFrame == 100) {
+      if (
+        Math.random() <
+          this.BASE_SPAWN_RATE +
+            (this.sceneFrame / 54000) * (1 - this.BASE_SPAWN_RATE) ||
+        this.sceneFrame == 100
+      ) {
         const spawnedCreature = this.creatureSpawner.randomlySpawn(this.ground);
         spawnedCreature.move();
       }
