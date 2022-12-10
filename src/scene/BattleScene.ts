@@ -368,8 +368,6 @@ export class BattleScene extends Scene {
       loadingUi.style.display = 'block';
       
       // Reset
-
-      // TODO: XiaoXuxxx will fix thisss!!!
       const key = this.keyboardEmitter.getCurrentKey();
       if (key) {
         this.phase = BattleScenePhase.BATTLE;

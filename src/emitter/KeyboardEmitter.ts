@@ -34,6 +34,7 @@ export class KeyboardEmitter implements Emitter<string> {
 
     window.addEventListener('keyup', (event: KeyboardEvent) => {
       const action = this.actionByKey.get(event.key);
+      this.currentKey = '';
       if (action) {
         action.unExecute(event.key);
       }
