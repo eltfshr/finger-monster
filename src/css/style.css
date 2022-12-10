@@ -244,3 +244,35 @@ html, body {
   padding-top: 8px;
   color: #f2f2f2;
 }
+
+#loading-overlay {
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 1;
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 1500ms;
+}
+
+#loading-ui {
+  z-index: 1;
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5rem;
+  color: white;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}

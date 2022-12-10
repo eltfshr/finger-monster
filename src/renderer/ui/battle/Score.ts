@@ -7,7 +7,6 @@ export class Score extends UserInterface {
   public createElement(): HTMLElement {
     const element = document.createElement('div');
     element.setAttribute('id', 'score');
-    console.log(this.score);
     this.score = 0;
     element.innerHTML = 'Score: ' + this.score;
 

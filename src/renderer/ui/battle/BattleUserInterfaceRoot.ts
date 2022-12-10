@@ -14,6 +14,8 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
 
   private readonly player: Player;
 
+  private readonly loadingOverlay = document.createElement('div');
+  private readonly loadingUi = document.createElement('div');
   private readonly playerHudRoot = document.createElement('div');
   private readonly playerFrame: BattlePlayerFrame;
   private readonly playerFrameBorder: BattlePlayerFrameBorder;
@@ -27,7 +29,15 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
 
   public constructor(player: Player) {
     super();
+    this.loadingOverlay.setAttribute('id', 'loading-overlay');
+    this.append(this.loadingOverlay);
+
+    this.loadingUi.setAttribute('id', 'loading-ui');
+    this.loadingUi.innerHTML = 'Press any key to start!';
+    this.append(this.loadingUi);
+
     this.playerHudRoot.setAttribute('id', 'player-info-hud');
+    this.playerHudRoot.style.display = 'none';
     this.append(this.playerHudRoot);
 
     this.player = player;

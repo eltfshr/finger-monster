@@ -37,7 +37,7 @@ import { Wave } from "@/wrapper/entities/Wave";
 export enum BattleScenePhase {
   START,
   BATTLE,
-  PAUSE,
+  GAMEOVER,
 }
 
 export class BattleScene extends Scene {
@@ -94,7 +94,7 @@ export class BattleScene extends Scene {
 
   private correctKeyCount: number = 0;
 
-  private phase: BattleScenePhase = BattleScenePhase.BATTLE;
+  private phase: BattleScenePhase = BattleScenePhase.START;
   private relativeVelocity: number = 1.0;
 
   private readonly BASE_SPAWN_RATE: number = 0.55;
@@ -117,7 +117,7 @@ export class BattleScene extends Scene {
   public async load(): Promise<void> {
     await Promise.all([this.imageRegistry.load(), this.backgroundAudio.load()]);
 
-    this.backgroundAudio.setVolume(0.25);
+    this.backgroundAudio.setVolume(0.10);
     this.backgroundAudio.play();
 
     this.baseBackground.setImage("bg/battle/base.png").setScene(this);
@@ -165,6 +165,11 @@ export class BattleScene extends Scene {
 
     await this.keyboardEmitter.init();
     await this.cameraEmitter.init();
+
+    const loadingOverlay = document.querySelector<HTMLDivElement>('#loading-overlay')!;
+    loadingOverlay.style.opacity = '0';
+    const loadingUi = document.querySelector<HTMLDivElement>('#loading-ui')!;
+    loadingUi.style.display = 'block';
   }
 
   public update(): void {
@@ -182,6 +187,16 @@ export class BattleScene extends Scene {
     this.baseBackground.draw(this.getCanvasContext());
     this.midBackground.draw(this.getCanvasContext());
     this.ground.draw(this.getCanvasContext());
+
+    const currentKey = this.keyboardEmitter.getCurrentKey();
+    if (currentKey) {
+      const playerHuds = document.querySelector<HTMLDivElement>('#player-info-hud')!;
+      playerHuds.style.display = 'block';
+      const loadingUi = document.querySelector<HTMLDivElement>('#loading-ui')!;
+      loadingUi.style.display = 'none';
+      this.phase = BattleScenePhase.BATTLE;
+      this.sceneFrame = 0;
+    }
   }
 
   private updateOnBattle(): void {
@@ -206,8 +221,8 @@ export class BattleScene extends Scene {
 
     this.eventManager.onTargetMove(nearEnermyX, nearEnemy.getRealY() - 30 - 5);
 
-    // const currentKey = this.keyboardEmitter.getCurrentKey();
-    const currentKey = this.cameraEmitter.getCurrentKey();
+    const currentKey = this.keyboardEmitter.getCurrentKey();
+    // const currentKey = this.cameraEmitter.getCurrentKey();
     this.uiRoot.updatePlayerCharacter(currentKey);
 
     //Get key for shooting
@@ -273,7 +288,8 @@ export class BattleScene extends Scene {
       });
 
     //Moving enemies and attacking
-    this.creatureSpawner.getSpawnedCreatures().forEach((creature) => {
+    const creatureInSpawner = this.creatureSpawner.getSpawnedCreatures();
+    creatureInSpawner.forEach((creature) => {
       // !creature.isAttacking() && creature.attack();
       if (
         creature.getCurrentState() === EntityState.MOVE ||
@@ -324,6 +340,14 @@ export class BattleScene extends Scene {
       }
     });
 
+    // Walk if creature not exists in the spawner
+    const livingCreatures = creatureInSpawner.filter((creature) => !creature.isDieing());
+    if (livingCreatures.length === 1) { // Count placeholder
+      !this.player.isMoving() && this.player.move();
+    } else {
+      this.player.isMoving() && this.player.idle();
+    }
+
     //audio first alphabet
     if (this.sceneFrame === 50) {
       this.firstAlphabet.load();
@@ -338,6 +362,25 @@ export class BattleScene extends Scene {
           creature.idle();
         }
       });
+      this.phase = BattleScenePhase.GAMEOVER;
+      const loadingUi = document.querySelector<HTMLDivElement>('#loading-ui')!;
+      loadingUi.innerHTML = 'GAMEOVER, Press any key to restart!'
+      loadingUi.style.display = 'block';
+      
+      // Reset
+
+      // TODO: XiaoXuxxx will fix thisss!!!
+      const key = this.keyboardEmitter.getCurrentKey();
+      if (key) {
+        this.phase = BattleScenePhase.BATTLE;
+        this.player.move();
+        this.player.setHealth(100);
+        this.sceneFrame = 0;
+        this.creatureSpawner.getSpawnedCreatures();
+        loadingUi.style.display = 'none';
+
+        // TODO: reset spawning mechanism, eltfshr will do that!!!
+      }
     }
 
     //Change wave
@@ -367,6 +410,7 @@ export class BattleScene extends Scene {
         spawnedCreature.move();
       }
     }
+    
   }
 
   private updateAllBackgrounds(): void {

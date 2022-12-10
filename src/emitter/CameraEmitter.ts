@@ -12,8 +12,7 @@ import * as tf from "@tensorflow/tfjs";
 import * as fp from "fingerpose";
 import { FingerCurl, FingerDirection } from 'fingerpose';
 
-console.log(tf.version['tfjs-data'])
-
+console.log('dataset:', tf.version['tfjs-data'])
 export class CameraEmitter implements Emitter<string> {
 
   private video?: HTMLVideoElement;
@@ -343,7 +342,7 @@ export class CameraEmitter implements Emitter<string> {
         const mostConfidentGesture = estimatedGesture.gestures.reduce((max, curr) => max.score > curr.score ? max : curr, estimatedGesture.gestures[0]);
         this.currentKey = mostConfidentGesture.name;
       } else {
-        this.currentKey = "_"
+        this.currentKey = ""
       }
     }
   }
