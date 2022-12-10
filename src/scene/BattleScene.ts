@@ -73,30 +73,21 @@ export class BattleScene extends Scene {
     "b",
     "c",
     "d",
-    "e",
     "f",
-    "g",
     "h",
     "i",
-    "j",
     "k",
     "l",
-    "m",
-    "n",
     "o",
-    "p",
     "q",
-    "r",
     "s",
     "t",
     "u",
     "v",
     "w",
-    "x",
     "y",
-    "z",
   ];
-  private targetKey: string = this.keys[Math.floor(Math.random() * 26)];
+  private targetKey: string = this.keys[Math.floor(Math.random() * this.keys.length)];
   private firstAlphabet = new AudioResource(
     `audio/alphabet/${this.targetKey}.mp3`
   );
@@ -127,7 +118,7 @@ export class BattleScene extends Scene {
     await Promise.all([this.imageRegistry.load(), this.backgroundAudio.load()]);
 
     this.backgroundAudio.setVolume(0.25);
-    // this.backgroundAudio.play();
+    this.backgroundAudio.play();
 
     this.baseBackground.setImage("bg/battle/base.png").setScene(this);
     this.midBackground.setImage("bg/battle/mid.png").setScene(this);
@@ -227,7 +218,7 @@ export class BattleScene extends Scene {
         this.correctKeyCount = 0;
         this.shoot();
         this.eventManager.onPlayerAttack();
-        this.targetKey = this.keys[Math.floor(Math.random() * 26)];
+        this.targetKey = this.keys[Math.floor(Math.random() * this.keys.length)];
         let newAlphabet = new AudioResource(
           `audio/alphabet/${this.targetKey}.mp3`
         );

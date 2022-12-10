@@ -56,15 +56,15 @@ export class CameraEmitter implements Emitter<string> {
       ])
       .getHandGesture()!,
 
-    new HandGesture('e')
-      .loadFinger([
-        new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerIndex(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-      ])
-      .getHandGesture()!,
+    // new HandGesture('e')
+    //   .loadFinger([
+    //     new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerIndex(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //   ])
+    //   .getHandGesture()!,
 
     new HandGesture('f')
       .loadFinger([
@@ -76,15 +76,15 @@ export class CameraEmitter implements Emitter<string> {
       ])
       .getHandGesture()!,
 
-    new HandGesture('g')
-      .loadFinger([
-        new FingerThumb(FingerCurl.NoCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
-        new FingerIndex(FingerCurl.NoCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
-        new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
-        new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
-      ])
-      .getHandGesture()!,
+    // new HandGesture('g')
+    //   .loadFinger([
+    //     new FingerThumb(FingerCurl.NoCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
+    //     new FingerIndex(FingerCurl.NoCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
+    //     new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
+    //     new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
+    //     new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
+    //   ])
+    //   .getHandGesture()!,
 
     new HandGesture('h')
       .loadFinger([
@@ -106,15 +106,15 @@ export class CameraEmitter implements Emitter<string> {
       ])
       .getHandGesture()!,
 
-    new HandGesture('j')
-      .loadFinger([
-        new FingerThumb(FingerCurl.NoCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
-        new FingerIndex(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
-        new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
-        new FingerPinky(FingerCurl.NoCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
-      ])
-      .getHandGesture()!,
+    // new HandGesture('j')
+    //   .loadFinger([
+    //     new FingerThumb(FingerCurl.NoCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
+    //     new FingerIndex(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
+    //     new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
+    //     new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
+    //     new FingerPinky(FingerCurl.NoCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
+    //   ])
+    //   .getHandGesture()!,
 
     new HandGesture('k')
       .loadFinger([
@@ -136,35 +136,25 @@ export class CameraEmitter implements Emitter<string> {
       ])
       .getHandGesture()!,
 
-    new HandGesture('m')
-      .loadFinger([
-        new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
-        new FingerIndex(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
-        new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-      ])
-      .getHandGesture()!,
+    // new HandGesture('m')
+    //   .loadFinger([
+    //     new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
+    //     new FingerIndex(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
+    //     new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //   ])
+    //   .getHandGesture()!,
 
-    new HandGesture('m')
-      .loadFinger([
-        new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
-        new FingerIndex(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
-        new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-      ])
-      .getHandGesture()!,
-    
-    new HandGesture('n')
-      .loadFinger([
-        new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
-        new FingerIndex(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
-        new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
-      ])
-      .getHandGesture()!,
+    // new HandGesture('n')
+    //   .loadFinger([
+    //     new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
+    //     new FingerIndex(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpRight, 0.70),
+    //     new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
+    //   ])
+    //   .getHandGesture()!,
 
     new HandGesture('o')
       .loadFinger([
@@ -176,15 +166,15 @@ export class CameraEmitter implements Emitter<string> {
       ])
       .getHandGesture()!,
 
-    new HandGesture('p')
-      .loadFinger([
-        new FingerThumb(FingerCurl.NoCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
-        new FingerIndex(FingerCurl.NoCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
-        new FingerMiddle(FingerCurl.HalfCurl, 1.0, FingerDirection.DiagonalDownRight, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalDownRight, 0.70),
-        new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalDownRight, 0.70),
-      ])
-      .getHandGesture()!,
+    // new HandGesture('p')
+    //   .loadFinger([
+    //     new FingerThumb(FingerCurl.NoCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
+    //     new FingerIndex(FingerCurl.NoCurl, 1.0, FingerDirection.HorizontalRight, 0.70),
+    //     new FingerMiddle(FingerCurl.HalfCurl, 1.0, FingerDirection.DiagonalDownRight, 0.70),
+    //     new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalDownRight, 0.70),
+    //     new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.DiagonalDownRight, 0.70),
+    //   ])
+    //   .getHandGesture()!,
 
     new HandGesture('q')
       .loadFinger([
@@ -196,15 +186,15 @@ export class CameraEmitter implements Emitter<string> {
       ])
       .getHandGesture()!,
 
-    new HandGesture('r')
-      .loadFinger([
-        new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
-        new FingerIndex(FingerCurl.NoCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerMiddle(FingerCurl.NoCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-      ])
-      .getHandGesture()!,
+    // new HandGesture('r')
+    //   .loadFinger([
+    //     new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
+    //     new FingerIndex(FingerCurl.NoCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerMiddle(FingerCurl.NoCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //   ])
+    //   .getHandGesture()!,
 
     new HandGesture('s')
       .loadFinger([
@@ -257,15 +247,15 @@ export class CameraEmitter implements Emitter<string> {
       ])
       .getHandGesture()!,
 
-    new HandGesture('x')
-      .loadFinger([
-        new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerIndex(FingerCurl.HalfCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-        new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
-      ])
-      .getHandGesture()!,
+    // new HandGesture('x')
+    //   .loadFinger([
+    //     new FingerThumb(FingerCurl.HalfCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerIndex(FingerCurl.HalfCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //     new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.VerticalUp, 0.70),
+    //   ])
+    //   .getHandGesture()!,
 
     new HandGesture('y')
       .loadFinger([
@@ -277,15 +267,15 @@ export class CameraEmitter implements Emitter<string> {
       ])
       .getHandGesture()!,
 
-    new HandGesture('z')
-      .loadFinger([
-        new FingerThumb(FingerCurl.NoCurl, 1.0, FingerDirection.HorizontalLeft, 0.70),
-        new FingerIndex(FingerCurl.NoCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
-        new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalLeft, 0.70),
-        new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalLeft, 0.70),
-        new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalLeft, 0.70),
-      ])
-      .getHandGesture()!,
+    // new HandGesture('z')
+    //   .loadFinger([
+    //     new FingerThumb(FingerCurl.NoCurl, 1.0, FingerDirection.HorizontalLeft, 0.70),
+    //     new FingerIndex(FingerCurl.NoCurl, 1.0, FingerDirection.DiagonalUpLeft, 0.70),
+    //     new FingerMiddle(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalLeft, 0.70),
+    //     new FingerRing(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalLeft, 0.70),
+    //     new FingerPinky(FingerCurl.FullCurl, 1.0, FingerDirection.HorizontalLeft, 0.70),
+    //   ])
+    //   .getHandGesture()!,
 
   ]);
 
@@ -353,7 +343,7 @@ export class CameraEmitter implements Emitter<string> {
         const mostConfidentGesture = estimatedGesture.gestures.reduce((max, curr) => max.score > curr.score ? max : curr, estimatedGesture.gestures[0]);
         this.currentKey = mostConfidentGesture.name;
       } else {
-        this.currentKey = ""
+        this.currentKey = "_"
       }
     }
   }
