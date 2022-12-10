@@ -19,6 +19,12 @@ export class BattleEventManager {
   private readonly attackSound: AudioResource = new AudioResource(
     "audio/character/player/attack.mp3"
   );
+  private readonly hurtSound: AudioResource = new AudioResource(
+    "audio/character/player/hurt.mp3"
+  );
+  private readonly deathSound: AudioResource = new AudioResource(
+    "audio/character/player/death.m4a"
+  );
 
   public constructor(
     uiRoot: BattleUserInterfaceRoot,
@@ -32,6 +38,10 @@ export class BattleEventManager {
     this.walkSound.load().then();
     this.attackSound.load().then();
     this.attackSound.setLoop(false);
+    this.hurtSound.load().then();
+    this.hurtSound.setLoop(false);
+    this.deathSound.load().then();
+    this.deathSound.setLoop(false);
     this.battleScene = battleScene;
   }
 
@@ -49,7 +59,12 @@ export class BattleEventManager {
     if (this.player.isDieing()) return;
 
     const isPlayerFatal = this.playerEvent.onHurt(damage);
-    if (isPlayerFatal) this.onPlayerDie();
+    if (isPlayerFatal) {
+      this.deathSound.play();
+      this.onPlayerDie();
+    } else {
+      this.hurtSound.play();
+    }
   }
 
   public onPlayerDie(): void {
