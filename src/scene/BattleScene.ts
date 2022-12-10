@@ -215,9 +215,9 @@ export class BattleScene extends Scene {
 
     this.eventManager.onTargetMove(nearEnermyX, nearEnemy.getRealY() - 30 - 5);
 
-    const currentKey = this.keyboardEmitter.getCurrentKey();
-    // const currentKey = this.cameraEmitter.getCurrentKey();
-    console.log("current: ", currentKey);
+    // const currentKey = this.keyboardEmitter.getCurrentKey();
+    const currentKey = this.cameraEmitter.getCurrentKey();
+    this.uiRoot.updatePlayerCharacter(currentKey);
 
     //Get key for shooting
     if (currentKey == this.targetKey) {

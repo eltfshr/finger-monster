@@ -205,3 +205,29 @@ html, body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+#player-character-box-border {
+  z-index: 98;
+  position: absolute;
+  bottom: 1.5%;
+  left: 13.2%;
+  width: 95px;
+  height: 95px;
+  background-image: url('/graphic/player-character-frame-border.png');
+  background-size: cover;
+}
+
+#player-character-box {
+  z-index: 100;
+  position: absolute;
+  top: 12%;
+  left: 12.5%;
+  width: 75px;
+  height: 78px;
+  background-size: cover;
+  font-size: 54px;
+  font-weight: 900;
+  text-align: center;
+  padding-top: 8px;
+  color: #f2f2f2;
+}

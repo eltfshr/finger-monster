@@ -4,6 +4,7 @@ import { BattlePlayerFrame } from '@/renderer/ui/battle/BattlePlayerFrame';
 import { BattlePlayerFrameBorder } from '@/renderer/ui/battle/BattlePlayerFrameBorder';
 import { CameraCanvas } from '@/renderer/ui/battle/CameraCanvas';
 import { CharacterBar } from '@/renderer/ui/battle/CharacterBar';
+import { PlayerCharacterBar } from '@/renderer/ui/battle/PlayerCharacterBar';
 import { TargetIndicator } from '@/renderer/ui/battle/TargetIndicator';
 import { UserInterfaceRoot } from '@/renderer/ui/UserInterfaceRoot';
 import { Player } from '@/wrapper/entities/living/Player';
@@ -20,6 +21,7 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
   private readonly characterBar: CharacterBar;
   private readonly targetIndicator: TargetIndicator;
   private readonly cameraCanvas: CameraCanvas;
+  private readonly playerCharacterbar: PlayerCharacterBar;
 
   public constructor(player: Player) {
     super();
@@ -47,6 +49,9 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
   
     this.cameraCanvas = new CameraCanvas();
     this.playerHudRoot.append(this.cameraCanvas.getNode())
+
+    this.playerCharacterbar = new PlayerCharacterBar();
+    this.playerHudRoot.append(this.playerCharacterbar.getNode())
   }
 
   public updateHealth(health: number): void {
@@ -63,6 +68,10 @@ export class BattleUserInterfaceRoot extends UserInterfaceRoot {
 
   public updateTarget(x: number, y: number): void {
     this.targetIndicator.update(x, y);
+  }
+
+  public updatePlayerCharacter(character: string): void {
+    this.playerCharacterbar.update(character);
   }
 
 }
