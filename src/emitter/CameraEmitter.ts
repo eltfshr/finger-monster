@@ -6,7 +6,7 @@ import { FingerPinky } from '@/emitter/handsings/finger/FingerPinky';
 import { FingerRing } from '@/emitter/handsings/finger/FIngerRing';
 import { FingerThumb } from '@/emitter/handsings/finger/FingerThumb';
 import { HandGesture } from '@/emitter/handsings/HandGesture';
-import { Time } from '@/utils/time';
+import { Time } from '@/utils/Time';
 import * as handpose from "@tensorflow-models/handpose";
 import * as tf from "@tensorflow/tfjs";
 import * as fp from "fingerpose";
