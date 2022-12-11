@@ -327,7 +327,7 @@ export class CameraEmitter implements Emitter<string> {
       if (this.network) {
         this.updateCurrentKey(this.network, this.video!);
       }
-    }, 200);
+    }, 500);
 
     await Time.sleep(5_000);
   }
