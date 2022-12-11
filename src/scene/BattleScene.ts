@@ -126,7 +126,7 @@ export class BattleScene extends Scene {
   public async load(): Promise<void> {
     await Promise.all([this.imageRegistry.load(), this.backgroundAudio.load()]);
 
-    this.backgroundAudio.setVolume(0.03);
+    this.backgroundAudio.setVolume(0.01);
     this.backgroundAudio.play();
 
     this.baseBackground.setImage("bg/battle/base.png").setScene(this);
@@ -390,8 +390,16 @@ export class BattleScene extends Scene {
         this.currentWaveNumber = 1;
         this.nextSpawnFrame = 100;
         this.nextWaveFrame = this.waves.get(1)!.getFrameAmount();
+        this.correctKeyCount = 0;
+        this.projectiles.splice(0, this.projectiles.length);
         this.creatureSpawner.clearCreatures();
         loadingUi.style.display = 'none';
+        this.targetKey = this.keys[Math.floor(Math.random() * this.keys.length)];
+        this.firstAlphabet = new AudioResource(
+          `audio/alphabet/${this.targetKey}.mp3`
+        );
+        this.eventManager.onCharacterChange(this.targetKey);
+        this.eventManager.onReset();
       }
     }
 
@@ -416,7 +424,7 @@ export class BattleScene extends Scene {
       if (
         Math.random() <
           this.BASE_SPAWN_RATE +
-            (this.sceneFrame / 54000) * (1 - this.BASE_SPAWN_RATE) ||
+            (this.sceneFrame / 67500) * (1 - this.BASE_SPAWN_RATE) ||
         this.sceneFrame == 100
       ) {
         const spawnedCreature = this.creatureSpawner.randomlySpawn(this.ground);

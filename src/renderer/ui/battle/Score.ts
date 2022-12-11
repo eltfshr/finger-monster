@@ -15,7 +15,11 @@ export class Score extends UserInterface {
 
   public update(score: number): void {
     const scoreElement = document.querySelector<HTMLDivElement>('#score')!;
-    this.score += score;
+    if (score == -1) {
+      this.score = 0;
+    } else {
+      this.score += score;
+    }
     scoreElement.innerHTML = 'Score: ' + this.score;
   }
 

@@ -77,8 +77,10 @@ export class BattleEventManager {
   }
 
   public onPlayerJump(): void {
-    this.jumpSound.play();
-    this.player.jump();
+    if (this.player.isOnGround()) {
+      this.jumpSound.play();
+      this.player.jump();
+    }
   }
 
   public onEnemySpawn(): void {}
@@ -117,6 +119,12 @@ export class BattleEventManager {
 
   public onWaveChange(wave: number): void {
     this.uiRoot.updateWave(Math.floor((wave - 1) / 2) + 1);
+  }
+
+  public onReset(): void {
+    this.uiRoot.updateScore(-1);
+    this.uiRoot.updateWave(1);
+    this.uiRoot.updateHealth(100);
   }
 
   public onItemSpawn(): void {}
