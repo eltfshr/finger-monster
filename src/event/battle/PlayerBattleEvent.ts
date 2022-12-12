@@ -15,6 +15,11 @@ export class PlayerBattleEvent {
     this.player.attack();
   }
 
+  public onManaChange(mana: number): void {
+    this.player.setMana(this.player.getMana() + mana);
+    this.uiRoot.updateMana(this.player.getMana());
+  }
+
   public onHurt(damage: number): boolean {
     if (this.player.isDieing()) return true;
     if (!this.player.isHurting() && !this.player.isAttacking()) {

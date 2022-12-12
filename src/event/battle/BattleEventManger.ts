@@ -83,6 +83,12 @@ export class BattleEventManager {
     }
   }
 
+  public onPlayerManaChange(mana: number): void {
+    if (!(this.player.getMana() + mana > 100)) {
+      this.playerEvent.onManaChange(mana);
+    }
+  }
+
   public onEnemySpawn(): void {}
 
   public onEnemyAttack(enemy: Creature): void {
@@ -125,6 +131,7 @@ export class BattleEventManager {
     this.uiRoot.updateScore(-1);
     this.uiRoot.updateWave(1);
     this.uiRoot.updateHealth(100);
+    this.uiRoot.updateMana(100);
   }
 
   public onItemSpawn(): void {}

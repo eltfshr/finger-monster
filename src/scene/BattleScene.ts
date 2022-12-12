@@ -1,5 +1,3 @@
-import { JumpAction } from "@/action/JumpAction";
-import { RunAction } from "@/action/RunAction";
 import { CameraEmitter } from "@/emitter/CameraEmitter";
 import { KeyboardEmitter } from "@/emitter/KeyboardEmitter";
 import { BattleEventManager } from "@/event/battle/BattleEventManger";
@@ -159,16 +157,16 @@ export class BattleScene extends Scene {
 
     this.eventManager.onCharacterChange(this.targetKey);
 
-    this.keyboardEmitter.attach([
-      // new CharacterAttackAction<string>(this.eventManager, this.uiRoot)
-      //   .loadKeys(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']),
-      new RunAction<string>(this.eventManager, this.uiRoot).loadKeys([
-        "ArrowRight",
-        "ArrowLeft",
-      ]),
+    // this.keyboardEmitter.attach([
+    //   new CharacterAttackAction<string>(this.eventManager, this.uiRoot)
+    //     .loadKeys(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']),
+    //   new RunAction<string>(this.eventManager, this.uiRoot).loadKeys([
+    //     "ArrowRight",
+    //     "ArrowLeft",
+    //   ]),
 
-      new JumpAction<string>(this.eventManager, this.uiRoot).loadKeys([" "]),
-    ]);
+    //   new JumpAction<string>(this.eventManager, this.uiRoot).loadKeys([" "]),
+    // ]);
 
     this.cameraEmitter.attach();
 
@@ -212,6 +210,7 @@ export class BattleScene extends Scene {
     this.updateAllBackgrounds();
     this.drawEntity(this.player, SpriteDirection.RIGHT);
     this.physicsEngine.gravitate(this.player, this.ground);
+    this.eventManager.onPlayerManaChange(0.01);
 
     //Find one nearest enemy for target
     const nearEnemy = this.physicsEngine.getNearestCreature(
@@ -230,18 +229,21 @@ export class BattleScene extends Scene {
 
     this.eventManager.onTargetMove(nearEnermyX, nearEnemy.getRealY() - 30 - 5);
 
-    // const currentKey = this.keyboardEmitter.getCurrentKey();
+    const key = this.keyboardEmitter.getCurrentKey();
     const currentKey = this.cameraEmitter.getCurrentKey();
     this.uiRoot.updatePlayerCharacter(currentKey);
 
+    if (key == '') {
+      this.player.setCasting(false);
+    }
+
     //Get key for shooting
-    if (currentKey == this.targetKey && !this.player.isMoving()) {
+    if (((currentKey == this.targetKey && !this.player.isMoving()) || (key == ' ' && this.player.getMana() >= 30)) && !this.player.isCasting()) {
       this.correctKeyCount++;
 
       if (this.correctKeyCount == 10 && !this.player.isDieing()) {
+        this.player.setCasting(true);
         this.correctKeyCount = 0;
-        this.shoot();
-        this.eventManager.onPlayerAttack();
         this.targetKey = this.keys[Math.floor(Math.random() * this.keys.length)];
         let newAlphabet = new AudioResource(
           `audio/alphabet/${this.targetKey}.mp3`
@@ -252,7 +254,14 @@ export class BattleScene extends Scene {
           newAlphabet.play();
         }, 500);
         this.eventManager.onCharacterChange(this.targetKey);
-        this.eventManager.onSignCorrect(nearEnemy);
+        
+        if (key != ' ') {
+          this.shoot();
+          this.eventManager.onPlayerAttack();
+          this.eventManager.onSignCorrect(nearEnemy);
+        } else {
+          this.eventManager.onPlayerManaChange(-30);
+        }
       }
     }
 
@@ -381,11 +390,11 @@ export class BattleScene extends Scene {
       loadingUi.style.display = 'block';
       
       // Reset
-      const key = this.keyboardEmitter.getCurrentKey();
       if (key) {
         this.phase = BattleScenePhase.BATTLE;
         this.player.move();
         this.player.setHealth(100);
+        this.player.setMana(100);
         this.sceneFrame = 0;
         this.currentWaveNumber = 1;
         this.nextSpawnFrame = 100;
