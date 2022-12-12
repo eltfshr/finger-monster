@@ -5,7 +5,7 @@
 👌 A web-based game written in Typescript to teach ASL alphabet.
 
 Player will be given an alphabet at the top left corner. They have to make correct handsign to attack enemies. At the bottom left corner, your camera is displayed 
-and besides it is the current alphabet handsign read from your camera
+and besides it is the current alphabet handsign read from your camera. Player can hold spacebar key to change the given character, costing 30 mana. Player has 100 mana maximum, regenerating 0.01 mana/frame(30 mana/50 seconds).
 
 Each enemy has different health, speed, damage. Enemies are randomly spawned in waves. The frequency and chance of spawning increase as the game progresses. There are 10 waves. 
 There are 25-second wave cooldown in between waves. 
